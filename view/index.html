@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1">
+    <title>PokéMath</title>
+    <style>
+      body {
+        background-color: #e4e4e4;
+      }
+      h1 {
+        text-align: center;
+      }
+      a {
+        color: black;
+        text-decoration: none;
+        text-align: center;
+        font-size: 18px;
+
+        display: block;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 10px;
+        margin: 20px auto;
+        width: 80%;
+
+        background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PokéMath</h1>
+    <hr>
+
+    <a href="/question">Catch a pokemon</a>
+    <a href="/pokemons">My pokemons (<span id="count">0</span>)</a>
+    <a href="/marvin">Marvin's pokemons (<span id="count2">0</span>)</a>
+
+    <script type="module">
+      const res = await fetch('/pokemoncount')
+      const json = await res.json()
+      document.getElementById('count').textContent = json.count
+      document.getElementById('count2').textContent = json.marvinsCount
+
+
+      document.getElementsByTagName('h1')[0].addEventListener('click', foo)
+
+      function foo() {
+        window.location = "/"
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1">
+    <title>PokéMath</title>
+    <style>
+      body {
+        background-color: #e4e4e4;
+      }
+      h1 {
+        text-align: center;
+      }
+      .sprite {
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PokéMath</h1>
+    <hr>
+
+    <div id="container"></div>
+
+    <script type="module">
+      const res = await fetch('/api/marvin')
+      const pokemons = await res.json()
+
+      if (pokemons.length === 0 ) {
+        const message = document.createElement('p')
+        message.textContent = 'You have no pokemon yet. Go and catch some!'
+
+        document.getElementById('container').appendChild(message)
+      } else {
+        for (const pokemon of pokemons) {
+          const anchor = document.createElement('a')
+          anchor.setAttribute('href', `/pokemon/${pokemon.id}`)
+          
+          const sprite = document.createElement('img')
+          sprite.setAttribute('src', `/sprites/pm0${String(pokemon.id).padStart(3, '0')}_00_00_00_big.png`)
+          sprite.setAttribute('class', 'sprite')
+          anchor.appendChild(sprite)
+  
+          document.getElementById('container').appendChild(anchor)
+        }
+      }
+
+      document.getElementsByTagName('h1')[0].addEventListener('click', foo)
+
+      function foo() {
+        window.location = "/"
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1">
+    <title>PokéMath</title>
+    <style>
+      body {
+        background-color: #e4e4e4;
+      }
+      h1 {
+        text-align: center;
+      }
+      button {
+        display: block;
+        margin: 10px auto;
+        width: 70%;
+        font-size: 18px;
+      }
+      input {
+        display: block;
+        font-size: 20px;
+        width: 70%;
+        margin: 15px auto;
+      }
+      p {
+        font-size: 20px;
+
+        margin: 60px auto;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PokéMath</h1>
+    <hr>
+
+    <p id="question">question</p>
+    <input type="number" id="answer">
+    <button id="submit">Submit</button>
+
+    <script type="module">
+      const topics = ["addition", "positive only subtraction"];
+
+      function getTopic() {
+        return topics[Math.floor(Math.random() * 2)];
+      }
+
+      function getQuestion(topic) {
+        if (topic === "addition") {
+          const x = Math.floor(Math.random() * 150);
+          const y = Math.floor(Math.random() * 150);
+
+          return {
+            question: `${x} + ${y} = ___`,
+            answer: x + y,
+          };
+        } else if (topic === "positive only subtraction") {
+          let x = Math.floor(Math.random() * 150);
+          let y = Math.floor(Math.random() * 150);
+
+          while (y > x) {
+            x = Math.floor(Math.random() * 150);
+            y = Math.floor(Math.random() * 150);
+          }
+
+          return {
+            question: `${x} - ${y} = ___`,
+            answer: x - y,
+          };
+        } else {
+          return "that topic is not supported";
+        }
+      }
+
+      const q = getQuestion(getTopic())
+      document.getElementById('question').textContent = q.question
+
+      document.getElementsByTagName('button')[0].addEventListener('click', checkAnswer)
+
+      async function checkAnswer(e) {
+        e.preventDefault()
+        if (q.answer != document.getElementById('answer').value) {
+          alert(`
+          WRONG ANSWER
+          `)
+        } else {
+          const res = await fetch('/api/claimpokemon')
+          const json = await res.json()
+
+          if (json.caught) {
+            alert(`
+            You got yourself a NEW POKEMON!!!
+            `)
+            window.location = `/pokemon/${json.id}`
+          } else {
+            alert('The pokemon got away. Try catching another one.')
+            window.location = '/question'
+          }
+
+        }
+      }
+
+      document.getElementsByTagName('h1')[0].addEventListener('click', foo)
+
+      function foo() {
+        window.location = "/"
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1">
+    <title>PokéMath</title>
+    <style>
+      body {
+        background-color: #e4e4e4;
+      }
+      h1 {
+        text-align: center;
+      }
+      #image {
+        width: 100%
+      }
+
+      #name {
+        text-align: center;
+        font-size: 30px;
+      }
+
+      #description {
+        width: 90%;
+        margin: 0 auto;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="card"></div>
+
+    <script type="module">
+      const temp = window.location.href.split('/')
+      const id = temp[temp.length - 1]
+
+      async function getNewPokemon() {
+          const card = document.getElementById('card')
+          card.innerHTML = ''
+          const randomNumber = Math.floor(Math.random() * 905 + 1)
+
+          let response = await fetch(`https://pokeapi.deno.dev/pokemon/${id}`)
+          let pokemon = await response.json()
+
+          const name = document.createElement('h1')
+          name.setAttribute('id', 'name')
+          name.textContent = pokemon.name
+
+          const image = document.createElement('img')
+          image.setAttribute('id', 'image')
+          image.setAttribute('src', `/sugimori/${id}.png`)
+
+          const desc = document.createElement('p')
+          desc.setAttribute('id', 'description')
+          desc.textContent = pokemon.description
+
+          document.body.style.backgroundColor = pokemon.color
+          card.appendChild(name)
+          card.appendChild(image)
+          card.appendChild(desc)
+      }
+
+      await getNewPokemon()
+
+      document.getElementById('card').onclick = () => {window.location = '/'}
+    </script>
+  </body>
+</html>
