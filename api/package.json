@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "dependencies": {
+    "hono": "^4.1.0"
+  },
+  "devDependencies": {
+    "pg": "^8.11.3",
+    "wrangler": "3.39.0"
+  }
+}
