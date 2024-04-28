@@ -264,12 +264,20 @@ const topics = [
   "addition",
   "counting",
   "counting with addition",
+  "division",
   "max/min",
   "multiplication",
   "subtraction (positive only)",
 ];
 function getQuestion(topic) {
-  if (topic === "max/min") {
+  if (topic === "division") {
+    const x = Math.floor(Math.random() * 5) + 1;
+
+    return {
+      question: `${x * 2} \u00f7 2 = ___`,
+      answer: x,
+    };
+  } else if (topic === "max/min") {
     let set = new Set();
     while (set.size !== 10) {
       const n = Math.floor(Math.random() * 150);
