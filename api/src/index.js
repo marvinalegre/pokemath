@@ -238,7 +238,7 @@ app.get("/user/:username", async (c) => {
       .bind(c.req.param("username"))
       .all();
 
-    return c.json(results);
+    return c.json(results.reverse());
   } else if (users.length === 0) {
     return c.json({
       user: "nonexistent",
