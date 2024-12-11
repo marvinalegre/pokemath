@@ -1,13 +1,19 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { useLoaderData } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
-  ];
+  return [{ title: "PokéMath" }];
+}
+
+export async function clientLoader() {
+  const res = await fetch("/api/hw");
+  const { message } = await res.json();
+
+  return { message };
 }
 
 export default function Home() {
-  return <Welcome />;
+  const { message } = useLoaderData();
+
+  return <p>{message}</p>;
 }
