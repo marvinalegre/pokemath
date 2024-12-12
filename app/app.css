@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  *:focus {
+    @apply outline-none ring ring-blue-500; /* Customize your focus styles */
+  }
+}
+
+::selection {
+  @apply bg-blue-500 text-white;
+}
+
+/* For Firefox compatibility */
+::-moz-selection {
+  @apply bg-blue-500 text-white;
+}
