@@ -14,7 +14,7 @@ export default function Login() {
         </Link>
         <ul className="flex text-gray-300 space-x-8 ml-10 text-xl">
           <li>
-            <Link to="/signup" className="py-1 text-black">
+            <Link to="/login" className="py-1 text-black">
               log in
             </Link>
           </li>
