@@ -5,4 +5,5 @@ export default [
   route("login", "routes/login.tsx"),
   route("signup", "routes/signup.tsx"),
   route("catch", "routes/catch.tsx"),
+  route(":username", "routes/user.tsx"),
 ] satisfies RouteConfig;
