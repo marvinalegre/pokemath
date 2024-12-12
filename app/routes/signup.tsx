@@ -21,11 +21,16 @@ export default function Login() {
         </ul>
       </nav>
 
-      <div className="p-2 md:p-8 mt-[15vh] md:mt-[10vh]">
-        <Form
-          method="post"
-          className="px-4 py-8 max-w-sm mx-auto space-y-4 md:p-8"
-        >
+      <div className="h-36 flex justify-center justify-center items-center">
+        {false && (
+          <p className="text-lg max-w-72 bg-[#ffa500] border-2 border-black border-solid p-2">
+            Invalid username
+          </p>
+        )}
+      </div>
+
+      <div className="px-2 md:px-8">
+        <Form method="post" className="px-4 max-w-sm mx-auto space-y-4 md:px-8">
           <input
             name="username"
             placeholder="username"
