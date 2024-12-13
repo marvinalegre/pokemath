@@ -27,8 +27,7 @@ export default function Players({ params }) {
         </ul>
       </nav>
       {!showMenu && (
-        /*        <div className="text-xl flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-2">*/
-        <ul classname="text-xl">
+        <ul className="py-8 text-xl flex flex-row flex-wrap justify-center items-center gap-4">
           <Player username="lucas" />
           <Player username="travis" />
           <Player username="miguel" />
@@ -55,7 +54,7 @@ function MenuLink({ link, to }) {
 function Player({ username }) {
   return (
     <Link to={`/${username}`}>
-      <li className="hover:bg-white py-2 px-3 text-xl">
+      <li className="bg-white py-2 px-3 text-xl w-full">
         <h3>{username}</h3>
         <p className="text-sm space-x-4 mb-2">
           <span>
