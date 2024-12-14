@@ -164,7 +164,24 @@ export default function User({ params }: Route.ComponentProps) {
               </Form>
             </div>
           )}
-          {showCard && <div onClick={handleCloseCardClick}>pokemon card</div>}
+          {showCard && (
+            <div className="flex items-center justify-center">
+              <div
+                onClick={handleCloseCardClick}
+                className="mx-auto border-4 border-black my-8 md:my-16 w-80 bg-[#f9e1c4]"
+              >
+                <h3 className="text-3xl text-center my-3">Dragonite</h3>
+                <img
+                  src="https://pokemons.pages.dev/sugimori/149.png"
+                  className="w-80 h-80"
+                />
+                <p className="m-6 text-justify">
+                  An extremely rarely seen marine POKéMON. Its intelligence is
+                  said to match that of humans.
+                </p>
+              </div>
+            </div>
+          )}
         </>
       )}
       {showMenu && (
