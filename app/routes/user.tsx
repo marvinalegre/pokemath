@@ -1,5 +1,5 @@
 import type { Route } from "./+types/user";
-import { Link } from "react-router";
+import { Form, Link } from "react-router";
 import { useState } from "react";
 
 export function meta({ params }: Route.MetaArgs) {
@@ -8,6 +8,11 @@ export function meta({ params }: Route.MetaArgs) {
 
 export default function User({ params }: Route.ComponentProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const [showPokemons, setShowPokemons] = useState(true);
+  const [showPokemonOptions, setShowPokemonOptions] = useState(false);
+  const [showCard, setShowCard] = useState(false);
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [isPinned, setIsPinned] = useState(false);
   const pinnedPokemons = [
     {
       pokemonId: 1,
@@ -15,30 +20,57 @@ export default function User({ params }: Route.ComponentProps) {
     },
     {
       pokemonId: 3,
-      userPokemonId: 1,
+      userPokemonId: 2,
     },
     {
       pokemonId: 9,
-      userPokemonId: 1,
+      userPokemonId: 3,
     },
   ];
   const pokemons = [
     {
       pokemonId: 25,
-      userPokemonId: 1,
+      userPokemonId: 4,
     },
     {
       pokemonId: 4,
-      userPokemonId: 1,
+      userPokemonId: 5,
     },
     {
       pokemonId: 6,
-      userPokemonId: 1,
+      userPokemonId: 6,
     },
   ];
 
   function handleMenuClick() {
     setShowMenu(!showMenu);
+  }
+
+  function handlePokemonClick(e) {
+    if (e.target.getAttribute("data-pokemonid")) {
+      setSelectedPokemon(e.target.getAttribute("data-pokemonid"));
+    } else {
+      setSelectedPokemon(null);
+    }
+
+    if (e.target.getAttribute("data-pinned")) {
+      setIsPinned(true);
+    } else {
+      setIsPinned(false);
+    }
+
+    setShowPokemonOptions(!showPokemonOptions);
+    setShowPokemons(!showPokemons);
+  }
+
+  function handleShowCardClick() {
+    setShowCard(true);
+    setShowPokemonOptions(false);
+  }
+
+  function handleCloseCardClick() {
+    setShowCard(false);
+    setShowPokemonOptions(true);
   }
 
   return (
@@ -58,26 +90,81 @@ export default function User({ params }: Route.ComponentProps) {
       {!showMenu && (
         <>
           <p className="sticky top-9 bg-white p-2 text-xl">{params.username}</p>
-          <div className="flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-2">
-            {pinnedPokemons.map((p) => (
+          {showPokemons && (
+            <>
+              <div className="flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-2">
+                {pinnedPokemons.map((p) => (
+                  <img
+                    data-userpokemonid={p.userPokemonId}
+                    data-pinned
+                    data-pokemonid={p.pokemonId}
+                    key={p.userPokemonId}
+                    onClick={handlePokemonClick}
+                    className={`w-40 md:w-48`}
+                    src={`https://pokemons.pages.dev/sprites/pm${String(
+                      p.pokemonId
+                    ).padStart(4, "0")}_00_00_00_big.png`}
+                  />
+                ))}
+              </div>
+              <div className="my-12 md:pb-12 flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-1">
+                {pokemons.map((p) => (
+                  <img
+                    data-userpokemonid={p.userPokemonId}
+                    data-pokemonid={p.pokemonId}
+                    key={p.userPokemonId}
+                    onClick={handlePokemonClick}
+                    className={`w-28 md:w-32`}
+                    src={`https://pokemons.pages.dev/sprites/pm${String(
+                      p.pokemonId
+                    ).padStart(4, "0")}_00_00_00_big.png`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          {showPokemonOptions && (
+            <div className="md:mt-16 px-2 md:px-8">
               <img
-                className={`w-40 md:w-48`}
+                className={`w-56 mb-4 md:w-64 mx-auto`}
                 src={`https://pokemons.pages.dev/sprites/pm${String(
-                  p.pokemonId
+                  selectedPokemon
                 ).padStart(4, "0")}_00_00_00_big.png`}
               />
-            ))}
-          </div>
-          <div className="my-12 md:pb-12 flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-1">
-            {pokemons.map((p) => (
-              <img
-                className={`w-28 md:w-32`}
-                src={`https://pokemons.pages.dev/sprites/pm${String(
-                  p.pokemonId
-                ).padStart(4, "0")}_00_00_00_big.png`}
-              />
-            ))}
-          </div>
+              <Form
+                method="post"
+                className="px-4 max-w-sm mx-auto space-y-4 md:px-8"
+              >
+                <button
+                  type="button"
+                  onClick={handleShowCardClick}
+                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                >
+                  show card
+                </button>
+                <button
+                  type="button"
+                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                >
+                  {isPinned ? "unpin" : "pin"}
+                </button>
+                <button
+                  type="button"
+                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                >
+                  release
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePokemonClick}
+                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                >
+                  hide options
+                </button>
+              </Form>
+            </div>
+          )}
+          {showCard && <div onClick={handleCloseCardClick}>pokemon card</div>}
         </>
       )}
       {showMenu && (
