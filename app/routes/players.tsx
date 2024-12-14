@@ -1,17 +1,61 @@
 import type { Route } from "./+types/players";
 import { Link } from "react-router";
+import type { FC } from "react";
 import { useState } from "react";
+import classNames from "classnames";
 
 export function meta({ params }: Route.MetaArgs) {
   return [{ title: `PokéMath | ${params.username}` }];
 }
 
-export default function Players({ params }) {
+export default function Players() {
   const [showMenu, setShowMenu] = useState(false);
+  const players = [
+    {
+      username: "lucas",
+      achievements: [
+        {
+          type: "normal",
+          count: 9,
+        },
+        {
+          type: "dark",
+          count: 2,
+        },
+        {
+          type: "fire",
+          count: 2,
+        },
+      ],
+    },
+    {
+      username: "travis",
+      achievements: [
+        {
+          type: "water",
+          count: 25,
+        },
+        {
+          type: "dragon",
+          count: 8,
+        },
+      ],
+    },
+    {
+      username: "miguel",
+      achievements: [
+        {
+          type: "bug",
+          count: 1,
+        },
+      ],
+    },
+  ];
 
   function handleMenuClick() {
     setShowMenu(!showMenu);
   }
+
   return (
     <>
       <nav className="sticky top-0 flex justify-between items-center py-2 px-1 relative h-9 text-black bg-gray-400">
@@ -28,55 +72,84 @@ export default function Players({ params }) {
       </nav>
       {!showMenu && (
         <ul className="py-8 text-xl flex flex-row flex-wrap justify-center items-center gap-4">
-          <Player username="lucas" />
-          <Player username="travis" />
-          <Player username="miguel" />
+          {players.map((p, i) => (
+            <Player
+              key={i}
+              username={p.username}
+              achievements={p.achievements}
+            />
+          ))}
         </ul>
       )}
       {showMenu && (
         <ul className="text-xl">
-          <MenuLink link="user" to="/user" />
-          <MenuLink link="log out" to="/logout" />
+          <Link to="/user">
+            <li className="hover:bg-white p-2">user</li>
+          </Link>
+          <Link to="/logout">
+            <li className="hover:bg-white p-2">log out</li>
+          </Link>
         </ul>
       )}
     </>
   );
 }
 
-function MenuLink({ link, to }) {
-  return (
-    <Link to={to}>
-      <li className="hover:bg-white p-2">{link}</li>
-    </Link>
-  );
+interface PlayerProps {
+  username: string;
+  achievements: { type: string; count: number }[];
 }
 
-function Player({ username }) {
+const Player: FC<PlayerProps> = ({ username, achievements }) => {
+  const darkColoredTypes = [
+    "dark",
+    "dragon",
+    "fighting",
+    "ghost",
+    "grass",
+    "ground",
+    "normal",
+    "steel",
+    "water",
+  ];
+
   return (
     <Link to={`/${username}`}>
-      <li className="bg-white py-2 px-3 text-xl w-full">
+      <li className="bg-white py-2 px-3 text-xl w-[300px]">
         <h3>{username}</h3>
         <p className="text-sm space-x-4 mb-2">
-          <span>
-            <span className="text-gray-100 bg-[#4a4b4b] p-1 rounded-sm">
-              dark
-            </span>{" "}
-            x 50
-          </span>
-          <span>
-            <span className="text-gray-100 bg-[#316e73] p-1 rounded-sm">
-              steel
-            </span>{" "}
-            x 50
-          </span>{" "}
-          <span>
-            <span className="text-gray-100 bg-[#c3581e] p-1 rounded-sm">
-              ground
-            </span>{" "}
-            x 50
-          </span>
+          {achievements.map((a, i) => {
+            const achievementClass = classNames({
+              "p-1": true,
+              "text-gray-100": darkColoredTypes.includes(a.type),
+              "bg-[#8fbe32]": a.type === "bug",
+              "bg-[#444949]": a.type === "dark",
+              "bg-[#0f66b7]": a.type === "dragon",
+              "bg-[#f8d129]": a.type === "electric",
+              "bg-[#ed8ded]": a.type === "fairy",
+              "bg-[#aa2343]": a.type === "fighting",
+              "bg-[#ff995b]": a.type === "fire",
+              "bg-[#87b7e1]": a.type === "flying",
+              "bg-[#696dc3]": a.type === "ghost",
+              "bg-[#30941a]": a.type === "grass",
+              "bg-[#bc5728]": a.type === "ground",
+              "bg-[#6dcec2]": a.type === "ice",
+              "bg-[#888e9d]": a.type === "normal",
+              "bg-[#b15fd9]": a.type === "poison",
+              "bg-[#fe6a76]": a.type === "psychic",
+              "bg-[#c8b588]": a.type === "rock",
+              "bg-[#277175]": a.type === "steel",
+              "bg-[#0fa3f0]": a.type === "water",
+            });
+
+            return (
+              <span>
+                <span className={achievementClass}>{a.type}</span> x {a.count}
+              </span>
+            );
+          })}
         </p>
       </li>
     </Link>
   );
-}
+};
