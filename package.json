@@ -18,6 +18,7 @@
     "react-router": "^7.0.2"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241205.0",
     "@react-router/dev": "^7.0.2",
     "@types/node": "^20",
     "@types/react": "^19.0.1",
