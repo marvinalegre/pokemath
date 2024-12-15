@@ -1,12 +1,24 @@
 import type { Route } from "./+types/home";
-import { Link, useLoaderData } from "react-router";
+import { Link, redirect, useLoaderData } from "react-router";
 import { useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "PokéMath" }];
 }
 
+export const clientLoader = async () => {
+  const res = await fetch("/api/user");
+  const { loggedIn, username } = await res.json();
+
+  if (loggedIn) {
+    return { username };
+  }
+
+  return redirect("/login");
+};
+
 export default function Home() {
+  const { username } = useLoaderData();
   const [showMenu, setShowMenu] = useState(false);
 
   function handleMenuClick() {
@@ -38,7 +50,7 @@ export default function Home() {
       )}
       {showMenu && (
         <ul className="text-xl">
-          <MenuLink link="marvinalegre" to="marvinalegre" />{" "}
+          <MenuLink link={username} to={`/${username}`} />
           <MenuLink link="players" to="players" />{" "}
           <MenuLink link="log out" to="logout" />
         </ul>

@@ -1,10 +1,21 @@
 import { useState } from "react";
 import type { Route } from "./+types/catch";
-import { Link, Form } from "react-router";
+import { Link, Form, redirect } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "PokéMath | Catch" }];
 }
+
+export const clientLoader = async () => {
+  const res = await fetch("/api/user");
+  const { loggedIn } = await res.json();
+
+  if (loggedIn) {
+    return null;
+  }
+
+  return redirect("/login");
+};
 
 export default function Catch() {
   const [showQuestion, setShowQuestion] = useState(true);

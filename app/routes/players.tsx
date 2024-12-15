@@ -1,5 +1,5 @@
 import type { Route } from "./+types/players";
-import { Link } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import type { FC } from "react";
 import { useState } from "react";
 import classNames from "classnames";
@@ -8,7 +8,15 @@ export function meta({ params }: Route.MetaArgs) {
   return [{ title: `PokéMath | ${params.username}` }];
 }
 
+export const clientLoader = async () => {
+  const res = await fetch("/api/user");
+  const { loggedIn, username } = await res.json();
+
+  return { loggedIn, username };
+};
+
 export default function Players() {
+  const { loggedIn, username } = useLoaderData();
   const [showMenu, setShowMenu] = useState(false);
   const players = [
     {
@@ -62,13 +70,15 @@ export default function Players() {
         <Link to="/">
           <div className="font-semibold text-3xl italic">PokéMath</div>
         </Link>
-        <ul className="flex text-gray-300 space-x-8 ml-10 text-xl">
-          <li>
-            <button onClick={handleMenuClick} className="py-1 text-black">
-              {showMenu ? "close menu" : "menu"}
-            </button>
-          </li>
-        </ul>
+        {loggedIn && (
+          <ul className="flex text-gray-300 space-x-8 ml-10 text-xl">
+            <li>
+              <button onClick={handleMenuClick} className="py-1 text-black">
+                {showMenu ? "close menu" : "menu"}
+              </button>
+            </li>
+          </ul>
+        )}
       </nav>
       {!showMenu && (
         <ul className="py-8 text-xl flex flex-row flex-wrap justify-center items-center gap-4">
@@ -83,8 +93,8 @@ export default function Players() {
       )}
       {showMenu && (
         <ul className="text-xl">
-          <Link to="/user">
-            <li className="hover:bg-white p-2">user</li>
+          <Link to={`/${username}`}>
+            <li className="hover:bg-white p-2">{username}</li>
           </Link>
           <Link to="/logout">
             <li className="hover:bg-white p-2">log out</li>

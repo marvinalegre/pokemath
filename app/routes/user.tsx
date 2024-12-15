@@ -1,12 +1,20 @@
 import type { Route } from "./+types/user";
-import { Form, Link } from "react-router";
+import { Form, Link, useLoaderData } from "react-router";
 import { useState } from "react";
 
 export function meta({ params }: Route.MetaArgs) {
   return [{ title: `PokéMath | ${params.username}` }];
 }
 
+export const clientLoader = async () => {
+  const res = await fetch("/api/user");
+  const { loggedIn, username } = await res.json();
+
+  return { loggedIn, username };
+};
+
 export default function User({ params }: Route.ComponentProps) {
+  const { loggedIn, username } = useLoaderData();
   const [showMenu, setShowMenu] = useState(false);
   const [showPokemons, setShowPokemons] = useState(true);
   const [showPokemonOptions, setShowPokemonOptions] = useState(false);
@@ -79,13 +87,24 @@ export default function User({ params }: Route.ComponentProps) {
         <Link to="/">
           <div className="font-semibold text-3xl italic">PokéMath</div>
         </Link>
-        <ul className="flex text-gray-300 space-x-8 ml-10 text-xl">
-          <li>
-            <button onClick={handleMenuClick} className="py-1 text-black">
-              {showMenu ? "close menu" : "menu"}
-            </button>
-          </li>
-        </ul>
+        {loggedIn && (
+          <ul className="flex text-gray-300 space-x-8 ml-10 text-xl">
+            <li>
+              <button onClick={handleMenuClick} className="py-1 text-black">
+                {showMenu ? "close menu" : "menu"}
+              </button>
+            </li>
+          </ul>
+        )}
+        {!loggedIn && (
+          <ul className="flex text-gray-300 space-x-8 ml-10 text-xl">
+            <li>
+              <Link to="/players" className="py-1 text-black">
+                players
+              </Link>
+            </li>
+          </ul>
+        )}
       </nav>
       {!showMenu && (
         <>
@@ -142,18 +161,22 @@ export default function User({ params }: Route.ComponentProps) {
                 >
                   show card
                 </button>
-                <button
-                  type="button"
-                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
-                >
-                  {isPinned ? "unpin" : "pin"}
-                </button>
-                <button
-                  type="button"
-                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
-                >
-                  release
-                </button>
+                {params.username === username && (
+                  <>
+                    <button
+                      type="button"
+                      className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                    >
+                      {isPinned ? "unpin" : "pin"}
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                    >
+                      release
+                    </button>
+                  </>
+                )}
                 <button
                   type="button"
                   onClick={handlePokemonClick}
@@ -186,6 +209,11 @@ export default function User({ params }: Route.ComponentProps) {
       )}
       {showMenu && (
         <ul className="text-xl">
+          {params.username !== username && (
+            <Link to={`/${username}`} onClick={handleMenuClick}>
+              <li className="hover:bg-white p-2">{username}</li>
+            </Link>
+          )}
           <Link to="/players">
             <li className="hover:bg-white p-2">players</li>
           </Link>

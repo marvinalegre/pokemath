@@ -1,9 +1,20 @@
 import type { Route } from "./+types/login";
-import { Link, Form } from "react-router";
+import { Link, Form, redirect } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "PokéMath | Login" }];
 }
+
+export const clientLoader = async () => {
+  const res = await fetch("/api/user");
+  const { loggedIn } = await res.json();
+
+  if (loggedIn) {
+    return redirect("/home");
+  }
+
+  return null;
+};
 
 export default function Login() {
   return (
