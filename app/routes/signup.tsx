@@ -1,5 +1,15 @@
 import type { Route } from "./+types/signup";
-import { Link, Form, redirect } from "react-router";
+import {
+  Link,
+  Form,
+  redirect,
+  useActionData,
+  useNavigation,
+} from "react-router";
+import { validateUsername } from "../utils/validateUser";
+import zxcvbn from "zxcvbn";
+import { useState } from "react";
+import classNames from "classnames";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "PokéMath | Signup" }];
@@ -16,7 +26,44 @@ export const clientLoader = async () => {
   return null;
 };
 
-export default function Login() {
+export const clientAction = async ({ request }: Route.ClientActionArgs) => {
+  const formData = await request.formData();
+  const usernameValidation = validateUsername(String(formData.get("username")));
+  if (usernameValidation !== "Username is valid.")
+    return { err: usernameValidation };
+
+  if (formData.get("password") !== formData.get("confirmPassword"))
+    return { err: "The passwords do not match." };
+
+  if (String(formData.get("password")).length < 8)
+    return { err: "The password must contain a minimum of 8 characters." };
+
+  if (String(formData.get("password")).length > 40)
+    return { err: "The password must contain a maximum of 40 characters." };
+
+  if (
+    zxcvbn(formData.get("password")).crack_times_display
+      .online_throttling_100_per_hour !== "centuries"
+  )
+    return {
+      err: "The password is too weak. Please choose a stronger password.",
+    };
+
+  return null;
+};
+
+export default function Signup() {
+  const actionData = useActionData();
+  const navigation = useNavigation();
+  const submitting = navigation.state === "submitting";
+  const [passwordType, setPasswordType] = useState("password");
+
+  const signupBtnClass = classNames({
+    "px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full": true,
+    "bg-black": !submitting,
+    "bg-[#3f3f3f]": submitting,
+  });
+
   return (
     <>
       <nav className="flex justify-between items-center py-2 px-1 relative h-9 text-black bg-gray-400">
@@ -33,9 +80,9 @@ export default function Login() {
       </nav>
 
       <div className="h-36 flex justify-center justify-center items-center">
-        {false && (
-          <p className="text-lg max-w-72 bg-[#ffa500] border-2 border-black border-solid p-2">
-            Invalid username
+        {!submitting && actionData?.err && (
+          <p className="text-md max-w-72 bg-[#ffa500] border-2 border-black border-solid p-2">
+            {actionData.err}
           </p>
         )}
       </div>
@@ -49,22 +96,40 @@ export default function Login() {
           />
           <input
             name="password"
-            type="password"
+            type={passwordType}
             placeholder="password"
             className="w-full p-2 border border-gray-400"
           />
           <input
             name="confirmPassword"
-            type="password"
+            type={passwordType}
             placeholder="confirm password"
             className="w-full p-2 border border-gray-400"
           />
+          <input
+            onClick={() => {
+              if (passwordType === "password") {
+                setPasswordType("text");
+              } else {
+                setPasswordType("password");
+              }
+            }}
+            type="checkbox"
+            id="show-passwords"
+          />{" "}
+          <label
+            className="text-sm mt-4 cursor-pointer"
+            htmlFor="show-passwords"
+          >
+            show passwords
+          </label>
           <div className="mt-8 space-x-6 text-right">
             <button
               type="submit"
-              className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+              disabled={submitting}
+              className={signupBtnClass}
             >
-              sign up
+              {submitting ? "signing up" : "sign up"}
             </button>
           </div>
         </Form>
