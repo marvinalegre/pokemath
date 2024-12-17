@@ -49,7 +49,19 @@ export const clientAction = async ({ request }: Route.ClientActionArgs) => {
       err: "The password is too weak. Please choose a stronger password.",
     };
 
-  return null;
+  const res = await fetch("/api/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: formData.get("username"),
+      password: formData.get("password"),
+    }),
+  });
+  const { err, success } = await res.json();
+  if (err) return { err };
+  if (success) return redirect("/");
 };
 
 export default function Signup() {

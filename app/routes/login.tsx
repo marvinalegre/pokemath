@@ -26,7 +26,6 @@ export const clientLoader = async () => {
 };
 
 export const clientAction = async ({ request }: Route.ClientActionArgs) => {
-  await sleep(1500); ///
   const formData = await request.formData();
   const usernameValidation = validateUsername(String(formData.get("username")));
   if (usernameValidation !== "Username is valid.")
