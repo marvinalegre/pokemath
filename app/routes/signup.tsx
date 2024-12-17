@@ -20,7 +20,7 @@ export const clientLoader = async () => {
   const { loggedIn } = await res.json();
 
   if (loggedIn) {
-    return redirect("/home");
+    return redirect("/");
   }
 
   return null;
