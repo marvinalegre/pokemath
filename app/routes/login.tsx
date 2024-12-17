@@ -19,7 +19,7 @@ export const clientLoader = async () => {
   const { loggedIn } = await res.json();
 
   if (loggedIn) {
-    return redirect("/home");
+    return redirect("/");
   }
 
   return null;
@@ -37,7 +37,19 @@ export const clientAction = async ({ request }: Route.ClientActionArgs) => {
   if (String(formData.get("password")).length > 40)
     return { err: "The password must contain a maximum of 40 characters." };
 
-  return null;
+  const res = await fetch("/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: formData.get("username"),
+      password: formData.get("password"),
+    }),
+  });
+  const { err, success } = await res.json();
+  if (err) return { err };
+  if (success) return redirect("/");
 };
 
 export default function Login() {
@@ -111,7 +123,6 @@ export default function Login() {
               type="submit"
               disabled={submitting}
               className={loginBtnClass}
-              // className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
             >
               {submitting ? "logging in" : "log in"}
             </button>
@@ -120,8 +131,4 @@ export default function Login() {
       </div>
     </>
   );
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
