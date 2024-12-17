@@ -9,9 +9,15 @@ export const onRequest: PagesFunction = async (context) => {
   }
 
   const secret = new TextEncoder().encode(context.env.JWT_SECRET);
-  const { payload } = await jose.jwtVerify(cookie[COOKIE_NAME], secret);
+  let jwtId;
+  try {
+    const { payload } = await jose.jwtVerify(cookie[COOKIE_NAME], secret);
+    jwtId = payload.jwtId;
+  } catch (e) {
+    // TODO: log these (observability)
+    return Response.json({ loggedIn: false });
+  }
 
-  const { jwtId } = payload;
   const { results: users } = await context.env.DB.prepare(
     "select username from users where jwt_id = ?"
   )
