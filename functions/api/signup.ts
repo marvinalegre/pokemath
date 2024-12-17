@@ -2,7 +2,7 @@ import zxcvbn from "zxcvbn";
 import bcrypt from "bcryptjs";
 import * as jose from "jose";
 import { nanoid } from "nanoid";
-import { validateUsername } from "../../app/utils/validateUser";
+import { validateUsername } from "../../app/utils/validateUsername";
 
 export const onRequestPost: PagesFunction = async (context) => {
   const { username, password } = (await context.request.json()) as {

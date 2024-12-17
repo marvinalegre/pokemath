@@ -7,7 +7,7 @@ import {
   useActionData,
   useNavigation,
 } from "react-router";
-import { validateUsername } from "~/utils/validateUser";
+import { validateUsername } from "~/utils/validateUsername";
 import classNames from "classnames";
 
 export function meta({}: Route.MetaArgs) {

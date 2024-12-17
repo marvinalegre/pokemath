@@ -6,7 +6,7 @@ import {
   useActionData,
   useNavigation,
 } from "react-router";
-import { validateUsername } from "../utils/validateUser";
+import { validateUsername } from "../utils/validateUsername";
 import zxcvbn from "zxcvbn";
 import { useState } from "react";
 import classNames from "classnames";
