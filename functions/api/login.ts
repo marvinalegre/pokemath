@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 import * as jose from "jose";
-import { nanoid } from "nanoid";
 import { validateUsername } from "../../app/utils/validateUser";
 
 export const onRequestPost: PagesFunction = async (context) => {
