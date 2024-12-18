@@ -157,7 +157,7 @@ export default function User({ params }: Route.ComponentProps) {
                 <button
                   type="button"
                   onClick={handleShowCardClick}
-                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
                 >
                   show card
                 </button>
@@ -165,13 +165,13 @@ export default function User({ params }: Route.ComponentProps) {
                   <>
                     <button
                       type="button"
-                      className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                      className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
                     >
                       {isPinned ? "unpin" : "pin"}
                     </button>
                     <button
                       type="button"
-                      className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                      className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
                     >
                       release
                     </button>
@@ -180,7 +180,7 @@ export default function User({ params }: Route.ComponentProps) {
                 <button
                   type="button"
                   onClick={handlePokemonClick}
-                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                  className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
                 >
                   hide options
                 </button>

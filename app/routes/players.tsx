@@ -153,7 +153,7 @@ const Player: FC<PlayerProps> = ({ username, achievements }) => {
             });
 
             return (
-              <span>
+              <span key={i}>
                 <span className={achievementClass}>{a.type}</span> x {a.count}
               </span>
             );

@@ -87,7 +87,7 @@ export default function Catch() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
               >
                 submit
               </button>
@@ -108,7 +108,7 @@ export default function Catch() {
               <button
                 type="button"
                 onClick={handleOkClick}
-                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
               >
                 ok
               </button>
@@ -128,14 +128,14 @@ export default function Catch() {
               <button
                 type="button"
                 onClick={handleOptionClick}
-                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
               >
                 keep
               </button>
               <button
                 type="button"
                 onClick={handleOptionClick}
-                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-gray-600 w-full"
+                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
               >
                 release
               </button>
