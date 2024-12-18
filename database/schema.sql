@@ -1,7 +1,8 @@
 DROP TABLE IF EXISTS user_questions;
 CREATE TABLE IF NOT EXISTS user_questions (
     user_id INTEGER NOT NULL UNIQUE,
-    question TEXT NOT NULL,
+    question_code TEXT NOT NULL,
+    question_parameters TEXT NOT NULL,
     answer TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)

@@ -1,6 +1,7 @@
+import Question from "../components/question.tsx";
 import { useState } from "react";
 import type { Route } from "./+types/catch";
-import { Link, Form, redirect } from "react-router";
+import { Link, Form, redirect, useLoaderData } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "PokéMath | Catch" }];
@@ -10,14 +11,19 @@ export const clientLoader = async () => {
   const res = await fetch("/api/user");
   const { loggedIn } = await res.json();
 
-  if (loggedIn) {
-    return null;
+  if (!loggedIn) {
+    return redirect("/login");
   }
 
-  return redirect("/login");
+  // TODO: consider using Promise.all
+  const res2 = await fetch("/api/auth/catch");
+  const { questionCode, questionParameters } = await res2.json();
+
+  return { questionCode, questionParameters };
 };
 
 export default function Catch() {
+  const { questionCode, questionParameters } = useLoaderData();
   const [showQuestion, setShowQuestion] = useState(true);
   const [showNewPokemon, setShowNewPokemon] = useState(false);
   const [showGotAwayMessage, setShowGotAwayMessage] = useState(false);
@@ -67,9 +73,13 @@ export default function Catch() {
             method="post"
             className="px-4 max-w-sm mx-auto space-y-4 md:px-8"
           >
-            <p className="text-center text-xl mb-4">1 + 1 =</p>
+            <Question
+              questionCode={questionCode}
+              questionParameters={questionParameters}
+            />
             <input
               name="answer"
+              type="number"
               placeholder="answer"
               className="w-full p-2 border border-gray-400"
             />
