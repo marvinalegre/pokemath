@@ -58,16 +58,16 @@ export default function Catch() {
         </Link>
       </nav>
       {showQuestion && (
-        <div className="h-36 flex justify-center justify-center items-center">
+        <div className="md:h-36 flex justify-center justify-center items-center">
           {false && (
-            <p className="text-lg max-w-72 bg-[#ffa500] border-2 border-black border-solid p-2">
+            <p className="text-lg max-w-72 bg-[#ffa500] mt-8 -mb-4 border-2 border-black border-solid p-2">
               Wrong answer.
             </p>
           )}
         </div>
       )}
 
-      <div className="px-2 md:px-8">
+      <div className="my-12 px-2 md:px-8">
         {showQuestion && (
           <Form
             method="post"
