@@ -1,7 +1,14 @@
 import Question from "../components/question.tsx";
-import { useState } from "react";
 import type { Route } from "./+types/catch";
-import { Link, Form, redirect, useLoaderData } from "react-router";
+import {
+  Link,
+  Form,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "react-router";
+import classNames from "classnames";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "PokéMath | Catch" }];
@@ -22,33 +29,34 @@ export const clientLoader = async () => {
   return { questionCode, questionParameters };
 };
 
+export const clientAction = async ({ request }) => {
+  const formData = await request.formData();
+  if (formData.get("answer").length > 20) return { err: "Wrong answer." };
+
+  const res = await fetch("/api/auth/catch", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      answer: formData.get("answer"),
+    }),
+  });
+  const { err, correct, gotaway } = await res.json();
+  if (correct) return redirect("/catch/latest");
+  else return { err, gotaway };
+};
+
 export default function Catch() {
+  const actionData = useActionData();
   const { questionCode, questionParameters } = useLoaderData();
-  const [showQuestion, setShowQuestion] = useState(true);
-  const [showNewPokemon, setShowNewPokemon] = useState(false);
-  const [showGotAwayMessage, setShowGotAwayMessage] = useState(false);
-
-  function handleSubmit() {
-    const caughtSomething = Math.round(Math.random() * 10) % 2 === 1;
-
-    if (caughtSomething) {
-      setShowQuestion(false);
-      setShowNewPokemon(true);
-    } else {
-      setShowQuestion(false);
-      setShowGotAwayMessage(true);
-    }
-  }
-
-  function handleOptionClick() {
-    setShowQuestion(true);
-    setShowNewPokemon(false);
-  }
-
-  function handleOkClick() {
-    setShowQuestion(true);
-    setShowGotAwayMessage(false);
-  }
+  const navigation = useNavigation();
+  const submitting = navigation.state === "submitting";
+  const submitBtnClass = classNames({
+    "px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full": true,
+    "bg-black": !submitting,
+    "bg-[#3f3f3f]": submitting,
+  });
 
   return (
     <>
@@ -57,91 +65,38 @@ export default function Catch() {
           <div className="font-semibold text-3xl italic">PokéMath</div>
         </Link>
       </nav>
-      {showQuestion && (
-        <div className="md:h-36 flex justify-center justify-center items-center">
-          {false && (
-            <p className="text-lg max-w-72 bg-[#ffa500] mt-8 -mb-4 border-2 border-black border-solid p-2">
-              Wrong answer.
-            </p>
-          )}
-        </div>
-      )}
+
+      <div className="md:h-36 flex justify-center justify-center items-center">
+        {actionData?.err && (
+          <p className="text-lg max-w-72 bg-[#ffa500] mt-8 -mb-4 border-2 border-black border-solid p-2">
+            {actionData.err}
+          </p>
+        )}
+        {actionData?.gotaway && (
+          <p className="text-lg max-w-72 bg-white mt-8 -mb-4 border-2 border-black border-solid p-2">
+            The pokemon got away.
+          </p>
+        )}
+      </div>
 
       <div className="my-12 px-2 md:px-8">
-        {showQuestion && (
-          <Form
-            method="post"
-            className="px-4 max-w-sm mx-auto space-y-4 md:px-8"
-          >
-            <Question
-              questionCode={questionCode}
-              questionParameters={questionParameters}
-            />
-            <input
-              name="answer"
-              type="number"
-              placeholder="answer"
-              className="w-full p-2 border border-gray-400"
-            />
-            <div className="mt-8 space-x-6 text-right">
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
-              >
-                submit
-              </button>
-            </div>
-          </Form>
-        )}
-        {showGotAwayMessage && (
-          <div className="md:mt-16 px-2 md:px-8">
-            <div className="h-56 mb-4  md:h-64 flex justify-center justify-center items-center">
-              <p className="text-lg max-w-72 bg-white border-2 border-black border-solid p-2">
-                The pokemon got away.
-              </p>
-            </div>
-            <Form
-              method="post"
-              className="px-4 max-w-sm mx-auto space-y-4 md:px-8"
-            >
-              <button
-                type="button"
-                onClick={handleOkClick}
-                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
-              >
-                ok
-              </button>
-            </Form>
+        <Form method="post" className="px-4 max-w-sm mx-auto space-y-4 md:px-8">
+          <Question
+            questionCode={questionCode}
+            questionParameters={questionParameters}
+          />
+          <input
+            name="answer"
+            type="number"
+            placeholder="answer"
+            className="w-full p-2 border border-gray-400"
+          />
+          <div className="mt-8 space-x-6 text-right">
+            <button type="submit" className={submitBtnClass}>
+              {submitting ? "submitting" : "submit"}
+            </button>
           </div>
-        )}
-        {showNewPokemon && (
-          <div className="md:mt-16 px-2 md:px-8">
-            <img
-              className={`w-56 h-56 mb-4 md:w-64 md:h-64 mx-auto`}
-              src={`https://pokemons.pages.dev/sprites/pm0001_00_00_00_big.png`}
-            />
-            <Form
-              method="post"
-              className="px-4 max-w-sm mx-auto space-y-4 md:px-8"
-            >
-              <button
-                type="button"
-                onClick={handleOptionClick}
-                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
-              >
-                keep
-              </button>
-              <button
-                type="button"
-                onClick={handleOptionClick}
-                className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
-              >
-                release
-              </button>
-            </Form>
-          </div>
-        )}
+        </Form>
       </div>
     </>
   );
