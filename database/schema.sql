@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS user_questions (
 DROP TABLE IF EXISTS user_pokemons;
 CREATE TABLE IF NOT EXISTS user_pokemons (
     id INTEGER PRIMARY KEY,
+    user_pokemon_ext_id TEXT NOT NULL UNIQUE,
     user_id INTEGER NOT NULL,
     pokemon_id INTEGER NOT NULL,
     caught_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
