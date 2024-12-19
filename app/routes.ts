@@ -6,6 +6,7 @@ export default [
   route("signup", "routes/signup.tsx"),
   route("logout", "routes/logout.tsx"),
   route("catch", "routes/catch.tsx"),
+  route("catch/latest", "routes/caught.tsx"),
   route("players", "routes/players.tsx"),
   route(":username", "routes/user.tsx"),
 ] satisfies RouteConfig;
