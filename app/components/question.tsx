@@ -1,17 +1,22 @@
-export default function Question({ questionCode, questionParameters }) {
-  const centers = [];
-  while (centers.length !== parseInt(questionParameters)) {
-    const center = [
-      Math.floor(Math.random() * (230 - 10 + 1)) + 10,
-      Math.floor(Math.random() * (230 - 10 + 1)) + 10,
-    ];
+import { useMemo } from "react";
 
-    let count = 0;
-    for (let c of centers) {
-      if (distance(c, center) >= 20) count++;
+export default function Question({ questionCode, questionParameters }) {
+  const centers = useMemo(() => {
+    const centers = [];
+    while (centers.length !== parseInt(questionParameters)) {
+      const center = [
+        Math.floor(Math.random() * (230 - 10 + 1)) + 10,
+        Math.floor(Math.random() * (230 - 10 + 1)) + 10,
+      ];
+
+      let count = 0;
+      for (let c of centers) {
+        if (distance(c, center) >= 20) count++;
+      }
+      if (count === centers.length) centers.push(center);
     }
-    if (count === centers.length) centers.push(center);
-  }
+    return centers;
+  }, [questionParameters]);
 
   return (
     <>
