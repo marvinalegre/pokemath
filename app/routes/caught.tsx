@@ -14,7 +14,10 @@ export const clientLoader = async () => {
   }
 
   const res2 = await fetch("/api/auth/latest");
-  return await res2.json();
+  const { none, userPokemonExtId, pokemonId, csrfToken } = await res2.json();
+
+  if (none) return redirect("/catch");
+  return { userPokemonExtId, pokemonId, csrfToken };
 };
 
 export const clientAction = async ({ request }) => {
