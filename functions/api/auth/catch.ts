@@ -44,7 +44,11 @@ export const onRequestPost: PagesFunction = async (context) => {
   if (results.length === 0 || results.length > 1)
     return Response.json({ err: "Something went wrong." });
   if (results[0].answer !== answer)
-    return Response.json({ err: "Wrong answer. -server" });
+    return Response.json({ err: "Wrong answer." });
+
+  context.env.DB.prepare("delete from user_questions where user_id = ?")
+    .bind(context.data["userId"])
+    .run();
 
   const die = rollADie();
   if (die === "got away") return Response.json({ gotaway: true });
@@ -62,9 +66,6 @@ export const onRequestPost: PagesFunction = async (context) => {
     "insert into user_pokemons (user_pokemon_ext_id, user_id, pokemon_id) values (?, ?, ?)"
   )
     .bind(extId, context.data["userId"], randomPokemon.id)
-    .run();
-  await context.env.DB.prepare("delete from user_questions where user_id = ?")
-    .bind(context.data["userId"])
     .run();
 
   return Response.json({ caught: true });
