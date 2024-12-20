@@ -1,6 +1,7 @@
 name = "pokemath3"
 pages_build_output_dir = "./build/client"
 compatibility_date = "2024-12-11"
+compatibility_flags = [ "nodejs_compat_v2" ]
 
 [[d1_databases]]
 binding = "DB" # available in your Worker on env.DB
