@@ -20,6 +20,14 @@ CREATE TABLE IF NOT EXISTS user_pokemons (
     FOREIGN KEY (pokemon_id) REFERENCES pokemons(id)
 );
 
+DROP TABLE IF EXISTS pokemon_types;
+CREATE TABLE IF NOT EXISTS pokemon_types (
+    pokemon_id INTEGER NOT NULL,
+    type_id INTEGER NOT NULL,
+    FOREIGN KEY (pokemon_id) REFERENCES pokemons(id),
+    FOREIGN KEY (type_id) REFERENCES types(id)
+);
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
@@ -36,4 +44,10 @@ CREATE TABLE IF NOT EXISTS pokemons (
     description TEXT NOT NULL UNIQUE,
     color TEXT NOT NULL,
     availability TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS types;
+CREATE TABLE IF NOT EXISTS types (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE
 );
