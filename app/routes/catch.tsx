@@ -1,5 +1,6 @@
 import Question from "../components/question.tsx";
 import type { Route } from "./+types/catch";
+import { useEffect } from "react";
 import {
   Link,
   Form,
@@ -58,6 +59,10 @@ export default function Catch() {
     "bg-[#3f3f3f]": submitting,
   });
 
+  useEffect(() => {
+    document.getElementById("answer").value = "";
+  }, [questionCode, questionParameters]);
+
   return (
     <>
       <nav className="flex justify-between items-center py-2 px-1 relative h-9 text-black bg-gray-400">
@@ -86,6 +91,7 @@ export default function Catch() {
             questionParameters={questionParameters}
           />
           <input
+            id="answer"
             name="answer"
             type="number"
             placeholder="answer"
