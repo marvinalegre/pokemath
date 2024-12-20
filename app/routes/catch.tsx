@@ -42,8 +42,8 @@ export const clientAction = async ({ request }) => {
       answer: formData.get("answer"),
     }),
   });
-  const { err, correct, gotaway } = await res.json();
-  if (correct) return redirect("/catch/latest");
+  const { err, caught, gotaway } = await res.json();
+  if (caught) return redirect("/catch/latest");
   else return { err, gotaway };
 };
 
@@ -90,6 +90,7 @@ export default function Catch() {
             type="number"
             placeholder="answer"
             className="w-full p-2 border border-gray-400"
+            required
           />
           <div className="mt-8 space-x-6 text-right">
             <button type="submit" className={submitBtnClass}>
