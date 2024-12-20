@@ -10,45 +10,20 @@ export const clientLoader = async () => {
   const res = await fetch("/api/user");
   const { loggedIn, username } = await res.json();
 
-  return { loggedIn, username };
+  const res2 = await fetch("/api/auth/userpokemons");
+  const { pinned, unpinned } = await res2.json();
+
+  return { loggedIn, username, pinned, unpinned };
 };
 
 export default function User({ params }: Route.ComponentProps) {
-  const { loggedIn, username } = useLoaderData();
+  const { loggedIn, username, pinned, unpinned } = useLoaderData();
   const [showMenu, setShowMenu] = useState(false);
   const [showPokemons, setShowPokemons] = useState(true);
   const [showPokemonOptions, setShowPokemonOptions] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [isPinned, setIsPinned] = useState(false);
-  const pinnedPokemons = [
-    {
-      pokemonId: 1,
-      userPokemonId: 1,
-    },
-    {
-      pokemonId: 3,
-      userPokemonId: 2,
-    },
-    {
-      pokemonId: 9,
-      userPokemonId: 3,
-    },
-  ];
-  const pokemons = [
-    {
-      pokemonId: 25,
-      userPokemonId: 4,
-    },
-    {
-      pokemonId: 4,
-      userPokemonId: 5,
-    },
-    {
-      pokemonId: 6,
-      userPokemonId: 6,
-    },
-  ];
 
   function handleMenuClick() {
     setShowMenu(!showMenu);
@@ -112,30 +87,30 @@ export default function User({ params }: Route.ComponentProps) {
           {showPokemons && (
             <>
               <div className="flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-2">
-                {pinnedPokemons.map((p) => (
+                {pinned.map((p) => (
                   <img
-                    data-userpokemonid={p.userPokemonId}
+                    data-userpokemonid={p.user_pokemon_ext_id}
                     data-pinned
-                    data-pokemonid={p.pokemonId}
-                    key={p.userPokemonId}
+                    data-pokemonid={p.pokemon_id}
+                    key={p.user_pokemon_ext_id}
                     onClick={handlePokemonClick}
                     className={`w-40 md:w-48`}
                     src={`https://pokemons.pages.dev/sprites/pm${String(
-                      p.pokemonId
+                      p.pokemon_id
                     ).padStart(4, "0")}_00_00_00_big.png`}
                   />
                 ))}
               </div>
               <div className="my-12 md:pb-12 flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-1">
-                {pokemons.map((p) => (
+                {unpinned.map((p) => (
                   <img
-                    data-userpokemonid={p.userPokemonId}
-                    data-pokemonid={p.pokemonId}
-                    key={p.userPokemonId}
+                    data-userpokemonid={p.user_pokemon_ext_id}
+                    data-pokemonid={p.pokemon_id}
+                    key={p.user_pokemon_ext_id}
                     onClick={handlePokemonClick}
                     className={`w-28 md:w-32`}
                     src={`https://pokemons.pages.dev/sprites/pm${String(
-                      p.pokemonId
+                      p.pokemon_id
                     ).padStart(4, "0")}_00_00_00_big.png`}
                   />
                 ))}
