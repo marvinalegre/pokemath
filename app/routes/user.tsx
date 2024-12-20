@@ -1,5 +1,11 @@
 import type { Route } from "./+types/user";
-import { Form, Link, useLoaderData } from "react-router";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useSubmit,
+} from "react-router";
 import { useState } from "react";
 
 export function meta({ params }: Route.MetaArgs) {
@@ -16,8 +22,16 @@ export const clientLoader = async () => {
   return { loggedIn, username, pinned, unpinned };
 };
 
+export const clientAction = async ({ request }) => {
+  const formData = await request.formData();
+  const res = await fetch(`/api/pokemon/${formData.get("id")}`);
+  return await res.json();
+};
+
 export default function User({ params }: Route.ComponentProps) {
   const { loggedIn, username, pinned, unpinned } = useLoaderData();
+  const submit = useSubmit();
+  const actionData = useActionData();
   const [showMenu, setShowMenu] = useState(false);
   const [showPokemons, setShowPokemons] = useState(true);
   const [showPokemonOptions, setShowPokemonOptions] = useState(false);
@@ -47,6 +61,8 @@ export default function User({ params }: Route.ComponentProps) {
   }
 
   function handleShowCardClick() {
+    submit({ id: selectedPokemon }, { method: "post" });
+
     setShowCard(true);
     setShowPokemonOptions(false);
   }
@@ -136,7 +152,7 @@ export default function User({ params }: Route.ComponentProps) {
                 >
                   show card
                 </button>
-                {params.username === username && (
+                {/* {params.username === username && (
                   <>
                     <button
                       type="button"
@@ -151,7 +167,7 @@ export default function User({ params }: Route.ComponentProps) {
                       release
                     </button>
                   </>
-                )}
+                )} */}
                 <button
                   type="button"
                   onClick={handlePokemonClick}
@@ -166,17 +182,17 @@ export default function User({ params }: Route.ComponentProps) {
             <div className="flex items-center justify-center">
               <div
                 onClick={handleCloseCardClick}
-                className="mx-auto border-4 border-black my-8 md:my-16 w-80 bg-[#f9e1c4]"
+                style={{ backgroundColor: actionData?.color }}
+                className="mx-auto border-4 border-black my-8 md:my-16 w-80 p-2"
               >
-                <h3 className="text-3xl text-center my-3">Dragonite</h3>
+                <h3 className="text-3xl text-center my-3">
+                  {actionData?.name}
+                </h3>
                 <img
-                  src="https://pokemons.pages.dev/sugimori/149.png"
+                  src={`https://pokemons.pages.dev/sugimori/${selectedPokemon}.png`}
                   className="w-80 h-80"
                 />
-                <p className="m-6 text-justify">
-                  An extremely rarely seen marine POKéMON. Its intelligence is
-                  said to match that of humans.
-                </p>
+                <p className="m-6 text-justify">{actionData?.description}</p>
               </div>
             </div>
           )}
