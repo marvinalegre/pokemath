@@ -53,7 +53,7 @@ export default function Caught() {
 
       <div className="mt-8 md:mt-20 px-2 md:px-8">
         <img
-          className={`w-56 h-56 mb-4 md:w-64 md:h-64 mx-auto`}
+          className={`w-56 h-56 mb-20 md:w-64 md:h-64 mx-auto`}
           src={`https://pokemons.pages.dev/sprites/pm${pokemonId.padStart(
             4,
             "0"
