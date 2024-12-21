@@ -2,7 +2,7 @@ import type { Route } from "./+types/players";
 import { Link, useLoaderData } from "react-router";
 import type { FC } from "react";
 import { useState } from "react";
-import classNames from "classnames";
+// import classNames from "classnames";
 
 export function meta({ params }: Route.MetaArgs) {
   return [{ title: `PokéMath | ${params.username}` }];
@@ -12,53 +12,56 @@ export const clientLoader = async () => {
   const res = await fetch("/api/user");
   const { loggedIn, username } = await res.json();
 
-  return { loggedIn, username };
+  const res2 = await fetch("/api/players");
+  const { players } = await res2.json();
+
+  return { loggedIn, username, players };
 };
 
 export default function Players() {
-  const { loggedIn, username } = useLoaderData();
+  const { loggedIn, username, players } = useLoaderData();
   const [showMenu, setShowMenu] = useState(false);
-  const players = [
-    {
-      username: "lucas",
-      achievements: [
-        {
-          type: "normal",
-          count: 9,
-        },
-        {
-          type: "dark",
-          count: 2,
-        },
-        {
-          type: "fire",
-          count: 2,
-        },
-      ],
-    },
-    {
-      username: "travis",
-      achievements: [
-        {
-          type: "water",
-          count: 25,
-        },
-        {
-          type: "dragon",
-          count: 8,
-        },
-      ],
-    },
-    {
-      username: "miguel",
-      achievements: [
-        {
-          type: "bug",
-          count: 1,
-        },
-      ],
-    },
-  ];
+  // const players = [
+  //   {
+  //     username: "lucas",
+  //     achievements: [
+  //       {
+  //         type: "normal",
+  //         count: 9,
+  //       },
+  //       {
+  //         type: "dark",
+  //         count: 2,
+  //       },
+  //       {
+  //         type: "fire",
+  //         count: 2,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     username: "travis",
+  //     achievements: [
+  //       {
+  //         type: "water",
+  //         count: 25,
+  //       },
+  //       {
+  //         type: "dragon",
+  //         count: 8,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     username: "miguel",
+  //     achievements: [
+  //       {
+  //         type: "bug",
+  //         count: 1,
+  //       },
+  //     ],
+  //   },
+  // ];
 
   function handleMenuClick() {
     setShowMenu(!showMenu);
@@ -86,7 +89,7 @@ export default function Players() {
             <Player
               key={i}
               username={p.username}
-              achievements={p.achievements}
+              // achievements={p.achievements}
             />
           ))}
         </ul>
@@ -107,10 +110,10 @@ export default function Players() {
 
 interface PlayerProps {
   username: string;
-  achievements: { type: string; count: number }[];
+  // achievements: { type: string; count: number }[];
 }
 
-const Player: FC<PlayerProps> = ({ username, achievements }) => {
+const Player: FC<PlayerProps> = ({ username }) => {
   const darkColoredTypes = [
     "dark",
     "dragon",
@@ -127,7 +130,7 @@ const Player: FC<PlayerProps> = ({ username, achievements }) => {
     <Link to={`/${username}`}>
       <li className="bg-white py-2 px-3 text-xl w-[300px]">
         <h3>{username}</h3>
-        <p className="text-sm space-x-4 mb-2">
+        {/* <p className="text-sm space-x-4 mb-2">
           {achievements.map((a, i) => {
             const achievementClass = classNames({
               "p-1": true,
@@ -158,7 +161,7 @@ const Player: FC<PlayerProps> = ({ username, achievements }) => {
               </span>
             );
           })}
-        </p>
+        </p> */}
       </li>
     </Link>
   );
