@@ -194,16 +194,18 @@ export default function User({ params }: Route.ComponentProps) {
               <div
                 onClick={handleCloseCardClick}
                 style={{ backgroundColor: actionData?.color }}
-                className="mx-auto border-4 border-black my-8 md:my-16 w-80 p-2"
+                className="mx-auto border-2 border-black my-8 md:my-16 w-80 p-4"
               >
-                <h3 className="text-3xl text-center my-3">
+                <h3 className="text-4xl text-center mt-3 mb-6 font-serif font-semibold">
                   {actionData?.name}
                 </h3>
                 <img
                   src={`https://pokemons.pages.dev/sugimori/${selectedPokemon}.png`}
                   className="w-80 h-80"
                 />
-                <p className="m-6 text-justify">{actionData?.description}</p>
+                <p className="mb-2 mt-6 mx-2 font-serif text-lg leading-5">
+                  {actionData?.description}
+                </p>
               </div>
             </div>
           )}
