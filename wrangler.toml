@@ -1,9 +1,9 @@
-name = "pokemath3"
+name = "pokemath"
 pages_build_output_dir = "./build/client"
 compatibility_date = "2024-12-11"
 compatibility_flags = [ "nodejs_compat_v2" ]
 
 [[d1_databases]]
-binding = "DB" # available in your Worker on env.DB
-database_name = "foobar"
-database_id = "6146e4c1-8a08-4eb9-b9d0-33ba3c629482"
+binding = "DB"
+database_name = "pokemath"
+database_id = "d11ea8d1-f646-4f97-95ae-f8c21244bc41"
