@@ -5,7 +5,7 @@ import { useState } from "react";
 // import classNames from "classnames";
 
 export function meta({ params }: Route.MetaArgs) {
-  return [{ title: `PokéMath | ${params.username}` }];
+  return [{ title: `PokéMath | Players` }];
 }
 
 export const clientLoader = async () => {
