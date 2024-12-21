@@ -7,6 +7,7 @@ import {
   useSubmit,
 } from "react-router";
 import { useState } from "react";
+import classNames from "classnames";
 
 export function meta({ params }: Route.MetaArgs) {
   return [{ title: `PokéMath | ${params.username}` }];
@@ -38,6 +39,13 @@ export default function User({ params }: Route.ComponentProps) {
   const [showCard, setShowCard] = useState(false);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [isPinned, setIsPinned] = useState(false);
+
+  const unpinnedClass = classNames({
+    "mb-12 md:pb-12 flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-1":
+      true,
+    "mt-0": pinned?.length === 0,
+    "mt-12": pinned?.length > 0,
+  });
 
   function handleMenuClick() {
     setShowMenu(!showMenu);
@@ -120,7 +128,7 @@ export default function User({ params }: Route.ComponentProps) {
                     />
                   ))}
                 </div>
-                <div className="my-12 md:pb-12 flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-1">
+                <div className={unpinnedClass}>
                   {unpinned.map((p) => (
                     <img
                       data-userpokemonid={p.user_pokemon_ext_id}
