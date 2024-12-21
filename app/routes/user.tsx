@@ -12,11 +12,11 @@ export function meta({ params }: Route.MetaArgs) {
   return [{ title: `PokéMath | ${params.username}` }];
 }
 
-export const clientLoader = async () => {
+export const clientLoader = async ({ params }) => {
   const res = await fetch("/api/user");
   const { loggedIn, username } = await res.json();
 
-  const res2 = await fetch("/api/auth/userpokemons");
+  const res2 = await fetch(`/api/player/${params.username}`);
   const { pinned, unpinned } = await res2.json();
 
   return { loggedIn, username, pinned, unpinned };
@@ -100,39 +100,42 @@ export default function User({ params }: Route.ComponentProps) {
       {!showMenu && (
         <>
           <p className="sticky top-9 bg-white p-2 text-xl">{params.username}</p>
-          {showPokemons && (
-            <>
-              <div className="flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-2">
-                {pinned.map((p) => (
-                  <img
-                    data-userpokemonid={p.user_pokemon_ext_id}
-                    data-pinned
-                    data-pokemonid={p.pokemon_id}
-                    key={p.user_pokemon_ext_id}
-                    onClick={handlePokemonClick}
-                    className={`w-40 md:w-48`}
-                    src={`https://pokemons.pages.dev/sprites/pm${String(
-                      p.pokemon_id
-                    ).padStart(4, "0")}_00_00_00_big.png`}
-                  />
-                ))}
-              </div>
-              <div className="my-12 md:pb-12 flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-1">
-                {unpinned.map((p) => (
-                  <img
-                    data-userpokemonid={p.user_pokemon_ext_id}
-                    data-pokemonid={p.pokemon_id}
-                    key={p.user_pokemon_ext_id}
-                    onClick={handlePokemonClick}
-                    className={`w-28 md:w-32`}
-                    src={`https://pokemons.pages.dev/sprites/pm${String(
-                      p.pokemon_id
-                    ).padStart(4, "0")}_00_00_00_big.png`}
-                  />
-                ))}
-              </div>
-            </>
-          )}
+          {showPokemons &&
+            (pinned === undefined ? (
+              <p className="text-md p-2">Not found.</p>
+            ) : (
+              <>
+                <div className="flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-2">
+                  {pinned.map((p) => (
+                    <img
+                      data-userpokemonid={p.user_pokemon_ext_id}
+                      data-pinned
+                      data-pokemonid={p.pokemon_id}
+                      key={p.user_pokemon_ext_id}
+                      onClick={handlePokemonClick}
+                      className={`w-40 md:w-48`}
+                      src={`https://pokemons.pages.dev/sprites/pm${String(
+                        p.pokemon_id
+                      ).padStart(4, "0")}_00_00_00_big.png`}
+                    />
+                  ))}
+                </div>
+                <div className="my-12 md:pb-12 flex flex-row flex-wrap justify-center items-center max-w-[1400px] mx-auto gap-1">
+                  {unpinned.map((p) => (
+                    <img
+                      data-userpokemonid={p.user_pokemon_ext_id}
+                      data-pokemonid={p.pokemon_id}
+                      key={p.user_pokemon_ext_id}
+                      onClick={handlePokemonClick}
+                      className={`w-28 md:w-32`}
+                      src={`https://pokemons.pages.dev/sprites/pm${String(
+                        p.pokemon_id
+                      ).padStart(4, "0")}_00_00_00_big.png`}
+                    />
+                  ))}
+                </div>
+              </>
+            ))}
           {showPokemonOptions && (
             <div className="md:mt-16 px-2 md:px-8">
               <img
