@@ -147,4 +147,17 @@ app.post("/api/login", async (c) => {
 
   return c.json({ success: true });
 });
+
+app.get("/api/logout", async (c) => {
+  setCookie(c, "token", "", {
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    expires: new Date(0),
+    sameSite: "Strict",
+  });
+
+  return c.json({ success: true });
+});
+
 export default app;
