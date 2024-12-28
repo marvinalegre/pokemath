@@ -13,7 +13,7 @@ export default defineConfig({
   plugins: [reactRouter(), tsconfigPaths()],
   server: {
     proxy: {
-      "^/api/.*": "http://localhost:8788",
+      "^/api/.*": "http://localhost:8787",
     },
   },
   build: {
