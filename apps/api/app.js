@@ -160,4 +160,12 @@ app.get("/api/logout", async (c) => {
   return c.json({ success: true });
 });
 
+app.get("/api/players", async (c) => {
+  const { results } = await c.env.DB.prepare(
+    "select username from users"
+  ).all();
+
+  return c.json({ players: results });
+});
+
 export default app;
