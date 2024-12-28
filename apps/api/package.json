@@ -1,5 +1,6 @@
 {
   "name": "@pokemath/api",
+  "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify"
@@ -8,6 +9,7 @@
     "wrangler": "^3.99.0"
   },
   "dependencies": {
+    "@pokemath/validation": "workspace:*",
     "hono": "^4.6.14"
   }
 }

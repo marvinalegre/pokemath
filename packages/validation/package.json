@@ -1,0 +1,5 @@
+{
+  "name": "@pokemath/validation",
+  "type": "module",
+  "main": "index.js"
+}
