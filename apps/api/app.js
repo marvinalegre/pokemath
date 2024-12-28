@@ -266,7 +266,7 @@ app.get("/api/auth/catch", async (c) => {
       questionParameters: results[0].question_parameters,
     });
 
-  const randomNumber = (Math.round(Math.random() * 10) % 5) + 1;
+  const randomNumber = (Math.round(Math.random() * 10) % 10) + 1;
   await c.env.DB.prepare(
     "insert into user_questions (user_id, question_code, question_parameters, answer) values (?, ?, ?, ?)"
   )
