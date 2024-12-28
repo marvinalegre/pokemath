@@ -3,37 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_ENV=production react-router build",
-    "dev": "react-router dev",
-    "start": "cross-env NODE_ENV=production react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
-  },
-  "dependencies": {
-    "@react-router/node": "^7.0.2",
-    "@react-router/serve": "^7.0.2",
-    "bcryptjs": "^2.4.3",
-    "classnames": "^2.5.1",
-    "isbot": "^5.1.17",
-    "jose": "^5.9.6",
-    "nanoid": "^5.0.9",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router": "^7.0.2",
-    "zxcvbn": "^4.4.2"
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^4.20241205.0",
-    "@react-router/dev": "^7.0.2",
-    "@types/node": "^20",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.1",
-    "autoprefixer": "^10.4.20",
-    "cross-env": "^7.0.3",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.11",
-    "vite-tsconfig-paths": "^5.1.4",
-    "wrangler": "^3.95.0"
+    "build": "pnpm run -r build",
+    "deploy": "pnpm build && pnpm run -r deploy",
+    "dev": "pnpm run -r --parallel --aggregate-output dev"
   }
 }

@@ -16,4 +16,8 @@ export default defineConfig({
       "^/api/.*": "http://localhost:8788",
     },
   },
+  build: {
+    outDir: "../api/public",
+    emptyOutDir: true,
+  },
 });
