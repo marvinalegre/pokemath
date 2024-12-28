@@ -5,11 +5,14 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify"
   },
-  "devDependencies": {
-    "wrangler": "^3.99.0"
-  },
   "dependencies": {
     "@pokemath/validation": "workspace:*",
-    "hono": "^4.6.14"
+    "bcryptjs": "^2.4.3",
+    "hono": "^4.6.14",
+    "nanoid": "^5.0.9",
+    "zxcvbn": "^4.4.2"
+  },
+  "devDependencies": {
+    "wrangler": "^3.99.0"
   }
 }
