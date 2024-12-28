@@ -1,6 +1,6 @@
-export function validateUsername(username) {
-  class ValidationError extends Error {}
+class ValidationError extends Error {}
 
+export function validateUsername(username) {
   if (typeof username !== "string") {
     throw new ValidationError("Username is not valid.");
   }
@@ -20,6 +20,22 @@ export function validateUsername(username) {
   if (!/^[a-z0-9]+$/.test(username)) {
     throw new ValidationError(
       "The username may only contain letters and numbers."
+    );
+  }
+}
+
+export function validatePassword(password) {
+  if (typeof password !== "string") {
+    throw new ValidationError("Password is not valid");
+  }
+  if (password.length > 40) {
+    throw new ValidationError(
+      "The password must contain a maximum of 40 characters."
+    );
+  }
+  if (password.length < 8) {
+    throw new ValidationError(
+      "The password must contain a minimum of 8 characters."
     );
   }
 }
