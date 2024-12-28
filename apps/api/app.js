@@ -17,6 +17,31 @@ app.use("*", (c, next) => {
 
   return c.env.ASSETS.fetch(new URL("/index.html", reqUrl.origin));
 });
+app.use("/api/auth/*", async (c, next) => {
+  const token = getCookie(c, "token");
+  if (token == undefined) {
+    return c.json({});
+  }
+
+  let jwtId;
+  try {
+    const decodedPayload = await verify(token, c.env.JWT_SECRET, "HS256");
+    jwtId = decodedPayload.jwtId;
+  } catch (e) {
+    console.log(e.message);
+    return c.json({ loggedIn: false });
+  }
+
+  const { results: users } = await c.env.DB.prepare(
+    "select id from users where jwt_id = ?"
+  )
+    .bind(jwtId)
+    .all();
+
+  c.set("userId", users[0].id);
+
+  await next();
+});
 
 app.get("/api/user", async (c) => {
   const token = getCookie(c, "token");
@@ -228,4 +253,120 @@ app.get("/api/pokemon/:id", async (c) => {
   });
 });
 
+app.get("/api/auth/catch", async (c) => {
+  const { results } = await c.env.DB.prepare(
+    "select question_code, question_parameters from user_questions where user_id = ?"
+  )
+    .bind(c.get("userId"))
+    .all();
+
+  if (results.length === 1)
+    return c.json({
+      questionCode: results[0].question_code,
+      questionParameters: results[0].question_parameters,
+    });
+
+  const randomNumber = (Math.round(Math.random() * 10) % 5) + 1;
+  await c.env.DB.prepare(
+    "insert into user_questions (user_id, question_code, question_parameters, answer) values (?, ?, ?, ?)"
+  )
+    .bind(c.get("userId"), "c", String(randomNumber), String(randomNumber))
+    .run();
+  return c.json({
+    questionCode: "c",
+    questionParameters: String(randomNumber),
+  });
+});
+
+app.post("/api/auth/catch", async (c) => {
+  const { answer } = await c.req.json();
+
+  const { results } = await c.env.DB.prepare(
+    "select answer from user_questions where user_id = ?"
+  )
+    .bind(c.get("userId"))
+    .all();
+
+  if (results.length === 0 || results.length > 1)
+    return c.json({ err: "Something went wrong." });
+  if (results[0].answer !== answer) return c.json({ err: "Wrong answer." });
+
+  c.env.DB.prepare("delete from user_questions where user_id = ?")
+    .bind(c.get("userId"))
+    .run();
+
+  const die = rollADie();
+  if (die === "got away") return c.json({ gotaway: true });
+
+  const { results: pokemons } = await c.env.DB.prepare(
+    "select id from pokemons where availability = ?"
+  )
+    .bind(die)
+    .all();
+
+  const randomPokemon = pokemons[Math.floor(Math.random() * pokemons.length)];
+  const extId = nanoid();
+
+  await c.env.DB.prepare(
+    "insert into user_pokemons (user_pokemon_ext_id, user_id, pokemon_id) values (?, ?, ?)"
+  )
+    .bind(extId, c.get("userId"), randomPokemon.id)
+    .run();
+
+  return c.json({ caught: true });
+});
+
+app.get("/api/auth/latest", async (c) => {
+  const { results } = await c.env.DB.prepare(
+    "select * from user_pokemons where user_id = ? order by caught_at desc limit 1"
+  )
+    .bind(c.get("userId"))
+    .all();
+
+  if (results.length === 0) return c.json({ none: true });
+
+  // TODO: manage csrfTokens
+  return c.json({
+    userPokemonExtId: results[0].user_pokemon_ext_id,
+    pokemonId: String(results[0].pokemon_id),
+    csrfToken: "oijasoidjfoisjoi",
+  });
+});
+
+app.post("/api/auth/latest", async (c) => {
+  const { userPokemonExtId } = await c.req.json();
+
+  if (typeof userPokemonExtId !== "string")
+    return c.json({ err: "Invalid input." });
+  try {
+    await c.env.DB.prepare(
+      "delete from user_pokemons where user_id = ? and user_pokemon_ext_id = ?"
+    )
+      .bind(c.get("userId"), userPokemonExtId)
+      .run();
+  } catch (e) {
+    return c.json({ err: "Failed to release the pokemon." });
+  }
+
+  return c.json({ success: true });
+});
+
 export default app;
+
+function rollADie() {
+  const r = Math.floor(Math.random() * 1_000_000) + 1;
+
+  if (r <= 333_333) return "got away";
+  else if (r <= 771_799) return "C";
+  else if (r <= 971_799) return "E";
+  else if (r <= 980_799) return "R";
+  else if (r <= 982_799) return "RE";
+  else if (r <= 983_599) return "REE";
+  else if (r <= 995_599) return "T";
+  else if (r <= 997_599) return "TE";
+  else if (r <= 998_399) return "TEE";
+  else if (r <= 999_399) return "H";
+  else if (r <= 999_899) return "HE";
+  else if (r <= 999_999) return "HEE";
+  else return "L";
+}
