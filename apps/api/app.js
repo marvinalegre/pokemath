@@ -168,4 +168,42 @@ app.get("/api/players", async (c) => {
   return c.json({ players: results });
 });
 
+app.get("/api/player/:username", async (c) => {
+  const username = c.req.param("username");
+  try {
+    validateUsername(username);
+  } catch (e) {
+    return c.json({ err: e.message });
+  }
+
+  const { results } = await c.env.DB.prepare(
+    "select id from users where username = ?"
+  )
+    .bind(username)
+    .all();
+
+  if (results.length === 0) {
+    return c.json({ err: "Resource not found." });
+  }
+
+  // TODO: use promise all
+  const { results: pinned } = await c.env.DB.prepare(
+    "select pokemon_id, user_pokemon_ext_id from user_pokemons where user_id = ? and pinned = 1 order by caught_at desc"
+  )
+    .bind(results[0].id)
+    .all();
+
+  const { results: unpinned } = await c.env.DB.prepare(
+    "select pokemon_id, user_pokemon_ext_id from user_pokemons where user_id = ? and pinned = 0 order by caught_at desc"
+  )
+    .bind(results[0].id)
+    .all();
+
+  // TODO: manage csrfTokens
+  return c.json({
+    pinned,
+    unpinned,
+  });
+});
+
 export default app;
