@@ -72,12 +72,12 @@ export default function Catch() {
       </nav>
 
       <div className="md:h-36 flex justify-center justify-center items-center">
-        {actionData?.err && (
+        {actionData?.err && !submitting && (
           <p className="text-lg max-w-72 bg-[#ffa500] mt-8 -mb-4 border-2 border-black border-solid p-2">
             {actionData.err}
           </p>
         )}
-        {actionData?.gotaway && (
+        {actionData?.gotaway && !submitting && (
           <p className="text-lg max-w-72 bg-white mt-8 -mb-4 border-2 border-black border-solid p-2">
             The pokemon got away.
           </p>
