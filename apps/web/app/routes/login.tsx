@@ -98,7 +98,7 @@ export default function Login() {
           />
           <input
             name="password"
-            type="password"
+            type={passwordType}
             placeholder="password"
             className="w-full p-2 border border-gray-400"
           />
