@@ -10,6 +10,10 @@ import {
 
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
+import appleIcon from "../public/apple-touch-icon.png?url";
+import favicon32 from "../public/favicon-32x32.png?url";
+import favicon16 from "../public/favicon-16x16.png?url";
+import manifest from "../public/site.webmanifest?url";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,6 +27,10 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
   { rel: "stylesheet", href: stylesheet },
+  { rel: "apple-touch-icon", sizes: "180x180", href: appleIcon },
+  { rel: "icon", href: favicon32, type: "image/png", sizes: "32x32" },
+  { rel: "icon", href: favicon16, type: "image/png", sizes: "16x16" },
+  { rel: "manifest", href: manifest },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
