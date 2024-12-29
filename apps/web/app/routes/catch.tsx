@@ -16,17 +16,17 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export const clientLoader = async () => {
-  const res = await fetch("/api/user");
-  const { loggedIn } = await res.json();
+  const responses = await Promise.all([
+    fetch("/api/user"),
+    fetch("/api/auth/catch"),
+  ]);
 
+  const { loggedIn } = await responses[0].json();
   if (!loggedIn) {
     return redirect("/login");
   }
 
-  // TODO: consider using Promise.all
-  const res2 = await fetch("/api/auth/catch");
-  const { questionCode, questionParameters } = await res2.json();
-
+  const { questionCode, questionParameters } = await responses[1].json();
   return { questionCode, questionParameters };
 };
 
