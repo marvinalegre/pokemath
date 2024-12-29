@@ -15,6 +15,7 @@ app.use("*", (c, next) => {
     return next();
   }
 
+  const reqUrl = new URL(c.req.raw.url);
   return c.env.ASSETS.fetch(new URL("/index.html", reqUrl.origin));
 });
 app.use("/api/auth/*", async (c, next) => {
