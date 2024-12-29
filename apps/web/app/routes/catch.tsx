@@ -96,6 +96,7 @@ export default function Catch() {
             type="number"
             placeholder="answer"
             className="w-full p-2 border border-gray-400"
+            autoFocus
             required
           />
           <div className="mt-8 space-x-6 text-right">

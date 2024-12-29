@@ -105,6 +105,7 @@ export default function Signup() {
             name="username"
             placeholder="username"
             className="w-full p-2 border border-gray-400"
+            autoFocus
           />
           <input
             name="password"

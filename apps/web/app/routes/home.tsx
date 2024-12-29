@@ -41,7 +41,7 @@ export default function Home() {
       </nav>
       {!showMenu && (
         <div className="flex items-center justify-center h-[calc(100vh-2.25rem)] md:h-[70vh]">
-          <Link to="catch">
+          <Link tabIndex={1} to="catch">
             <div className="pokeball">
               <div className="pokeball-button"></div>
             </div>

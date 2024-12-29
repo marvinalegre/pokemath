@@ -64,6 +64,7 @@ export default function Caught() {
             name="keep"
             type="submit"
             className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
+            autoFocus
           >
             keep
           </button>
