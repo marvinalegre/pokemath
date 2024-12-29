@@ -292,7 +292,7 @@ app.post("/api/auth/catch", async (c) => {
     return c.json({ err: "Something went wrong." });
   if (results[0].answer !== answer) return c.json({ err: "Wrong answer." });
 
-  c.env.DB.prepare("delete from user_questions where user_id = ?")
+  await c.env.DB.prepare("delete from user_questions where user_id = ?")
     .bind(c.get("userId"))
     .run();
 
