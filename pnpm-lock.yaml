@@ -10,6 +10,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@pokemath/reserved-usernames':
+        specifier: workspace:*
+        version: link:../../packages/reserved-usernames
       '@pokemath/validation':
         specifier: workspace:*
         version: link:../../packages/validation
@@ -96,6 +99,8 @@ importers:
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.7.2)(vite@5.4.11(@types/node@20.17.10))
+
+  packages/reserved-usernames: {}
 
   packages/validation: {}
 

@@ -5,6 +5,7 @@ import zxcvbn from "zxcvbn";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
 import { validateUsername, validatePassword } from "@pokemath/validation";
+import { reservedUsernames } from "@pokemath/reserved-usernames";
 
 const app = new Hono();
 
@@ -79,6 +80,10 @@ app.post("/api/signup", async (c) => {
     validateUsername(username);
   } catch (e) {
     return c.json({ err: e.message });
+  }
+
+  if (reservedUsernames.includes(username)) {
+    return c.json({ err: "This username is not available." });
   }
 
   const { results: users } = await c.env.DB.prepare(
