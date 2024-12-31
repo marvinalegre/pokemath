@@ -6,7 +6,7 @@ import {
   useActionData,
   useNavigation,
 } from "react-router";
-import { validateUsername } from "../utils/validateUsername";
+import { validateUsername, validatePassword } from "@pokemath/validation";
 import zxcvbn from "zxcvbn";
 import { useState } from "react";
 import classNames from "classnames";
@@ -28,26 +28,32 @@ export const clientLoader = async () => {
 
 export const clientAction = async ({ request }: Route.ClientActionArgs) => {
   const formData = await request.formData();
-  const usernameValidation = validateUsername(String(formData.get("username")));
-  if (usernameValidation !== "Username is valid.")
-    return { err: usernameValidation };
+
+  try {
+    validateUsername(formData.get("username"));
+  } catch (e) {
+    return { err: e.message };
+  }
 
   if (formData.get("password") !== formData.get("confirmPassword"))
     return { err: "The passwords do not match." };
 
-  if (String(formData.get("password")).length < 8)
-    return { err: "The password must contain a minimum of 8 characters." };
+  try {
+    validatePassword(formData.get("password"));
+  } catch (e) {
+    return { err: e.message };
+  }
 
-  if (String(formData.get("password")).length > 40)
-    return { err: "The password must contain a maximum of 40 characters." };
-
-  if (
-    zxcvbn(formData.get("password")).crack_times_display
-      .online_throttling_100_per_hour !== "centuries"
-  )
-    return {
-      err: "The password is too weak. Please choose a stronger password.",
-    };
+  const zxcvbnOutput = zxcvbn(formData.get("password"));
+  if (zxcvbnOutput.score < 3) {
+    let err = "The password is weak.";
+    if (zxcvbnOutput.feedback.warning) {
+      err = `${err} ${zxcvbnOutput.feedback.warning}.`;
+    } else if (zxcvbnOutput.feedback.suggestions.length > 0) {
+      err = `${err} ${zxcvbnOutput.feedback.suggestions[0]}`;
+    }
+    return { err };
+  }
 
   const res = await fetch("/api/signup", {
     method: "POST",

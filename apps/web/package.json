@@ -9,6 +9,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@pokemath/validation": "workspace:*",
     "@react-router/node": "^7.0.2",
     "@react-router/serve": "^7.0.2",
     "classnames": "^2.5.1",
