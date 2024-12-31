@@ -5,6 +5,7 @@ import {
   useActionData,
   useLoaderData,
   useSubmit,
+  redirect,
 } from "react-router";
 import { useState } from "react";
 import classNames from "classnames";
@@ -14,6 +15,10 @@ export function meta({ params }: Route.MetaArgs) {
 }
 
 export const clientLoader = async ({ params }) => {
+  if (params.username !== params.username.toLowerCase()) {
+    return redirect(`/${params.username.toLowerCase()}`);
+  }
+
   const res = await fetch("/api/user");
   const { loggedIn, username } = await res.json();
 

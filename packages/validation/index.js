@@ -17,7 +17,7 @@ export function validateUsername(username) {
   if (/^\d/.test(username)) {
     throw new ValidationError("The username cannot begin with a number.");
   }
-  if (!/^[a-z0-9]+$/.test(username)) {
+  if (!/^[A-Za-z0-9]+$/.test(username)) {
     throw new ValidationError(
       "The username may only contain letters and numbers."
     );

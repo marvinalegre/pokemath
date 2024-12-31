@@ -5,7 +5,7 @@ export function validateUsername(username: string) {
   if (username.length > 20)
     return "The username must contain a maximum of 20 characters.";
   if (/^\d/.test(username)) return "The username cannot begin with a number.";
-  if (!/^[a-z0-9]+$/.test(username))
+  if (!/^[A-Za-z0-9]+$/.test(username))
     return "The username may only contain letters and numbers.";
 
   return "Username is valid.";

@@ -84,7 +84,7 @@ app.post("/api/signup", async (c) => {
   const { results: users } = await c.env.DB.prepare(
     "select username from users where username = ?"
   )
-    .bind(username)
+    .bind(username.toLowerCase())
     .all();
 
   if (users.length) {
@@ -116,7 +116,7 @@ app.post("/api/signup", async (c) => {
     await c.env.DB.prepare(
       "insert into users (jwt_id, username, hashed_password) values (?, ?, ?)"
     )
-      .bind(jwtId, username, hash)
+      .bind(jwtId, username.toLowerCase(), hash)
       .run();
   } catch (e) {
     console.log(e.message);
@@ -147,7 +147,7 @@ app.post("/api/login", async (c) => {
   const { results: users } = await c.env.DB.prepare(
     "select username, hashed_password, jwt_id from users where username = ?"
   )
-    .bind(username)
+    .bind(username.toLowerCase())
     .all();
 
   if (!users.length) return c.json({ err: "Incorrect username or password." });
@@ -205,7 +205,7 @@ app.get("/api/player/:username", async (c) => {
   const { results } = await c.env.DB.prepare(
     "select id from users where username = ?"
   )
-    .bind(username)
+    .bind(username.toLowerCase())
     .all();
 
   if (results.length === 0) {
