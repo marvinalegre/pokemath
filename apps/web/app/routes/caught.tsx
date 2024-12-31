@@ -25,7 +25,7 @@ export const clientAction = async ({ request }) => {
   if (formData.get("keep") === "") {
     return redirect("/catch");
   } else if (formData.get("release") === "") {
-    const res = await fetch("/api/auth/latest", {
+    await fetch("/api/auth/latest", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
