@@ -94,5 +94,9 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 }
 
 export function HydrateFallback() {
-  return <p>Loading...</p>;
+  return (
+    <div className="flex items-center justify-center h-[calc(100vh-2.25rem)] md:h-[70vh]">
+      <div className="font-semibold text-3xl italic">PokéMath</div>
+    </div>
+  );
 }
