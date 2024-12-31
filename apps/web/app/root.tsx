@@ -10,10 +10,10 @@ import {
 
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
-import appleIcon from "../public/apple-touch-icon.png?url";
-import favicon32 from "../public/favicon-32x32.png?url";
-import favicon16 from "../public/favicon-16x16.png?url";
-import manifest from "../public/site.webmanifest?url";
+import appleIcon from "/apple-touch-icon.png?url";
+import favicon32 from "/favicon-32x32.png?url";
+import favicon16 from "/favicon-16x16.png?url";
+import manifest from "/site.webmanifest?url";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
