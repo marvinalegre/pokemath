@@ -1,3 +1,4 @@
+PRAGMA defer_foreign_keys=TRUE;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
