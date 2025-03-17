@@ -4,6 +4,7 @@ import {
   Link,
   useActionData,
   useLoaderData,
+  useNavigate,
   useSubmit,
   redirect,
 } from "react-router";
@@ -37,12 +38,15 @@ export const clientAction = async ({ request }) => {
 export default function User({ params }: Route.ComponentProps) {
   const { loggedIn, username, pinned, unpinned } = useLoaderData();
   const submit = useSubmit();
+  const navigate = useNavigate();
   const actionData = useActionData();
   const [showMenu, setShowMenu] = useState(false);
   const [showPokemons, setShowPokemons] = useState(true);
   const [showPokemonOptions, setShowPokemonOptions] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [selectedUserPokemon, setSelectedUserPokemon] = useState(null);
+  const [showEvolutionButton, setShowEvolutionButton] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
 
   const unpinnedClass = classNames({
@@ -57,6 +61,18 @@ export default function User({ params }: Route.ComponentProps) {
   }
 
   function handlePokemonClick(e) {
+    if (e.target.getAttribute("data-evolutionid")) {
+      setShowEvolutionButton(true);
+    } else {
+      setShowEvolutionButton(false);
+    }
+
+    if (e.target.getAttribute("data-userpokemonid")) {
+      setSelectedUserPokemon(e.target.getAttribute("data-userpokemonid"));
+    } else {
+      setSelectedUserPokemon(null);
+    }
+
     if (e.target.getAttribute("data-pokemonid")) {
       setSelectedPokemon(e.target.getAttribute("data-pokemonid"));
     } else {
@@ -138,6 +154,7 @@ export default function User({ params }: Route.ComponentProps) {
                     <img
                       data-userpokemonid={p.user_pokemon_ext_id}
                       data-pokemonid={p.pokemon_id}
+                      data-evolutionid={p.evolution_id}
                       key={p.user_pokemon_ext_id}
                       onClick={handlePokemonClick}
                       className={`w-28 md:w-32`}
@@ -168,22 +185,21 @@ export default function User({ params }: Route.ComponentProps) {
                 >
                   show card
                 </button>
-                {/* {params.username === username && (
+                {params.username === username && (
                   <>
-                    <button
-                      type="button"
-                      className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
-                    >
-                      {isPinned ? "unpin" : "pin"}
-                    </button>
-                    <button
-                      type="button"
-                      className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
-                    >
-                      release
-                    </button>
+                    {showEvolutionButton && (
+                      <button
+                        type="button"
+                        className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
+                        onClick={() => {
+                          navigate(`/evolve/${selectedUserPokemon}`);
+                        }}
+                      >
+                        evolve
+                      </button>
+                    )}
                   </>
-                )} */}
+                )}
                 <button
                   type="button"
                   onClick={handlePokemonClick}

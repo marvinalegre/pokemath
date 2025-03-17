@@ -225,7 +225,7 @@ app.get("/api/player/:username", async (c) => {
     .all();
 
   const { results: unpinned } = await c.env.DB.prepare(
-    "select pokemon_id, user_pokemon_ext_id from user_pokemons where user_id = ? and pinned = 0 order by caught_at desc"
+    "select pokemon_id, user_pokemon_ext_id, evolution_id from user_pokemons left join pokemons on user_pokemons.pokemon_id = pokemons.id where user_id = ? and pinned = 0 order by caught_at desc"
   )
     .bind(results[0].id)
     .all();
