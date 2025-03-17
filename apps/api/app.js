@@ -363,8 +363,9 @@ function rollADie() {
   const r = Math.floor(Math.random() * 1_000_000) + 1;
 
   if (r <= 333_333) return "got away";
-  else if (r <= 771_799) return "C";
-  else if (r <= 971_799) return "E";
+  else if (r <= 871_799) return "C";
+  else if (r <= 950_000) return "CE";
+  else if (r <= 971_799) return "CEE";
   else if (r <= 980_799) return "R";
   else if (r <= 982_799) return "RE";
   else if (r <= 983_599) return "REE";
