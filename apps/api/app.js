@@ -313,10 +313,21 @@ app.post("/api/auth/catch", async (c) => {
   const randomPokemon = pokemons[Math.floor(Math.random() * pokemons.length)];
   const extId = nanoid();
 
+  let experience = null;
+  if (
+    (
+      await c.env.DB.prepare("select evolution_id from pokemons where id = ?")
+        .bind(randomPokemon.id)
+        .all()
+    ).results[0].evolution_id
+  ) {
+    experience = 0;
+  }
+
   await c.env.DB.prepare(
-    "insert into user_pokemons (user_pokemon_ext_id, user_id, pokemon_id) values (?, ?, ?)"
+    "insert into user_pokemons (user_pokemon_ext_id, user_id, pokemon_id, experience) values (?, ?, ?, ?)"
   )
-    .bind(extId, c.get("userId"), randomPokemon.id)
+    .bind(extId, c.get("userId"), randomPokemon.id, experience)
     .run();
 
   return c.json({ caught: true });
