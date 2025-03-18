@@ -9,4 +9,5 @@ export default [
   route("catch/latest", "routes/caught.tsx"),
   route("players", "routes/players.tsx"),
   route(":username", "routes/user.tsx"),
+  route("evolve/:extId", "routes/evolve.tsx"),
 ] satisfies RouteConfig;
