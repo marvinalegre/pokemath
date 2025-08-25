@@ -1,0 +1,6 @@
+{
+  "watch": ["app.js", "routes/", "views/", "public/"],
+  "ext": "js ejs css",
+  "ignore": ["node_modules"],
+  "nodeArgs": ["--env-file=.env"]
+}

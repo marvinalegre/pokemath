@@ -1,0 +1,140 @@
+html,
+body {
+  background-color: #e4e4e4;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Nav container */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #99a1af;
+  padding: 0.7rem 6rem;
+  color: white;
+}
+
+#logo {
+  text-decoration: none;
+  color: black;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+/* Base nav styles (reuse from before or add this below your nav styles) */
+.menu-container button {
+  all: unset; /* resets all inherited/default button styles */
+  background-color: #99a1af;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.menu-container {
+  position: relative;
+}
+
+.popover {
+  display: none;
+  position: absolute;
+  top: 120%; /* slightly below the button */
+  right: 0;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  min-width: 160px;
+  z-index: 100;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.popover a {
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: #333;
+  transition: background 0.2s ease;
+}
+
+.popover a:hover {
+  background-color: #f2f2f2;
+}
+
+/* SHOW POPOVER on hover or focus */
+.menu-container:hover .popover,
+.menu-container:focus-within .popover {
+  display: flex;
+}
+
+/* source: https://github.com/athanstan/css-pokeball/ */
+.pokeball {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background: #fff;
+  border: 5px solid #000;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: inset -10px 10px 0 10px #ccc;
+  animation: shake 1.25s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  animation-play-state: paused;
+}
+.pokeball::before,
+.pokeball::after {
+  content: "";
+  position: absolute;
+}
+.pokeball::before {
+  background: red;
+  width: 100%;
+  height: 50%;
+}
+.pokeball::after {
+  top: calc(50% - 5px);
+  width: 100%;
+  height: 10px;
+  background: #000;
+}
+.pokeball-button {
+  position: absolute;
+  top: calc(50% - 15px);
+  left: calc(50% - 15px);
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 4px solid #7f8c8d;
+  border-radius: 50%;
+  z-index: 10;
+  box-shadow: 0 0 0 7px black;
+  animation: blink 0.5s alternate infinite;
+  animation-play-state: paused;
+}
+
+.responsive-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 5.25rem);
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 1rem 2rem;
+  }
+
+  .responsive-center {
+    height: 70vh;
+  }
+}
