@@ -1,2 +1,23 @@
 node_modules/
 .env
+
+# SQLite database files
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+
+# SQLite journal and temporary files
+*.sqlite-journal
+*.sqlite3-journal
+*.db-journal
+*.db3-journal
+*.sql-journal
+
+# SQLite WAL mode files
+*.db-shm
+*.db-wal
+
+# Optional: backups or temp files
+*.bak
+*.tmp

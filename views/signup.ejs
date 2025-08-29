@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up | Pokemath</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <div id="logo">PokéMath</div>
+    </nav>
+
+    <form method="post" action="/signup" id="signup-form">
+        <p class="error-message" style="margin-bottom: 2rem"><%= generalError ? generalError : null %></p>
+
+        <label for="username">username:</label>
+        <input id="username" name="username" type="text" required value="<%= username ? username : '' %>">
+        <p class="error-message"><%= usernameError ? usernameError : null %></p>
+        <br />
+        <label for="password">password:</label>
+        <input id="password" name="password" type="password" required value="<%= password ? password : '' %>">
+        <p class="error-message"><%= passwordError ? passwordError : null %></p>
+
+        <label for="password-toggle" style="font-size: 0.9rem">
+            <input id="password-toggle" type="checkbox" onchange="togglePassword()">
+            show password
+        </label>
+
+        <button type="submit" style="font-size: 1.1rem">sign up</button>
+
+        <p style="font-size: 0.9rem; margin: 2rem 0;">Already have an account? <a href="/login">Log in</a></p>
+    </form>
+
+</body>
+</html>

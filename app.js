@@ -1,5 +1,9 @@
 import express from "express";
 import path from "path";
+import cookieParser from "cookie-parser";
+
+import indexRoutes from "./routes/index.js";
+import authRoutes from "./routes/auth.js";
 
 const PORT = process.env.PORT || 3000;
 
@@ -7,10 +11,11 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "views"));
 
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.get("/", (_req, res) => {
-  res.render("home");
-});
+app.use("/", indexRoutes);
+app.use("/", authRoutes);
 
 app.listen(PORT, () => console.log(`Now listening at ${PORT}.`));

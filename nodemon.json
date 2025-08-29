@@ -1,5 +1,5 @@
 {
-  "watch": ["app.js", "routes/", "views/", "public/"],
+  "watch": ["app.js", "routes/", "views/", "public/", "utils/"],
   "ext": "js ejs css",
   "ignore": ["node_modules"],
   "nodeArgs": ["--env-file=.env"]

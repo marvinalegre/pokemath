@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: #e4e4e4;
+  background-color: #e5e7eb;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -25,6 +25,7 @@ nav {
   color: black;
   font-size: 1.5rem;
   font-weight: bold;
+  font-style: italic;
   transition: transform 0.2s ease;
 }
 
@@ -127,6 +128,42 @@ nav {
   align-items: center;
   justify-content: center;
   height: calc(100vh - 5.25rem);
+}
+
+#signup-form {
+  padding: 1rem;
+  margin: 2rem auto;
+  width: 300px;
+}
+
+#signup-form label {
+  display: block;
+  margin-top: 1rem;
+}
+
+#signup-form input[type="text"],
+#signup-form input[type="password"] {
+  margin: 0.2rem 0;
+  padding: 0.2rem;
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+#signup-form button {
+  display: block;
+  margin-top: 2rem;
+  padding: 0.4rem 1rem;
+  width: 100%;
+  background-color: white;
+  border: none;
+  font-weight: bold;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin: 0.2rem;
+  font-style: italic;
 }
 
 @media (max-width: 768px) {

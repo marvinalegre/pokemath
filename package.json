@@ -9,8 +9,14 @@
     "stop": "pm2 stop ecosystem.json"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^12.2.0",
+    "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nanoid": "^5.1.5",
+    "zxcvbn": "^4.4.2"
   },
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
