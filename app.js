@@ -20,4 +20,13 @@ app.use("/", authRoutes);
 app.use("/catch", catchRoutes);
 app.use("/", indexRoutes);
 
+app.use((_req, res) => {
+  res.status(404).send("Page not found");
+});
+
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  res.status(500).send("Internal server error");
+});
+
 app.listen(PORT, () => console.log(`Now listening at ${PORT}.`));

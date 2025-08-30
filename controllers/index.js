@@ -165,7 +165,7 @@ const player = (req, res) => {
     .bind(req.params.username.toLowerCase())
     .all();
   if (!users.length) {
-    res.redirect("/");
+    return res.status(404).send("Page not found");
   }
 
   const pokemons = db
