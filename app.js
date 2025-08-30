@@ -16,8 +16,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.use("/", indexRoutes);
 app.use("/", authRoutes);
 app.use("/catch", catchRoutes);
+app.use("/", indexRoutes);
 
 app.listen(PORT, () => console.log(`Now listening at ${PORT}.`));

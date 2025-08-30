@@ -188,9 +188,35 @@ svg {
   border: 1px solid black;
 }
 
+.sticky-text {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 36px; /* Equivalent to top-9 (usually 9 * 4px = 36px) */
+  background-color: white;
+  padding: 0.7rem 6rem;
+  font-size: 1.25rem; /* Equivalent to text-xl */
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row; /* Equivalent to flex-row */
+  flex-wrap: wrap; /* Equivalent to flex-wrap */
+  justify-content: center; /* Equivalent to justify-center */
+  align-items: center; /* Equivalent to items-center */
+  max-width: 900px; /* Equivalent to max-w-[1400px] */
+  margin-left: auto; /* Equivalent to mx-auto */
+  margin-right: auto; /* Equivalent to mx-auto */
+  gap: 0.5rem; /* Equivalent to gap-2 */
+}
+
+.flex-container img {
+  width: 112px;
+}
+
 @media (max-width: 768px) {
+  .sticky-text,
   nav {
-    padding: 1rem 2rem;
+    padding: 1rem 1rem;
   }
 
   .responsive-center {

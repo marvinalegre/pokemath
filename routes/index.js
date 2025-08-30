@@ -6,5 +6,6 @@ import { ensureLoggedIn } from "../middlewares.js";
 router.get("/", controller.home);
 router.get("/catch", ensureLoggedIn, controller.catchForm);
 router.post("/catch", ensureLoggedIn, controller.catchHandler);
+router.get("/:username", controller.player);
 
 export default router;

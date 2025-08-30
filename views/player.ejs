@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemath</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+</head>
+<body>
+    <nav>
+        <div id="logo">PokéMath</div>
+        <div class="menu-container">
+            <button><img src="/icons/menu.svg"></button>
+            <div class="popover">
+                <% if (username) { %>
+                    <a href="/<%= username %>"><%= username %></a>
+                <% } %>
+
+                <a href="/players">players</a>
+
+                <% if (username) { %>
+                    <a href="/logout">logout</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <p class="sticky-text"><%= requestedPlayer %></p>
+
+    <div class="flex-container">
+        <% for (let p of pokemons) { %>
+            <img src="/images/icons/<%= p.id %>.webp">
+        <% } %>
+    </div>
+</body>
+</html>

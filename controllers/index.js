@@ -153,7 +153,45 @@ const catchHandler = (req, res) => {
   res.redirect("/catch/latest");
 };
 
-export default { home, catchForm, catchHandler };
+const player = (req, res) => {
+  const users = db
+    .prepare("select id from users where username = ?")
+    .bind(req.params.username.toLowerCase())
+    .all();
+  if (!users.length) {
+    res.redirect("/");
+  }
+
+  const pokemons = db
+    .prepare(
+      "select pokemon_id as id from user_pokemons where user_id = ? order by caught_at desc",
+    )
+    .bind(users[0].id)
+    .all();
+
+  let decoded;
+  try {
+    decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+  } catch (e) {
+    return res.render("player", {
+      username: undefined,
+      requestedPlayer: req.params.username,
+      pokemons,
+    });
+  }
+
+  const result = db
+    .prepare("select * from users where jwt_sub = ?")
+    .bind(decoded.sub)
+    .all();
+  res.render("player", {
+    username: result[0].username,
+    requestedPlayer: req.params.username,
+    pokemons,
+  });
+};
+
+export default { home, catchForm, catchHandler, player };
 
 function distance(pt1, pt2) {
   // Calculate the difference in x and y coordinates
