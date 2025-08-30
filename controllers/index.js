@@ -150,6 +150,12 @@ const catchHandler = (req, res) => {
     .bind(extId, id, randomPokemon.id, experience)
     .run();
 
+  db.prepare(
+    "insert into pokemon_catch_log (user_id, pokemon_id, user_pokemon_ext_id) values (?, ?, ?)",
+  )
+    .bind(id, randomPokemon.id, extId)
+    .run();
+
   res.redirect("/catch/latest");
 };
 
