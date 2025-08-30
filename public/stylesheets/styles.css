@@ -191,7 +191,7 @@ svg {
 .sticky-text {
   position: -webkit-sticky; /* For Safari */
   position: sticky;
-  top: 36px; /* Equivalent to top-9 (usually 9 * 4px = 36px) */
+  top: 0; /* Equivalent to top-9 (usually 9 * 4px = 36px) */
   background-color: white;
   padding: 0.7rem 6rem;
   font-size: 1.25rem; /* Equivalent to text-xl */
