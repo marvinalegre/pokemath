@@ -9,6 +9,7 @@ INSERT INTO pokemons VALUES(6,'Charizard','Spits fire that is hot enough to melt
 INSERT INTO pokemons VALUES(7,'Squirtle','Shoots water at prey while in the water. Withdraws into its shell when in danger.','#c1d7de','R');
 INSERT INTO pokemons VALUES(8,'Wartortle','When tapped, this POKéMON will pull in its head, but its tail will still stick out a little bit.','#dfe4f0','RE');
 INSERT INTO pokemons VALUES(9,'Blastoise','It deliberately makes itself heavy so it can withstand the recoil of the water jets it fires.','#d1dceb','REE');
+INSERT INTO pokemons VALUES(10,'Caterpie','Its short feet are tipped with suction pads that enable it to tirelessly climb slopes and walls.','#ffffff','C');
 INSERT INTO pokemons VALUES(23,'Ekans','Moves silently and stealthily. Eats the eggs of birds, such as PIDGEY and SPEAROW, whole.','#cfbfcb','C');
 INSERT INTO pokemons VALUES(24,'Arbok','It is rumored that the ferocious warning markings on its belly differ from area to area.','#c7c3c7','C');
 INSERT INTO pokemons VALUES(25,'Pikachu','When several of these POKéMON gather, their electricity could build and cause lightning storms.','#faefca','C');
