@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 
 import indexRoutes from "./routes/index.js";
 import authRoutes from "./routes/auth.js";
+import catchRoutes from "./routes/catch.js";
 
 const PORT = process.env.PORT || 3000;
 
@@ -17,5 +18,6 @@ app.use(express.static("public"));
 
 app.use("/", indexRoutes);
 app.use("/", authRoutes);
+app.use("/catch", catchRoutes);
 
 app.listen(PORT, () => console.log(`Now listening at ${PORT}.`));

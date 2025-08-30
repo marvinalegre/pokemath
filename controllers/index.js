@@ -150,7 +150,7 @@ const catchHandler = (req, res) => {
     .bind(extId, id, randomPokemon.id, experience)
     .run();
 
-  res.redirect("/");
+  res.redirect("/catch/latest");
 };
 
 export default { home, catchForm, catchHandler };

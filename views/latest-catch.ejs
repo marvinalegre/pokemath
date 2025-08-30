@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch | Pokemath</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+</head>
+<body>
+    <nav>
+        <div id="logo">PokéMath</div>
+        <div class="menu-container">
+            <button><img src="/icons/menu.svg"></button>
+            <div class="popover">
+                <% if (username) { %>
+                    <a href="/<%= username %>"><%= username %></a>
+                <% } %>
+
+                <a href="/players">players</a>
+
+                <% if (username) { %>
+                    <a href="/logout">logout</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+        <div style="width: 300px; margin: 0 auto">
+        <img src="/images/icons/<%= pokemonId %>.webp" style="display:block; margin: 0 auto 4rem auto;"/>
+        <form method="post" action="/catch/latest">
+          <button
+            name="keep"
+            value="true"
+            type="submit"
+            className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
+          >
+            keep
+          </button>
+          <button
+            name="release"
+            value="true"
+            type="submit"
+            className="bg-black px-4 py-2 text-xl font-medium text-white hover:bg-[#3f3f3f] w-full"
+          >
+            release
+          </button>
+          <input
+            type="hidden"
+            name="pokemonExtId"
+            value="<%= pokemonExtId %>"
+          />
+        </form>
+      </div>
+</body>
+</html>

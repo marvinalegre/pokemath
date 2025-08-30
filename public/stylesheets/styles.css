@@ -151,10 +151,11 @@ form[action="/catch"] input,
 }
 
 form[action="/catch"] button,
+form[action="/catch/latest"] button,
 #signup-form button {
   display: block;
   margin-top: 2rem;
-  padding: 0.4rem 1rem;
+  padding: 0.5rem 1rem;
   width: 100%;
   background-color: black;
   color: white;
