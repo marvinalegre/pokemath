@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch | Pokemath</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+</head>
+<body>
+    <nav>
+        <div id="logo">PokéMath</div>
+        <div class="menu-container">
+            <button><img src="/icons/menu.svg"></button>
+            <div class="popover">
+                <% if (username) { %>
+                    <a href="/<%= username %>"><%= username %></a>
+                <% } %>
+
+                <a href="/players">players</a>
+
+                <% if (username) { %>
+                    <a href="/logout">logout</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <p class="error-message" style="margin: 2rem auto; width: 300px; background-color: <%= /pokemon/.test(generalError) ? 'white' : '#ffa500' %>; color: black; padding: .5rem; border: 3px solid black; display: <%= generalError ? '' : 'none' %>"><%= generalError ? generalError : null %></p>
+
+    <div class="question">
+        <p style="text-align: center; font-size: 1.1rem">
+            How many dots are in the box?
+        </p>
+        <svg className="h-60 w-60 border border-black m-auto">
+            <% for (let c of centers) { %>
+                <circle r="10" cx=<%= c[0] %> cy=<%= c[1] %> fill="black" />
+            <% } %>
+        </svg>
+    </div>
+
+    <form method="post" action="/catch">
+        <input name="answer" tabindex="1" type="number" required>
+        <button tabindex="2" type="submit">submit</button>
+    </form>
+</body>
+</html>

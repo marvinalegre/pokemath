@@ -1,5 +1,13 @@
 {
-  "watch": ["app.js", "routes/", "views/", "public/", "utils/"],
+  "watch": [
+    "app.js",
+    "middlewares.js",
+    "controllers/",
+    "public/",
+    "routes/",
+    "utils/",
+    "views/"
+  ],
   "ext": "js ejs css",
   "ignore": ["node_modules"],
   "nodeArgs": ["--env-file=.env"]
