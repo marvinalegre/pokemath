@@ -4,19 +4,15 @@
 <%- include('partials/head', { title: 'Log in | Pokemath' }) %>
 
 <body>
-    <nav>
-        <a href="/" style="text-decoration: none">
-            <div id="logo">PokéMath</div>
-        </a>
-    </nav>
+    <%- include('partials/nav', { username: null }) %>
 
     <form method="post" action="/login" id="signup-form">
         <p class="error-message" style="margin-bottom: 2rem"><%= generalError ? generalError : null %></p>
 
         <label for="username">username:</label>
         <input id="username" name="username" type="text" required value="<%= username ? username : '' %>">
-        <p class="error-message"><%= usernameError ? usernameError : null %></p>
-        <br />
+        <p class="error-message"><%= usernameError ? usernameError : null %></p><br />
+
         <label for="password">password:</label>
         <input id="password" name="password" type="password" required value="<%= password ? password : '' %>">
         <p class="error-message"><%= passwordError ? passwordError : null %></p>

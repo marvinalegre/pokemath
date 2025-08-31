@@ -4,23 +4,7 @@
 <%- include('partials/head', { title: 'Catch | Pokemath' }) %>
 
 <body>
-    <nav>
-        <div id="logo">PokéMath</div>
-        <div class="menu-container">
-            <button><img src="/icons/menu.svg"></button>
-            <div class="popover">
-                <% if (username) { %>
-                    <a href="/<%= username %>"><%= username %></a>
-                <% } %>
-
-                <a href="/players">players</a>
-
-                <% if (username) { %>
-                    <a href="/logout">logout</a>
-                <% } %>
-            </div>
-        </div>
-    </nav>
+    <%- include('partials/nav', { username }) %>
 
     <p class="error-message" style="margin: 2rem auto; width: 300px; background-color: <%= /pokemon/.test(generalError) ? 'white' : '#ffa500' %>; color: black; padding: .5rem; border: 3px solid black; display: <%= generalError ? '' : 'none' %>"><%= generalError ? generalError : null %></p>
 

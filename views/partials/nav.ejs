@@ -1,0 +1,21 @@
+<nav>
+    <a href="/" style="text-decoration: none">
+        <div id="logo">PokéMath</div>
+    </a>
+
+    <div class="menu-container">
+        <button><img src="/icons/menu.svg"></button>
+
+        <div class="popover">
+            <% if (username) { %>
+                <a href="/<%= username %>"><%= username %></a>
+            <% } %>
+
+            <a href="/players">players</a>
+
+            <% if (username) { %>
+                <a href="/logout">logout</a>
+            <% } %>
+        </div>
+    </div>
+</nav>
