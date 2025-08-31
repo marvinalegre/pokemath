@@ -35,10 +35,9 @@ const catchForm = (req, res) => {
     .all();
 
   if (result.length === 1) {
-    return res.render("catch", {
+    return res.render(`questions/${result[0].question_code}`, {
       username: req.user.username,
       generalError: undefined,
-      qCode: result[0].question_code,
       qParameters: JSON.parse(result[0].question_parameters),
     });
   }
@@ -46,11 +45,10 @@ const catchForm = (req, res) => {
   const qCode = getCode();
   const { qParameters, qAnswer } = getParametersAndAnswer(qCode);
 
-  res.render("catch", {
+  res.render(`questions/${qCode}`, {
     username: req.user.username,
     generalError: undefined,
     qParameters,
-    qCode,
   });
 
   db.prepare(
@@ -71,19 +69,10 @@ const catchHandler = (req, res) => {
     .bind(id)
     .all();
 
-  if (result.length === 0 || result.length > 1) {
-    return res.render("catch", {
-      username,
-      generalError: "Oops. Something went wrong.",
-      qCode: result[0].question_code,
-      qParameters: JSON.parse(result[0].question_parameters),
-    });
-  }
   if (result[0].answer !== answer) {
-    return res.render("catch", {
+    return res.render(`questions/${result[0].question_code}`, {
       username,
       generalError: "Wrong answer.",
-      qCode: result[0].question_code,
       qParameters: JSON.parse(result[0].question_parameters),
     });
   }
@@ -101,10 +90,9 @@ const catchHandler = (req, res) => {
       .bind(req.user.id, qCode, JSON.stringify(qParameters), String(qAnswer))
       .run();
 
-    return res.render("catch", {
+    return res.render(`questions/${qCode}`, {
       username,
       generalError: "The pokemon got away.",
-      qCode,
       qParameters,
     });
   }
@@ -211,13 +199,14 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["c"];
+  const codes = ["c", "a", "ar"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
   if (code === "c") {
+    // counting
     const randomNumber = (Math.round(Math.random() * 10) % 10) + 5;
     const centers = [];
     while (centers.length !== (1 === randomNumber ? 11 : randomNumber)) {
@@ -232,7 +221,16 @@ function getParametersAndAnswer(code) {
       }
       if (count === centers.length) centers.push(center);
     }
-
     return { qAnswer: randomNumber, qParameters: centers };
+  } else if (code === "a") {
+    // addition
+    const x = Math.floor(Math.random() * 13);
+    const y = Math.floor(Math.random() * 13);
+    return { qAnswer: x + y, qParameters: { x, y } };
+  } else if (code === "ar") {
+    // repeated addition
+    const x = Math.floor(Math.random() * 5) + 1;
+    const n = Math.floor(Math.random() * 5) + 3;
+    return { qAnswer: x * n, qParameters: { x, n } };
   }
 }

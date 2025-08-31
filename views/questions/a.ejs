@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include('partials/head', { title: 'Catch | Pokemath' }) %>
+<%- include('../partials/head', { title: 'Catch | Pokemath' }) %>
 
 <body>
-    <%- include('partials/nav', { username }) %>
+    <%- include('../partials/nav', { username }) %>
 
     <p class="error-message" style="margin: 2rem auto; width: 300px; background-color: <%= /pokemon/.test(generalError) ? 'white' : '#ffa500' %>; color: black; padding: .5rem; border: 3px solid black; display: <%= generalError ? '' : 'none' %>"><%= generalError ? generalError : null %></p>
 
-    <div class="question" style="display: <%= qCode === 'c' ? '' : 'none' %>">
+    <div class="question">
         <p style="text-align: center; font-size: 1.1rem">
-            How many dots are in the box?
+            Fill in the blank.
         </p>
-        <svg className="h-60 w-60 border border-black m-auto">
-            <% for (let c of qParameters) { %>
-                <circle r="10" cx=<%= c[0] %> cy=<%= c[1] %> fill="black" />
-            <% } %>
-        </svg>
+
+        <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> + <%= qParameters.y %> = ___</p>
     </div>
 
     <form method="post" action="/catch">
