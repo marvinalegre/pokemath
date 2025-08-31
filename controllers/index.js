@@ -37,35 +37,26 @@ const catchForm = (req, res) => {
   if (result.length === 1) {
     return res.render("catch", {
       username: req.user.username,
-      centers: JSON.parse(result[0].question_parameters),
       generalError: undefined,
+      qCode: result[0].question_code,
+      qParameters: JSON.parse(result[0].question_parameters),
     });
   }
 
-  const randomNumber = (Math.round(Math.random() * 10) % 10) + 5;
-  const centers = [];
-  while (centers.length !== (1 === randomNumber ? 11 : randomNumber)) {
-    const center = [
-      Math.floor(Math.random() * (230 - 10 + 1)) + 10,
-      Math.floor(Math.random() * (230 - 10 + 1)) + 10,
-    ];
+  const qCode = getCode();
+  const { qParameters, qAnswer } = getParametersAndAnswer(qCode);
 
-    let count = 0;
-    for (let c of centers) {
-      if (distance(c, center) >= 20) count++;
-    }
-    if (count === centers.length) centers.push(center);
-  }
   res.render("catch", {
     username: req.user.username,
     generalError: undefined,
-    centers,
+    qParameters,
+    qCode,
   });
 
   db.prepare(
     "insert into user_questions (user_id, question_code, question_parameters, answer) values (?, ?, ?, ?)",
   )
-    .bind(req.user.id, "c", JSON.stringify(centers), String(randomNumber))
+    .bind(req.user.id, qCode, JSON.stringify(qParameters), String(qAnswer))
     .run();
 };
 
@@ -75,7 +66,7 @@ const catchHandler = (req, res) => {
 
   const result = db
     .prepare(
-      "select answer, question_parameters from user_questions where user_id = ?",
+      "select answer, question_parameters, question_code from user_questions where user_id = ?",
     )
     .bind(id)
     .all();
@@ -84,14 +75,16 @@ const catchHandler = (req, res) => {
     return res.render("catch", {
       username,
       generalError: "Oops. Something went wrong.",
-      centers: JSON.parse(result[0].question_parameters),
+      qCode: result[0].question_code,
+      qParameters: JSON.parse(result[0].question_parameters),
     });
   }
   if (result[0].answer !== answer) {
     return res.render("catch", {
       username,
       generalError: "Wrong answer.",
-      centers: JSON.parse(result[0].question_parameters),
+      qCode: result[0].question_code,
+      qParameters: JSON.parse(result[0].question_parameters),
     });
   }
 
@@ -99,30 +92,20 @@ const catchHandler = (req, res) => {
 
   const die = rollDie();
   if (die === "got away") {
-    const randomNumber = (Math.round(Math.random() * 10) % 10) + 5;
-    const centers = [];
-    while (centers.length !== (1 === randomNumber ? 11 : randomNumber)) {
-      const center = [
-        Math.floor(Math.random() * (230 - 10 + 1)) + 10,
-        Math.floor(Math.random() * (230 - 10 + 1)) + 10,
-      ];
+    const qCode = getCode();
+    const { qParameters, qAnswer } = getParametersAndAnswer(qCode);
 
-      let count = 0;
-      for (let c of centers) {
-        if (distance(c, center) >= 20) count++;
-      }
-      if (count === centers.length) centers.push(center);
-    }
     db.prepare(
       "insert into user_questions (user_id, question_code, question_parameters, answer) values (?, ?, ?, ?)",
     )
-      .bind(req.user.id, "c", JSON.stringify(centers), String(randomNumber))
+      .bind(req.user.id, qCode, JSON.stringify(qParameters), String(qAnswer))
       .run();
 
     return res.render("catch", {
       username,
       generalError: "The pokemon got away.",
-      centers,
+      qCode,
+      qParameters,
     });
   }
 
@@ -225,4 +208,31 @@ function rollDie() {
   else if (r <= 999_899) return "HE";
   else if (r <= 999_999) return "HEE";
   else return "L";
+}
+
+function getCode() {
+  const codes = ["c"];
+  const index = Math.floor(Math.random() * codes.length);
+  return codes[index];
+}
+
+function getParametersAndAnswer(code) {
+  if (code === "c") {
+    const randomNumber = (Math.round(Math.random() * 10) % 10) + 5;
+    const centers = [];
+    while (centers.length !== (1 === randomNumber ? 11 : randomNumber)) {
+      const center = [
+        Math.floor(Math.random() * (230 - 10 + 1)) + 10,
+        Math.floor(Math.random() * (230 - 10 + 1)) + 10,
+      ];
+
+      let count = 0;
+      for (let c of centers) {
+        if (distance(c, center) >= 20) count++;
+      }
+      if (count === centers.length) centers.push(center);
+    }
+
+    return { qAnswer: randomNumber, qParameters: centers };
+  }
 }
