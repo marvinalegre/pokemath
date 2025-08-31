@@ -1,23 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Pokemath</title>
-    <link rel="stylesheet" href="/stylesheets/styles.css">
-    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
 
-    <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-            } else {
-                passwordField.type = 'password';
-            }
-        }
-    </script>
-</head>
+<%- include('partials/head', { title: 'Log in | Pokemath' }) %>
+
 <body>
     <nav>
         <a href="/" style="text-decoration: none">
@@ -46,5 +31,15 @@
         <p style="font-size: 0.9rem; margin: 2rem 0;">Don't have an account? <a href="/signup">Sign up</a></p>
     </form>
 
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        }
+    </script>
 </body>
 </html>
