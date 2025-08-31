@@ -69,6 +69,19 @@ const catchHandler = (req, res) => {
     .bind(id)
     .all();
 
+  // record submitted answers
+  db.prepare(
+    "insert into question_log (user_id, answer, correct_answer, question_code, question_parameters) values (?, ?, ?, ?, ?)",
+  )
+    .bind(
+      id,
+      answer,
+      result[0].answer,
+      result[0].question_code,
+      result[0].question_parameters,
+    )
+    .run();
+
   if (result[0].answer !== answer) {
     return res.render(`questions/${result[0].question_code}`, {
       username,
