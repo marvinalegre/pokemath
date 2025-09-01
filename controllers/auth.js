@@ -8,6 +8,7 @@ const nanoid = customAlphabet(
 );
 import jwt from "jsonwebtoken";
 import db from "../database/db.js";
+import { bot, chatId } from "../telegram-bot.js";
 
 const signupForm = (_req, res) => {
   res.render("signup", {
@@ -99,6 +100,7 @@ const signup = async (req, res) => {
     )
       .bind(jwtSub, username, hash)
       .run();
+    await bot.telegram.sendMessage(chatId, `New sign up: ${username}`);
   } catch (e) {
     return res.render("signup", {
       username,

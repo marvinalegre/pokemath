@@ -6,16 +6,18 @@ import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
 
+import { bot, chatId } from "./telegram-bot.js";
 import indexRoutes from "./routes/index.js";
 import authRoutes from "./routes/auth.js";
 import catchRoutes from "./routes/catch.js";
 
 const app = express();
-app.use(helmet());
 const accessLogStream = fs.createWriteStream(
   path.join(process.cwd(), "logs", "access.log"),
   { flags: "a" },
 );
+
+app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use(compression());
 
@@ -34,8 +36,8 @@ app.use((_req, res) => {
   res.status(404).send("Page not found");
 });
 
-app.use((err, _req, res, _next) => {
-  console.error(err);
+app.use(async (err, _req, res, _next) => {
+  await bot.telegram.sendMessage(chatId, err);
   res.status(500).send("Internal server error");
 });
 
