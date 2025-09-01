@@ -23,3 +23,5 @@ node_modules/
 *.tmp
 
 _assets/
+
+logs/
