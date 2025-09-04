@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: #e5e7eb;
+  background-color: #fafafa;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -15,7 +15,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #99a1af;
+  background-color: #9f9fa9;
   padding: 0.7rem 6rem;
   color: white;
 }
@@ -192,7 +192,7 @@ svg {
   position: -webkit-sticky; /* For Safari */
   position: sticky;
   top: 0; /* Equivalent to top-9 (usually 9 * 4px = 36px) */
-  background-color: white;
+  background-color: #e4e4e7;
   padding: 0.7rem 6rem;
   font-size: 1.25rem; /* Equivalent to text-xl */
 }
