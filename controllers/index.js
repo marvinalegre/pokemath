@@ -4,6 +4,7 @@ const nanoid = customAlphabet(
   "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
 );
 import db from "../database/db.js";
+import { bot, chatId } from "../telegram-bot.js";
 
 const home = (req, res) => {
   if (!req.cookies.token) {
@@ -58,7 +59,7 @@ const catchForm = (req, res) => {
     .run();
 };
 
-const catchHandler = (req, res) => {
+const catchHandler = async (req, res) => {
   const { answer } = req.body;
   const { id, username } = req.user;
 
@@ -141,6 +142,29 @@ const catchHandler = (req, res) => {
     .run();
 
   res.redirect("/catch/latest");
+  await bot.telegram.sendMessage(chatId, `${username} just caught a pokemon!`);
+};
+
+const players = (req, res) => {
+  const players = db
+    .prepare("select username from users order by username asc")
+    .all();
+
+  let decoded;
+  try {
+    decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+  } catch (e) {
+    return res.render("players", {
+      username: undefined,
+      players,
+    });
+  }
+
+  const result = db
+    .prepare("select username from users where jwt_sub = ?")
+    .bind(decoded.sub)
+    .all();
+  res.render("players", { players, username: result[0].username });
 };
 
 const player = (req, res) => {
@@ -181,7 +205,7 @@ const player = (req, res) => {
   });
 };
 
-export default { home, catchForm, catchHandler, player };
+export default { home, catchForm, catchHandler, players, player };
 
 function distance(pt1, pt2) {
   // Calculate the difference in x and y coordinates

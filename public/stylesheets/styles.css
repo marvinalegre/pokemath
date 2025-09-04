@@ -213,6 +213,17 @@ svg {
   width: 112px;
 }
 
+.player {
+  padding: 5px 10px;
+  color: black;
+  text-decoration: none;
+  margin: 45px;
+  display: inline-block;
+  background-color: #e4e4e7;
+}
+.player:hover {
+  text-decoration: underline;
+}
 @media (max-width: 768px) {
   .sticky-text,
   nav {

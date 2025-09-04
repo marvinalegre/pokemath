@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head', { title: 'Players | Pokemath' }) %>
+
+<body>
+    <%- include('partials/nav', { username }) %>
+
+    <div class="flex-container">
+        <% for (let p of players) { %>
+            <a href="/<%= p.username %>" class="player"><%= p.username %></a>
+        <% } %>
+    </div>
+</body>
+</html>
