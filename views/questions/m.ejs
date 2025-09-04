@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head', { title: 'Catch | Pokemath' }) %>
+
+<body>
+    <%- include('../partials/nav', { username }) %>
+
+    <p class="error-message" style="margin: 2rem auto; width: 300px; background-color: <%= /pokemon/.test(generalError) ? 'white' : '#ffa500' %>; color: black; padding: .5rem; border: 3px solid black; display: <%= generalError ? '' : 'none' %>"><%= generalError ? generalError : null %></p>
+
+    <div class="question">
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> x <%= qParameters.y %> = ___</p>
+    </div>
+
+    <form method="post" action="/catch">
+        <input name="answer" tabindex="1" type="number" required>
+        <button tabindex="2" type="submit">submit</button>
+    </form>
+</body>
+</html>

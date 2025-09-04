@@ -236,7 +236,7 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["c", "a", "ar"];
+  const codes = ["c", "a", "ar", "m"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
@@ -269,5 +269,10 @@ function getParametersAndAnswer(code) {
     const x = Math.floor(Math.random() * 5) + 1;
     const n = Math.floor(Math.random() * 5) + 3;
     return { qAnswer: x * n, qParameters: { x, n } };
+  } else if (code === "m") {
+    // multiplication
+    const x = Math.floor(Math.random() * 11);
+    const y = Math.floor(Math.random() * 11);
+    return { qAnswer: x * y, qParameters: { x, y } };
   }
 }
