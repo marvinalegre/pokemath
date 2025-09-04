@@ -76,8 +76,8 @@ function optimize(n) {
   try {
     sharp(join(sugimoriPath, `${n}.png`))
       .resize(400) // width in pixels
-      .toFormat("webp")
-      .toFile(join(sugimoriOutputPath, `${n}.webp`));
+      .toFormat("avif", { quality: 50, effort: 9 })
+      .toFile(join(sugimoriOutputPath, `${n}.avif`));
   } catch (e) {
     console.error(e.message);
   }
@@ -90,8 +90,8 @@ function optimize(n) {
       ),
     )
       .resize(200) // width in pixels
-      .toFormat("webp")
-      .toFile(join(iconsOutputPath, `${n}.webp`));
+      .toFormat("avif", { quality: 50, effort: 9 })
+      .toFile(join(iconsOutputPath, `${n}.avif`));
   } catch (e) {
     console.error(e.message);
   }
