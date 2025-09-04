@@ -173,7 +173,7 @@ const player = (req, res) => {
     .bind(req.params.username.toLowerCase())
     .all();
   if (!users.length) {
-    return res.status(404).send("Page not found");
+    return res.status(404).render("404");
   }
 
   const pokemons = db

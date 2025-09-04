@@ -33,12 +33,12 @@ app.use("/catch", catchRoutes);
 app.use("/", indexRoutes);
 
 app.use((_req, res) => {
-  res.status(404).send("Page not found");
+  res.status(404).render("404");
 });
 
 app.use(async (err, _req, res, _next) => {
   await bot.telegram.sendMessage(chatId, err);
-  res.status(500).send("Internal server error");
+  res.status(500).render("500");
 });
 
 const PORT = process.env.PORT || 3000;
