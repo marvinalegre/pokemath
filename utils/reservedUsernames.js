@@ -1,6 +1,7 @@
 const appSpecificUsernames = [
   "battle",
   "catch",
+  "guest",
   "player",
   "players",
   "practice",
