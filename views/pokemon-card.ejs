@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head', { title: 'Pokemath' }) %>
+
+<body>
+    <%- include('partials/nav', { username }) %>
+
+    <p class="sticky-text"><%= requestedPlayer %></p>
+
+    <div class="pokemon-card" style="background-color:<%= pokemon.color %>">
+        <h3><%= pokemon.name %></h3>
+        <img src="/images/sugimori/<%= pokemon.id %>.avif">
+        <p><%= pokemon.description %></p>
+    </div>
+</body>
+</html>

@@ -187,6 +187,50 @@ const player = (req, res) => {
   });
 };
 
+const pokemonCard = (req, res) => {
+  const { username: requestedPlayer, pokemonId } = req.params;
+  const users = db
+    .prepare("select id from users where username = ?")
+    .bind(requestedPlayer)
+    .all();
+  if (users.length === 0) {
+    return res.status(404).render("404");
+  }
+
+  const pokemons = db
+    .prepare(
+      `
+      select pokemon_id as id, name, description, color
+      from user_pokemons
+      left join pokemons
+      on pokemons.id = user_pokemons.pokemon_id
+      where user_id = ?
+      and user_pokemon_ext_id = ?
+      order by caught_at desc
+      `,
+    )
+    .bind(users[0].id, pokemonId)
+    .all();
+  if (pokemons.length === 0) {
+    return res.status(404).render("404");
+  }
+
+  if (!req.sub) {
+    return res.render("pokemon-card", {
+      username: undefined,
+      requestedPlayer: req.params.username,
+      pokemon: pokemons[0],
+    });
+  }
+
+  const { username } = getUser(req.sub);
+  return res.render("pokemon-card", {
+    username,
+    requestedPlayer: req.params.username,
+    pokemon: pokemons[0],
+  });
+};
+
 const pokemon = (req, res) => {
   const users = db
     .prepare("select id from users where username = ?")
@@ -232,7 +276,15 @@ const pokemon = (req, res) => {
   });
 };
 
-export default { home, catchForm, catchHandler, players, player, pokemon };
+export default {
+  home,
+  catchForm,
+  catchHandler,
+  players,
+  player,
+  pokemon,
+  pokemonCard,
+};
 
 function distance(pt1, pt2) {
   // Calculate the difference in x and y coordinates

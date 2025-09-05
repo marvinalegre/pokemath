@@ -226,6 +226,42 @@ svg {
 .player:hover {
   text-decoration: underline;
 }
+
+.pokemon-card {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid black;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  width: 20rem;
+  padding: 1rem;
+}
+
+.pokemon-card h3 {
+  font-size: 2.25rem;
+  text-align: center;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-family: serif;
+  font-weight: 600;
+}
+
+.pokemon-card img {
+  width: 18rem;
+  height: 18;
+}
+
+.pokemon-card p {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  font-family: serif;
+  font-size: 1.125rem;
+  line-height: 1.25rem;
+}
+
 @media (max-width: 768px) {
   .sticky-text,
   nav {
@@ -234,5 +270,10 @@ svg {
 
   .responsive-center {
     height: 70vh;
+  }
+
+  .pokemon-card {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
   }
 }

@@ -11,12 +11,21 @@
     <div style="width: 300px; margin: 0 auto">
         <img src="/images/icons/<%= pokemon.id %>.avif" style="display:block; margin: 0 auto 4rem auto;"/>
         <form method="post" action="/catch/latest">
+            <a href="/<%= requestedPlayer %>/<%= pokemon.extId %>/card" style="text-decoration: none">
+            <button
+                type="button"
+                tabindex="1"
+                style="font-size: 1.1rem"
+            >
+                show card
+            </button>
+            </a>
             <% if (showReleaseBtn) { %>
             <button
                 name="release"
                 value="true"
                 type="submit"
-                tabindex="1"
+                tabindex="2"
                 style="font-size: 1.1rem"
             >
                 release
