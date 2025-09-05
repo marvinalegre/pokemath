@@ -7,6 +7,12 @@ const appSpecificUsernames = [
   "practice",
   "quiz",
   "trade",
+  "buy",
+  "offer",
+  "offers",
+  "ask",
+  "bid",
+  "market",
 ];
 
 const generalUsernames = [
