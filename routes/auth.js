@@ -9,7 +9,7 @@ router.get(
   redirectIfAuthenticated,
   controller.signupForm,
 );
-router.post("/signup", limiter(10), controller.signup);
+router.post("/signup", limiter(20), controller.signup);
 router.get(
   "/login",
   limiter(10),

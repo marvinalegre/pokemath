@@ -2,31 +2,34 @@ import jwt from "jsonwebtoken";
 import db from "./database/db.js";
 import { rateLimit } from "express-rate-limit";
 
+export const verifyToken = (req, res, next) => {
+  if (!req.cookies?.token) {
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+    req.sub = decoded.sub;
+  } catch (_) {}
+
+  next();
+};
+
 export const redirectIfAuthenticated = (req, res, next) => {
-  if (req.cookies?.token) {
-    try {
-      jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-      return res.redirect("/");
-    } catch (e) {}
+  if (req.sub) {
+    return res.redirect("/");
   }
   next();
 };
 
 export const ensureLoggedIn = (req, res, next) => {
-  if (!req.cookies?.token) {
-    return res.redirect("/login");
-  }
-
-  let decoded;
-  try {
-    decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-  } catch (e) {
+  if (!req.sub) {
     return res.redirect("/login");
   }
 
   const result = db
     .prepare("select id, username from users where jwt_sub = ?")
-    .bind(decoded.sub)
+    .bind(req.sub)
     .all();
   req.user = result[0];
 

@@ -7,6 +7,7 @@ import compression from "compression";
 import morgan from "morgan";
 
 import { bot, chatId } from "./telegram-bot.js";
+import { verifyToken } from "./middlewares.js";
 import indexRoutes from "./routes/index.js";
 import authRoutes from "./routes/auth.js";
 import catchRoutes from "./routes/catch.js";
@@ -17,16 +18,16 @@ const accessLogStream = fs.createWriteStream(
   { flags: "a" },
 );
 
-app.use(helmet());
-app.use(morgan("combined", { stream: accessLogStream }));
-app.use(compression());
-
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "views"));
 
+app.use(helmet());
+app.use(morgan("combined", { stream: accessLogStream }));
+app.use(compression());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(verifyToken);
 
 app.use("/", authRoutes);
 app.use("/catch", catchRoutes);

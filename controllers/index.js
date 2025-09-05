@@ -7,39 +7,30 @@ import db from "../database/db.js";
 import { bot, chatId } from "../telegram-bot.js";
 
 const home = (req, res) => {
-  if (!req.cookies.token) {
-    res.render("home", { username: undefined });
-    return;
+  if (!req.sub) {
+    return res.render("home", { username: undefined });
   }
 
-  let decoded;
-  try {
-    decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-  } catch (e) {
-    res.render("home", { username: undefined });
-    return;
-  }
+  const { username } = getUser(req.sub);
 
-  const result = db
-    .prepare("select * from users where jwt_sub = ?")
-    .bind(decoded.sub)
-    .all();
-  res.render("home", { username: result[0].username });
+  return res.render("home", { username });
 };
 
 const catchForm = (req, res) => {
-  const result = db
+  const { username, id } = req.user;
+
+  const questions = db
     .prepare(
       "select question_code, question_parameters from user_questions where user_id = ?",
     )
-    .bind(req.user.id)
+    .bind(id)
     .all();
 
-  if (result.length === 1) {
-    return res.render(`questions/${result[0].question_code}`, {
-      username: req.user.username,
+  if (questions.length === 1) {
+    return res.render(`questions/${questions[0].question_code}`, {
+      username,
       generalError: undefined,
-      qParameters: JSON.parse(result[0].question_parameters),
+      qParameters: JSON.parse(questions[0].question_parameters),
     });
   }
 
@@ -47,7 +38,7 @@ const catchForm = (req, res) => {
   const { qParameters, qAnswer } = getParametersAndAnswer(qCode);
 
   res.render(`questions/${qCode}`, {
-    username: req.user.username,
+    username,
     generalError: undefined,
     qParameters,
   });
@@ -55,15 +46,15 @@ const catchForm = (req, res) => {
   db.prepare(
     "insert into user_questions (user_id, question_code, question_parameters, answer) values (?, ?, ?, ?)",
   )
-    .bind(req.user.id, qCode, JSON.stringify(qParameters), String(qAnswer))
+    .bind(id, qCode, JSON.stringify(qParameters), String(qAnswer))
     .run();
 };
 
 const catchHandler = async (req, res) => {
   const { answer } = req.body;
-  const { id, username } = req.user;
+  const { username, id } = req.user;
 
-  const result = db
+  const questions = db
     .prepare(
       "select answer, question_parameters, question_code from user_questions where user_id = ?",
     )
@@ -77,17 +68,17 @@ const catchHandler = async (req, res) => {
     .bind(
       id,
       answer,
-      result[0].answer,
-      result[0].question_code,
-      result[0].question_parameters,
+      questions[0].answer,
+      questions[0].question_code,
+      questions[0].question_parameters,
     )
     .run();
 
-  if (result[0].answer !== answer) {
-    return res.render(`questions/${result[0].question_code}`, {
+  if (questions[0].answer !== answer) {
+    return res.render(`questions/${questions[0].question_code}`, {
       username,
       generalError: "Wrong answer.",
-      qParameters: JSON.parse(result[0].question_parameters),
+      qParameters: JSON.parse(questions[0].question_parameters),
     });
   }
 
@@ -101,7 +92,7 @@ const catchHandler = async (req, res) => {
     db.prepare(
       "insert into user_questions (user_id, question_code, question_parameters, answer) values (?, ?, ?, ?)",
     )
-      .bind(req.user.id, qCode, JSON.stringify(qParameters), String(qAnswer))
+      .bind(id, qCode, JSON.stringify(qParameters), String(qAnswer))
       .run();
 
     return res.render(`questions/${qCode}`, {
@@ -150,21 +141,16 @@ const players = (req, res) => {
     .prepare("select username from users order by username asc")
     .all();
 
-  let decoded;
-  try {
-    decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-  } catch (e) {
+  if (!req.sub) {
     return res.render("players", {
       username: undefined,
       players,
     });
   }
 
-  const result = db
-    .prepare("select username from users where jwt_sub = ?")
-    .bind(decoded.sub)
-    .all();
-  res.render("players", { players, username: result[0].username });
+  const { username } = getUser(req.sub);
+
+  return res.render("players", { players, username });
 };
 
 const player = (req, res) => {
@@ -172,6 +158,7 @@ const player = (req, res) => {
     .prepare("select id from users where username = ?")
     .bind(req.params.username.toLowerCase())
     .all();
+
   if (!users.length) {
     return res.status(404).render("404");
   }
@@ -183,10 +170,7 @@ const player = (req, res) => {
     .bind(users[0].id)
     .all();
 
-  let decoded;
-  try {
-    decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-  } catch (e) {
+  if (!req.sub) {
     return res.render("player", {
       username: undefined,
       requestedPlayer: req.params.username,
@@ -194,12 +178,10 @@ const player = (req, res) => {
     });
   }
 
-  const result = db
-    .prepare("select * from users where jwt_sub = ?")
-    .bind(decoded.sub)
-    .all();
-  res.render("player", {
-    username: result[0].username,
+  const { username } = getUser(req.sub);
+
+  return res.render("player", {
+    username,
     requestedPlayer: req.params.username,
     pokemons,
   });
@@ -275,4 +257,12 @@ function getParametersAndAnswer(code) {
     const y = Math.floor(Math.random() * 11);
     return { qAnswer: x * y, qParameters: { x, y } };
   }
+}
+
+function getUser(sub) {
+  const users = db
+    .prepare("select id, username from users where jwt_sub = ?")
+    .bind(sub)
+    .all();
+  return users[0];
 }
