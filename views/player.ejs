@@ -10,7 +10,9 @@
 
     <div class="flex-container">
         <% for (let p of pokemons) { %>
-            <img src="/images/icons/<%= p.id %>.avif" width="112" height="112">
+            <a href="/<%= requestedPlayer %>/<%= p.ext_id %>">
+                <img src="/images/icons/<%= p.id %>.avif" width="112" height="112">
+            </a>
         <% } %>
     </div>
 </body>

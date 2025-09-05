@@ -38,6 +38,7 @@ app.use((_req, res) => {
 });
 
 app.use(async (err, _req, res, _next) => {
+  console.log(err);
   await bot.telegram.sendMessage(chatId, err);
   res.status(500).render("500");
 });

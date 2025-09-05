@@ -29,6 +29,9 @@ const dealWithLatest = (req, res) => {
       .bind(req.user.id, req.body.pokemonExtId)
       .run();
   }
+  if (req.body.redirect) {
+    return res.redirect(req.body.redirect);
+  }
   res.redirect("/catch");
 };
 

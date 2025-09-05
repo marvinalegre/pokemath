@@ -165,7 +165,7 @@ const player = (req, res) => {
 
   const pokemons = db
     .prepare(
-      "select pokemon_id as id from user_pokemons where user_id = ? order by caught_at desc",
+      "select pokemon_id as id, user_pokemon_ext_id as ext_id from user_pokemons where user_id = ? order by caught_at desc",
     )
     .bind(users[0].id)
     .all();
@@ -187,7 +187,52 @@ const player = (req, res) => {
   });
 };
 
-export default { home, catchForm, catchHandler, players, player };
+const pokemon = (req, res) => {
+  const users = db
+    .prepare("select id from users where username = ?")
+    .bind(req.params.username)
+    .all();
+  if (users.length === 0) {
+    return res.status(404).render("404");
+  }
+  const pokemons = db
+    .prepare(
+      `
+      select pokemon_id as id
+      from user_pokemons
+      where user_id = ?
+      and user_pokemon_ext_id = ?
+      order by caught_at desc
+      `,
+    )
+    .bind(users[0].id, req.params.pokemonId)
+    .all();
+
+  if (pokemons.length === 0) {
+    return res.status(404).render("404");
+  }
+
+  pokemons[0].extId = req.params.pokemonId;
+
+  if (!req.sub) {
+    return res.render("pokemon", {
+      username: undefined,
+      requestedPlayer: req.params.username,
+      pokemon: pokemons[0],
+      showReleaseBtn: false,
+    });
+  }
+
+  const { username } = getUser(req.sub);
+  return res.render("pokemon", {
+    username,
+    requestedPlayer: req.params.username,
+    pokemon: pokemons[0],
+    showReleaseBtn: username === req.params.username,
+  });
+};
+
+export default { home, catchForm, catchHandler, players, player, pokemon };
 
 function distance(pt1, pt2) {
   // Calculate the difference in x and y coordinates
