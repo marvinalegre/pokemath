@@ -41,6 +41,9 @@ importers:
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
+      pm2:
+        specifier: ^6.0.8
+        version: 6.0.8
       telegraf:
         specifier: ^4.16.3
         version: 4.16.3
@@ -51,9 +54,6 @@ importers:
       nodemon:
         specifier: ^3.1.10
         version: 3.1.10
-      pm2:
-        specifier: ^6.0.8
-        version: 6.0.8
       sharp:
         specifier: ^0.34.3
         version: 0.34.3

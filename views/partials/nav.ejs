@@ -14,7 +14,15 @@
             <a href="/players">players</a>
 
             <% if (username) { %>
+                <a href="/trades">trades</a>
+            <% } %>
+
+            <% if (username) { %>
                 <a href="/logout">logout</a>
+            <% } %>
+
+            <% if (!username) { %>
+                <a href="/login">login</a>
             <% } %>
         </div>
     </div>
