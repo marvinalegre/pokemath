@@ -150,7 +150,6 @@ form[action="/catch"] input,
   font-size: 1.1rem;
 }
 
-.tradeBtn,
 form[action="/catch"] button,
 form[action="/catch/latest"] button,
 #signup-form button {
@@ -263,65 +262,6 @@ svg {
   line-height: 1.25rem;
 }
 
-.badge {
-  display: inline;
-  padding: 0.25em 0.6em;
-  font-size: 0.9rem;
-  border-radius: 0.25rem;
-  color: white;
-  margin: 0 auto;
-}
-.badge-warning {
-  background-color: #ffc107;
-}
-.badge-primary {
-  background-color: #007bff;
-}
-.badge-danger {
-  background-color: #dc3545;
-}
-.badge-success {
-  background-color: #28a745;
-}
-.badge-secondary {
-  background-color: #6c757d;
-}
-.badge-light {
-  background-color: #f8f9fa;
-  color: #212529;
-}
-
-.trade-table {
-  width: 500px;
-  margin: 20px auto;
-  border-collapse: collapse;
-}
-
-.trade-table th,
-.trade-table td {
-  border: 1px solid #ccc;
-  padding: 0;
-  text-align: center;
-}
-
-.trade-table td a {
-  display: block;
-  padding: 10px;
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-  height: 100%;
-}
-
-.trade-table img {
-  width: 50px;
-  height: auto;
-}
-
-.trade-table tr:hover {
-  background-color: #f0f0f0;
-}
-
 @media (max-width: 768px) {
   .sticky-text,
   nav {
@@ -335,9 +275,5 @@ svg {
   .pokemon-card {
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
-  }
-
-  .trade-table {
-    width: 95%;
   }
 }

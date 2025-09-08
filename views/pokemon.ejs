@@ -11,21 +11,10 @@
     <div style="width: 300px; margin: 0 auto">
         <img src="/images/icons/<%= pokemon.id %>.avif" style="display:block; margin: 0 auto 4rem auto;"/>
         <form method="post" action="/catch/latest">
-            <% if (showOfferBtn) { %>
-            <a href="/<%= requestedPlayer %>/<%= pokemon.extId %>/trade" style="text-decoration: none">
-            <button
-                type="button"
-                tabindex="1"
-                style="font-size: 1.1rem"
-            >
-                make an offer
-            </button>
-            </a>
-            <% } %>
             <a href="/<%= requestedPlayer %>/<%= pokemon.extId %>/card" style="text-decoration: none">
             <button
                 type="button"
-                tabindex="2"
+                tabindex="1"
                 style="font-size: 1.1rem"
             >
                 show card
@@ -36,7 +25,7 @@
                 name="release"
                 value="true"
                 type="submit"
-                tabindex="3"
+                tabindex="2"
                 style="font-size: 1.1rem"
             >
                 release

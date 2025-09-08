@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import { customAlphabet } from "nanoid";
 const nanoid = customAlphabet(
   "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -152,48 +153,6 @@ const players = (req, res) => {
   return res.render("players", { players, username });
 };
 
-const makeOffer = (req, res) => {
-  const { username, id } = req.user;
-
-  const users = db
-    .prepare("select id from users where username = ?")
-    .bind(req.params.username)
-    .all();
-  if (users.length === 0) {
-    return res.status(404).render("404");
-  }
-
-  const recipientPokemons = db
-    .prepare(
-      `
-      select pokemon_id as id
-      from user_pokemons
-      where user_id = ?
-      and user_pokemon_ext_id = ?
-      order by caught_at desc
-      `,
-    )
-    .bind(users[0].id, req.params.pokemonId)
-    .all();
-  if (recipientPokemons.length === 0) {
-    return res.status(404).render("404");
-  }
-
-  const initiatorPokemons = db
-    .prepare(
-      "select pokemon_id as id, user_pokemon_ext_id as ext_id from user_pokemons where user_id = ? order by caught_at desc",
-    )
-    .bind(id)
-    .all();
-
-  return res.render("make-offer", {
-    username,
-    requestedPlayer: req.params.username,
-    pokemons: initiatorPokemons,
-    recipientPokemon: recipientPokemons[0],
-  });
-};
-
 const player = (req, res) => {
   const users = db
     .prepare("select id from users where username = ?")
@@ -280,7 +239,6 @@ const pokemon = (req, res) => {
   if (users.length === 0) {
     return res.status(404).render("404");
   }
-
   const pokemons = db
     .prepare(
       `
@@ -293,6 +251,7 @@ const pokemon = (req, res) => {
     )
     .bind(users[0].id, req.params.pokemonId)
     .all();
+
   if (pokemons.length === 0) {
     return res.status(404).render("404");
   }
@@ -305,7 +264,6 @@ const pokemon = (req, res) => {
       requestedPlayer: req.params.username,
       pokemon: pokemons[0],
       showReleaseBtn: false,
-      showOfferBtn: false,
     });
   }
 
@@ -315,200 +273,7 @@ const pokemon = (req, res) => {
     requestedPlayer: req.params.username,
     pokemon: pokemons[0],
     showReleaseBtn: username === req.params.username,
-    showOfferBtn: username !== req.params.username,
   });
-};
-
-const handleOffer = (req, res) => {
-  const { id } = req.user;
-
-  const users = db
-    .prepare("select id from users where username = ?")
-    .bind(req.params.username)
-    .all();
-  if (users.length === 0) {
-    return res.status(500).end();
-  }
-
-  const pokemons = db
-    .prepare(
-      "select pokemon_id from user_pokemons where user_pokemon_ext_id = ?",
-    )
-    .bind(req.params.pokemonId)
-    .all();
-  if (pokemons.length === 0) {
-    return res.status(500).end();
-  }
-
-  const tradeId = nanoid();
-  const trade = db
-    .prepare(
-      "insert into trades (initiator_id, recipient_id, trade_ext_id, pokemon_id) values(?, ?, ?, ?)",
-    )
-    .bind(id, users[0].id, tradeId, pokemons[0].pokemon_id)
-    .run();
-
-  const insertStmt = db.prepare(
-    "insert into trade_items (trade_id, user_id, user_pokemon_id) values(?, ?, ?)",
-  );
-  const insertItems = db.transaction((items) => {
-    for (const item of items) {
-      insertStmt.run(...item);
-    }
-  });
-  const tradeItems = req.body.map((extId) => [
-    trade.lastInsertRowid,
-    id,
-    getUserPokemonId(extId).id,
-  ]);
-  tradeItems.push([
-    trade.lastInsertRowid,
-    users[0].id,
-    getUserPokemonId(req.params.pokemonId).id,
-  ]);
-  insertItems(tradeItems);
-
-  function getUserPokemonId(extId) {
-    return db
-      .prepare("select id from user_pokemons where user_pokemon_ext_id = ?")
-      .bind(extId)
-      .all()[0];
-  }
-
-  return res.json({ success: true, tradeId });
-};
-
-const tradeDetails = (req, res) => {
-  const { username, id } = req.user;
-
-  const trades = db
-    .prepare(
-      "select id, recipient_id, initiator_id, status from trades where trade_ext_id = ?",
-    )
-    .bind(req.params.tradeId)
-    .all();
-  if (trades.length === 0) {
-    return res.status(404).render("404");
-  }
-
-  const tradeItems = db
-    .prepare(
-      `
-      select trade_items.user_id, user_pokemon_ext_id, pokemon_id from trade_items
-      left join user_pokemons on trade_items.user_pokemon_id = user_pokemons.id
-      where trade_id = ?
-      `,
-    )
-    .bind(trades[0].id)
-    .all();
-  const recipientItems = tradeItems
-    .filter((i) => i.user_id === trades[0].recipient_id)
-    .map((i) => ({ id: i.pokemon_id, ext_id: i.user_pokemon_ext_id }));
-  const initiatorItems = tradeItems
-    .filter((i) => i.user_id === trades[0].initiator_id)
-    .map((i) => ({ id: i.pokemon_id, ext_id: i.user_pokemon_ext_id }));
-
-  res.render("trade-details", {
-    username,
-    tradeId: req.params.tradeId,
-    recipientUsername: getUsername(trades[0].recipient_id),
-    initiatorUsername: getUsername(trades[0].initiator_id),
-    recipientPokemon: recipientItems[0],
-    pokemons: initiatorItems,
-    status: trades[0].status,
-    showCancelBtn:
-      trades[0].status === "pending" && id === trades[0].initiator_id
-        ? true
-        : false,
-    showRecipientBtns:
-      trades[0].status === "pending" && id !== trades[0].initiator_id
-        ? true
-        : false,
-  });
-};
-
-const trades = (req, res) => {
-  const { username, id } = req.user;
-
-  let trades = db
-    .prepare(
-      "select trade_ext_id, recipient_id, initiator_id, pokemon_id, status from trades order by created_at desc",
-    )
-    .all();
-  trades = trades.map((t) => ({
-    id: t.trade_ext_id,
-    player: getUsername(
-      t.recipient_id === id ? t.initiator_id : t.recipient_id,
-    ),
-    status: t.status,
-    pokemonId: t.pokemon_id,
-  }));
-
-  res.render("trades", {
-    username,
-    trades,
-  });
-};
-
-const handleTrade = (req, res) => {
-  let newStatus;
-  if (req.body.action === "cancel") {
-    newStatus = "cancelled";
-  } else if (req.body.action === "reject") {
-    newStatus = "rejected";
-  } else if (req.body.action === "accept") {
-    let proceed = true;
-    const tradeItems = db
-      .prepare(
-        `
-        select user_id, user_pokemon_id from trades
-        left join trade_items on trades.id = trade_items.trade_id
-        where trade_ext_id = ?
-        `,
-      )
-      .bind(req.params.tradeId)
-      .all();
-    if (trades.length === 0) {
-      return res.redirect("/logout");
-    }
-
-    for (const item of tradeItems) {
-      const result = db
-        .prepare("select * from user_pokemons where id = ? and user_id = ?")
-        .bind(item.user_pokemon_id, item.user_id)
-        .all();
-      if (result.length === 0) {
-        proceed = false;
-        break;
-      }
-    }
-
-    if (!proceed) {
-      newStatus = "cancelled";
-    }
-
-    const [trade] = db
-      .prepare("select * from trades where trade_ext_id = ?")
-      .bind(req.params.tradeId)
-      .all();
-    tradeItems.forEach((i) => {
-      if (i.user_id === trade.recipient_id) {
-        db.prepare("update user_pokemons set user_id = ? where id = ?")
-          .bind(trade.initiator_id, i.user_pokemon_id)
-          .run();
-      } else {
-        db.prepare("update user_pokemons set user_id = ? where id = ?")
-          .bind(trade.recipient_id, i.user_pokemon_id)
-          .run();
-      }
-    });
-    newStatus = "completed";
-  }
-
-  db.prepare("update trades set status = ? where trade_ext_id = ?")
-    .bind(newStatus, req.params.tradeId)
-    .run();
-  res.redirect(`/trades/${req.params.tradeId}`);
 };
 
 export default {
@@ -519,11 +284,6 @@ export default {
   player,
   pokemon,
   pokemonCard,
-  makeOffer,
-  handleOffer,
-  trades,
-  tradeDetails,
-  handleTrade,
 };
 
 function distance(pt1, pt2) {
@@ -602,9 +362,4 @@ function getUser(sub) {
     .bind(sub)
     .all();
   return users[0];
-}
-
-function getUsername(id) {
-  return db.prepare("select username from users where id = ?").bind(id).all()[0]
-    .username;
 }
