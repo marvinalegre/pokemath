@@ -9,7 +9,13 @@
     <p class="error-message" style="margin: 2rem auto; width: 300px; background-color: <%= /pokemon/.test(generalError) ? 'white' : '#ffa500' %>; color: black; padding: .5rem; border: 3px solid black; display: <%= generalError ? '' : 'none' %>"><%= generalError ? generalError : null %></p>
 
     <div class="question">
-    <% if (qCode === 'a') { %>
+    <% if (qCode === 'b' || qCode === 'd' || qCode === 'e') { %>
+        <p style="text-align: center; font-size: 1.1rem; margin-top: 5rem">
+            <%= qParameters.question %>
+        </p>
+    <% } %>
+
+    <% if (qCode === 'a' || qCode === 'a2') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
         </p>
@@ -17,7 +23,7 @@
         <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> + <%= qParameters.y %> = ___</p>
     <% } %>
 
-    <% if (qCode === 'ar') { %>
+    <% if (qCode === 'ar' || qCode === 'ar2') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
         </p>

@@ -195,13 +195,88 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["c", "a", "ar", "m"];
+  const codes = ["a2", "b", "d", "e", "m", "ar2"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "c") {
+  if (code === "e") {
+    const x = Math.floor(Math.random() * 6) + 15;
+    const y = Math.floor(Math.random() * 3) + 3;
+
+    const phrases = [
+      `If a single box can carry just ${y} toys, how many boxes are required to store all ${x} of Juan's toys?`,
+      `Given that one box holds ${y} toys, how many boxes will it take to pack all ${x} of Juan's toys?`,
+      `Each box has a capacity of ${y} toys. How many boxes are necessary for Juan's collection of ${x} toys?`,
+      `Juan has ${x} toys, and each box fits only ${y}. What is the total number of boxes needed?`,
+      `With each box fitting ${y} toys, how many boxes must be used to store all ${x} of Juan's toys?`,
+      `You can only place ${y} toys in a box. How many boxes will you need for all ${x} of Juan's toys?`,
+      `If boxes can contain only ${y} toys each, how many are needed to hold all ${x} of Juan's toys?`,
+    ];
+
+    return {
+      qAnswer: Math.ceil(x / y),
+      qParameters: {
+        question: phrases[Math.floor(Math.random() * phrases.length)],
+      },
+    };
+  } else if (code === "d") {
+    const x = Math.floor(Math.random() * 9) + 6;
+    const y = Math.floor(Math.random() * 5) + 1;
+
+    const phrases = [
+      `What do you get when you subtract ${y} from ${x}?`,
+      `What is ${x} minus ${y}?`,
+      `What’s the result of ${x} − ${y}?`,
+      `What number do you get by taking ${y} away from ${x}?`,
+      `If you have ${x} and lose ${y}, how many are left?`,
+      `Start with ${x} and take away ${y} — what’s left?`,
+      `Imagine you had ${x} and gave away ${y} — how many do you have now?`,
+      `You had ${x}, then removed ${y} — what’s the result?`,
+      `Take ${y} off of ${x} — what number do you get?`,
+      `What number is ${y} smaller than ${x}?`,
+      `What number is ${y} less than ${x}?`,
+    ];
+
+    return {
+      qAnswer: x - y,
+      qParameters: {
+        question: phrases[Math.floor(Math.random() * phrases.length)],
+      },
+    };
+  } else if (code === "b") {
+    const x = Math.floor(Math.random() * 9) + 1;
+    let y = Math.floor(Math.random() * 9) + 1;
+    while (x === y) {
+      y = Math.floor(Math.random() * 9) + 1;
+    }
+
+    const phrases = [
+      `What do you get when you add ${x} to ${y}?`,
+      `What is the sum of ${y} and ${x}?`,
+      `How much is ${y} plus ${x}?`,
+      `What number results from adding ${x} to ${y}?`,
+      `What is the result of ${y} + ${x}?`,
+      `If you add ${x} to ${y}, what do you get?`,
+      `Start with ${y} and add ${x} — what’s the total?`,
+      `Imagine you have ${y} and someone gives you ${x} more — how many do you have now?`,
+      `What do you end up with if you add ${x} more to ${y}?`,
+      `You’ve got ${y}, then gain ${x} — what’s your new total?`,
+      `What number is ${x} units greater than ${y}?`,
+      `Which number is ${x} more than ${y}?`,
+      `What’s the next number after increasing ${y} by ${x}?`,
+      `By increasing ${y} by ${x}, what number do you reach?`,
+      `What value do you get by adding ${x} more to the number ${y}?`,
+    ];
+
+    return {
+      qAnswer: x + y,
+      qParameters: {
+        question: phrases[Math.floor(Math.random() * phrases.length)],
+      },
+    };
+  } else if (code === "c") {
     // counting
     const randomNumber = (Math.round(Math.random() * 10) % 10) + 5;
     const centers = [];
@@ -223,10 +298,18 @@ function getParametersAndAnswer(code) {
     const x = Math.floor(Math.random() * 13);
     const y = Math.floor(Math.random() * 13);
     return { qAnswer: x + y, qParameters: { x, y } };
+  } else if (code === "a2") {
+    const x = Math.floor(Math.random() * 80) + 20;
+    const y = Math.floor(Math.random() * 80) + 20;
+    return { qAnswer: x + y, qParameters: { x, y } };
   } else if (code === "ar") {
     // repeated addition
     const x = Math.floor(Math.random() * 5) + 1;
     const n = Math.floor(Math.random() * 5) + 3;
+    return { qAnswer: x * n, qParameters: { x, n } };
+  } else if (code === "ar2") {
+    const x = Math.floor(Math.random() * 5) + 4;
+    const n = Math.floor(Math.random() * 5) + 5;
     return { qAnswer: x * n, qParameters: { x, n } };
   } else if (code === "m") {
     // multiplication
