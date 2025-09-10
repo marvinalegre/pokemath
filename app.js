@@ -11,6 +11,8 @@ import { verifyToken } from "./middlewares.js";
 import indexRoutes from "./routes/index.js";
 import authRoutes from "./routes/auth.js";
 import catchRoutes from "./routes/catch.js";
+import playerRoutes from "./routes/player.js";
+import tradesRoutes from "./routes/trades.js";
 
 const app = express();
 const accessLogStream = fs.createWriteStream(
@@ -31,7 +33,9 @@ app.use(verifyToken);
 
 app.use("/", authRoutes);
 app.use("/catch", catchRoutes);
+app.use("/trades", tradesRoutes);
 app.use("/", indexRoutes);
+app.use("/", playerRoutes);
 
 app.use((_req, res) => {
   res.status(404).render("404");

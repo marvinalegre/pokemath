@@ -1,14 +1,9 @@
 import express from "express";
 const router = express.Router();
 import controller from "../controllers/index.js";
-import { limiter, ensureLoggedIn } from "../middlewares.js";
+import { limiter } from "../middlewares.js";
 
 router.get("/", limiter(400), controller.home);
-router.get("/catch", limiter(400), ensureLoggedIn, controller.catchForm);
-router.post("/catch", limiter(400), ensureLoggedIn, controller.catchHandler);
 router.get("/players", limiter(400), controller.players);
-router.get("/:username", limiter(400), controller.player);
-router.get("/:username/:pokemonId", limiter(400), controller.pokemon);
-router.get("/:username/:pokemonId/card", limiter(400), controller.pokemonCard);
 
 export default router;
