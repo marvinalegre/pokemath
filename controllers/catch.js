@@ -4,6 +4,7 @@ const nanoid = customAlphabet(
 );
 import db from "../database/db.js";
 import { bot, chatId } from "../telegram-bot.js";
+import { ToWords } from "to-words";
 
 const latest = (req, res) => {
   const { id, username } = req.user;
@@ -195,13 +196,24 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["a2", "b", "d", "e", "m", "ar2"];
+  const codes = ["a2", "b", "d", "e", "f", "m", "ar2"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "e") {
+  if (code === "f") {
+    const x = Math.ceil(Math.random() * 1_900) + 100;
+    const toWords = new ToWords({ localeCode: "en-PH" });
+    let words = toWords.convert(x).toLowerCase();
+
+    return {
+      qAnswer: x,
+      qParameters: {
+        numberInWords: words,
+      },
+    };
+  } else if (code === "e") {
     const x = Math.floor(Math.random() * 6) + 15;
     const y = Math.floor(Math.random() * 3) + 3;
 

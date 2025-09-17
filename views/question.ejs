@@ -9,6 +9,19 @@
     <p class="error-message" style="margin: 2rem auto; width: 300px; background-color: <%= /pokemon/.test(generalError) ? 'white' : '#ffa500' %>; color: black; padding: .5rem; border: 3px solid black; display: <%= generalError ? '' : 'none' %>"><%= generalError ? generalError : null %></p>
 
     <div class="question">
+    <% if (qCode === 'f') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <ul style="list-style: none; margin-top: 3rem">
+            <li style="margin-top: 1rem"><span style="font-weight: bold;">248</span> --&gt; &quot;two hundred forty eight&quot;</li>
+            <li style="margin-top: 1rem"><span style="font-weight: bold">731</span> --&gt; &quot;seven hundred thirty one&quot;</li>
+            <li style="margin-top: 1rem"><span style="font-weight: bold">1 234</span> --&gt; &quot;one thousand two hundred thirty four&quot;</li>
+            <li style="margin-top: 1rem"><span style="font-weight: bold">_____</span> --&gt; &quot;<%= qParameters.numberInWords %>&quot;</li>
+        </ul>
+    <% } %>
+
     <% if (qCode === 'b' || qCode === 'd' || qCode === 'e') { %>
         <p style="text-align: center; font-size: 1.1rem; margin-top: 5rem">
             <%= qParameters.question %>
