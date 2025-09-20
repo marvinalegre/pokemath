@@ -196,13 +196,28 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["a2", "b", "d", "e", "f", "m", "ar2"];
+  const codes = ["a2", "b", "d", "e", "f", "g", "m", "ar2"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "f") {
+  if (code === "g") {
+    const x = Math.ceil(Math.random() * 9_900) + 99;
+    const placeValue = Math.ceil(Math.random() * 3);
+
+    return {
+      qAnswer: roundToNearest(x, 10 ** placeValue),
+      qParameters: {
+        x,
+        placeValue,
+      },
+    };
+
+    function roundToNearest(value, place) {
+      return Math.round(value / place) * place;
+    }
+  } else if (code === "f") {
     const x = Math.ceil(Math.random() * 1_900) + 100;
     const toWords = new ToWords({ localeCode: "en-PH" });
     let words = toWords.convert(x).toLowerCase();

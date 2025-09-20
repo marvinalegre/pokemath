@@ -9,6 +9,36 @@
     <p class="error-message" style="margin: 2rem auto; width: 300px; background-color: <%= /pokemon/.test(generalError) ? 'white' : '#ffa500' %>; color: black; padding: .5rem; border: 3px solid black; display: <%= generalError ? '' : 'none' %>"><%= generalError ? generalError : null %></p>
 
     <div class="question">
+    <% if (qCode === 'g') { %>
+<%
+const formatted = qParameters.x.toLocaleString('fr-FR');
+const underlineIndex = String(qParameters.x).length -1 - qParameters.placeValue;
+let digitIndex = 0;
+
+const parts = formatted.split('').map(char => {
+  if (char.codePointAt(0) === 8239) return ' ';
+
+  const span = digitIndex === underlineIndex
+    ? `<span style="text-decoration: underline;">${char}</span>`
+    : char;
+
+  digitIndex++;
+  return span;
+});
+%>
+
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <ul style="list-style: none; margin-top: 3rem">
+            <li style="margin-top: 1rem; text-align: center;">2<span style="text-decoration: underline;">4</span>8 --&gt; 250</li>
+            <li style="margin-top: 1rem; text-align: center;"><span style="text-decoration: underline;">7</span>31 --&gt; 700</li>
+            <li style="margin-top: 1rem; text-align: center;"><span style="text-decoration: underline;">1</span> 234 --&gt; 1000</li>
+<li style="margin-top: 1rem; text-align: center;"><%- parts.join('') %> --&gt; ____</li>
+        </ul>
+    <% } %>
+
     <% if (qCode === 'f') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
