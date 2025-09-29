@@ -204,7 +204,12 @@ function getCode() {
 function getParametersAndAnswer(code) {
   if (code === "g") {
     const x = Math.ceil(Math.random() * 9_900) + 99;
-    const placeValue = Math.ceil(Math.random() * 3);
+    let placeValue;
+    if (x <= 999) {
+      placeValue = Math.ceil(Math.random() * 2);
+    } else {
+      placeValue = Math.ceil(Math.random() * 3);
+    }
 
     return {
       qAnswer: roundToNearest(x, 10 ** placeValue),
