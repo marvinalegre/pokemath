@@ -10,6 +10,22 @@
 
     <div class="question">
 
+    <% if (qCode === 'j') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+<p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> - <%= qParameters.y %> = ___</p>
+    <% } %>
+
+    <% if (qCode === 'i') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+<p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.addends %> = <%= qParameters.x %></p>
+    <% } %>
+
     <% if (qCode === 'h') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.

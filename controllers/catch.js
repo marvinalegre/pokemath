@@ -196,13 +196,32 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["a2", "b", "d", "e", "f", "g", "h", "m", "ar2"];
+  const codes = ["a2", "b", "d", "e", "f", "g", "h", "i", "j", "m", "ar2"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "h") {
+  if (code === "j") {
+    const x = Math.ceil(Math.random() * 4) + 10;
+    const y = Math.floor(Math.random() * 5) + 5;
+
+    return { qAnswer: x - y, qParameters: { x, y } };
+  } else if (code === "i") {
+    const x = Math.ceil(Math.random() * 89) + 10;
+    const placeValue = Math.ceil(Math.random() * 2);
+
+    return {
+      qAnswer: placeValue === 1 ? String(x)[1] : String(x)[0] * 10,
+      qParameters: {
+        addends:
+          placeValue === 1
+            ? `${String(x)[0] * 10} + ___`
+            : `___ + ${String(x)[1]}`,
+        x,
+      },
+    };
+  } else if (code === "h") {
     const i = Math.ceil(Math.random() * 8) + 2;
     const n = Math.ceil(Math.random() * 6) + 4;
 
