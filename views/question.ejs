@@ -10,6 +10,20 @@
 
     <div class="question">
 
+    <% if (qCode === 'l') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+<p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> + ___ = 10</p>
+    <% } %>
+
+    <% if (qCode === 'k') { %>
+        <p style="text-align: center; font-size: 1.1rem; margin-top: 5rem">
+            How many tens are there in <%= qParameters.x %>?
+        </p>
+    <% } %>
+
     <% if (qCode === 'j') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
@@ -77,7 +91,7 @@ const parts = formatted.split('').map(char => {
         </ul>
     <% } %>
 
-    <% if (qCode === 'b' || qCode === 'd' || qCode === 'e') { %>
+    <% if (['b', 'd', 'e', 'n'].includes(qCode)) { %>
         <p style="text-align: center; font-size: 1.1rem; margin-top: 5rem">
             <%= qParameters.question %>
         </p>

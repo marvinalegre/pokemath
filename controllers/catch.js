@@ -196,13 +196,63 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["a2", "b", "d", "e", "f", "g", "h", "i", "j", "m", "ar2"];
+  const codes = [
+    "a2",
+    "ar2",
+    "b",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+  ];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "j") {
+  if (code === "n") {
+    const x = Math.floor(Math.random() * 3) + 2;
+    const y = Math.floor(Math.random() * 8) + 2;
+
+    const phrases = [
+      `Anne has ${x} ten-peso coins and ${y} five-peso coins. How much money does he have?`,
+      `Anne owns ${x} ten-peso coins and ${y} five-peso coins. What is the total amount of money he has?`,
+      `How much money does Anne have if he has ${x} 10-peso coins and ${y} 5-peso coins?`,
+      `Anne has a collection of coins: ${x} coins worth 10 pesos each and ${y} coins worth 5 pesos each. What is their total value?`,
+      `Calculate the total amount Anne has if he holds ${x} ten-peso coins and ${y} five-peso coins.`,
+      `Anne's wallet contains ${x} coins of 10 pesos and ${y} coins of 5 pesos. What is the sum of his money?`,
+      `Anne emptied his piggy bank and found ${x} ten-peso coins and ${y} five-peso coins. How much money did he save?`,
+      `Anne was paid in coins: ${x} ten-peso coins and ${y} five-peso coins. How much was he paid?`,
+      `After shopping, Anne had ${x} ten-peso coins and ${y} five-peso coins left. How much money does he still have?`,
+      `Anne is counting his change: ${x} coins worth 10 pesos and ${y} coins worth 5 pesos. How much does he have in total?`,
+    ];
+
+    return {
+      qAnswer: x * 10 + y * 5,
+      qParameters: {
+        question: phrases[Math.floor(Math.random() * phrases.length)],
+      },
+    };
+  } else if (code === "l") {
+    const x = Math.floor(Math.random() * 11);
+
+    return { qAnswer: 10 - x, qParameters: { x } };
+  } else if (code === "k") {
+    const x = Math.floor(Math.random() * 100);
+
+    if (x < 10) {
+      return { qAnswer: 0, qParameters: { x } };
+    }
+
+    return { qAnswer: Number(String(x)[0]), qParameters: { x } };
+  } else if (code === "j") {
     const x = Math.ceil(Math.random() * 4) + 10;
     const y = Math.floor(Math.random() * 5) + 5;
 
