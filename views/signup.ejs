@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include('partials/head', { title: 'Sign up | Pokemath' }) %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up | Pokemath</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
+    <script type="module" src="/javascripts/login.js"></script>
+</head>
 
 <body>
     <%- include('partials/nav', { username: null }) %>
@@ -18,7 +25,7 @@
         <p class="error-message"><%= passwordError ? passwordError : null %></p>
 
         <label for="password-toggle" style="font-size: 0.9rem">
-            <input id="password-toggle" type="checkbox" onchange="togglePassword()">
+            <input id="password-toggle" type="checkbox">
             show password
         </label>
 
@@ -26,16 +33,5 @@
 
         <p style="font-size: 0.9rem; margin: 2rem 0;">Already have an account? <a href="/login">Log in</a></p>
     </form>
-
-    <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-            } else {
-                passwordField.type = 'password';
-            }
-        }
-    </script>
 </body>
 </html>
