@@ -6,9 +6,9 @@
 <body>
     <%- include('partials/nav', { username }) %>
 
-    <div class="flex-container">
+    <div class="players">
         <% for (let p of players) { %>
-            <a href="/<%= p.username %>" class="player"><%= p.username %></a>
+            <a href="/<%= p.username %>"><p class="player"><%= p.username %></p></a>
         <% } %>
     </div>
 </body>
