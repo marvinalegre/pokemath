@@ -1,0 +1,16 @@
+INSERT INTO pokemon_types VALUES(10, 7);
+INSERT INTO pokemon_types VALUES(11, 7);
+INSERT INTO pokemon_types VALUES(12, 7);
+INSERT INTO pokemon_types VALUES(12, 3);
+INSERT INTO pokemon_types VALUES(16, 1);
+INSERT INTO pokemon_types VALUES(16, 3);
+INSERT INTO pokemon_types VALUES(17, 1);
+INSERT INTO pokemon_types VALUES(17, 3);
+INSERT INTO pokemon_types VALUES(18, 1);
+INSERT INTO pokemon_types VALUES(18, 3);
+INSERT INTO pokemon_types VALUES(19, 1);
+INSERT INTO pokemon_types VALUES(20, 1);
+INSERT INTO pokemon_types VALUES(21, 1);
+INSERT INTO pokemon_types VALUES(21, 3);
+INSERT INTO pokemon_types VALUES(22, 1);
+INSERT INTO pokemon_types VALUES(22, 3);
