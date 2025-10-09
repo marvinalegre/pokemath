@@ -8,7 +8,13 @@
 
     <div class="players">
         <% for (let p of players) { %>
-            <a href="/<%= p.username %>"><p class="player"><%= p.username %></p></a>
+            <div class="player">
+                <a href="/<%= p.username %>">
+                    <p><%= p.username %></p>
+                    <div class="type-badge fairy">Fairy</div>
+                    <div class="type-badge fighting">fighting</div>
+                </a>
+            </div>
         <% } %>
     </div>
 </body>
