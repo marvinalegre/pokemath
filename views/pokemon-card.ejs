@@ -9,9 +9,12 @@
     <p class="sticky-text"><%= requestedPlayer %></p>
 
     <div class="pokemon-card" style="background-color:<%= pokemon.color %>">
-        <h3><%= pokemon.name %></h3>
+        <h3><%= pokemon.pokemon_name %></h3>
         <img src="/images/sugimori/<%= pokemon.id %>.avif">
         <p><%= pokemon.description %></p>
+        <% pokemon.types.forEach(function(t) { %>
+            <div class="type-badge <%= t %>"><%= t %></div>
+        <% }); %>
     </div>
 </body>
 </html>

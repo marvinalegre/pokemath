@@ -93,10 +93,14 @@ const pokemonCard = (req, res) => {
   const pokemons = db
     .prepare(
       `
-      select pokemon_id as id, name, description, color
+      select user_pokemons.pokemon_id as id, pokemons.name as pokemon_name, description, color, types.name as type_name
       from user_pokemons
       left join pokemons
       on pokemons.id = user_pokemons.pokemon_id
+      left join pokemon_types
+      on pokemons.id = pokemon_types.pokemon_id
+      left join types
+      on pokemon_types.type_id = types.id
       where user_id = ?
       and user_pokemon_ext_id = ?
       order by caught_at desc
@@ -106,6 +110,12 @@ const pokemonCard = (req, res) => {
     .all();
   if (pokemons.length === 0) {
     return res.status(404).render("404");
+  }
+  if (pokemons.length === 2 && pokemons[0].id === pokemons[1].id) {
+    pokemons[0].types = [pokemons[0].type_name, pokemons[1].type_name];
+  }
+  if (pokemons.length === 1) {
+    pokemons[0].types = [pokemons[0].type_name];
   }
 
   if (!req.sub) {
