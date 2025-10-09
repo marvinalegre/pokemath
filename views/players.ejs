@@ -11,8 +11,13 @@
             <div class="player">
                 <a href="/<%= p.username %>">
                     <p><%= p.username %></p>
-                    <div class="type-badge fairy">Fairy</div>
-                    <div class="type-badge fighting">fighting</div>
+                    <% if (p.top_type_1) { %>
+                        <div class="type-badge <%= p.top_type_1 %>"><%= p.top_type_1 %></div>
+                    <% } %>
+
+                    <% if (p.top_type_2) { %>
+                        <div class="type-badge <%= p.top_type_2 %>"><%= p.top_type_2 %></div>
+                    <% } %>
                 </a>
             </div>
         <% } %>
