@@ -234,11 +234,17 @@ svg {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  border: 2px solid black;
   margin-top: 3rem;
   margin-bottom: 3rem;
   width: 20rem;
   padding: 1rem;
+  border-radius: 3px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.45);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .pokemon-card h3 {
@@ -253,6 +259,9 @@ svg {
 .pokemon-card img {
   width: 18rem;
   height: 18;
+  background-color: #ffffff;
+  border: 1.5px solid black;
+  border-radius: 2px;
 }
 
 .pokemon-card p {
