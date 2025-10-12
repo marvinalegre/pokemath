@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head', { title: 'Trades | Pokemath' }) %>
+
+<body>
+    <%- include('partials/nav', { username }) %>
+
+  <h2 style="text-align:center; margin: 2rem">Trades</h2>
+  <table class="trade-table">
+    <thead>
+      <tr>
+        <th>interest</th>
+        <th>player</th>
+        <th>status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% trades.forEach(function(t) { %>
+        <tr>
+          <td>
+            <a href="/trades/<%= t.id %>">
+              <img src="/images/icons/<%= t.pokemonId %>.avif" alt="Pokemon">
+            </a>
+          </td>
+          <td>
+            <a href="/trades/<%= t.id %>"><%= t.player %></a>
+          </td>
+          <td>
+            <a href="/trades/<%= t.id %>">
+<% if (t.status === 'pending') { %>
+  <span class="badge badge-warning">Pending</span>
+<% } else if (t.status === 'accepted') { %>
+  <span class="badge badge-primary">Accepted</span>
+<% } else if (t.status === 'rejected') { %>
+  <span class="badge badge-danger">Rejected</span>
+<% } else if (t.status === 'cancelled') { %>
+  <span class="badge badge-secondary">Cancelled</span>
+<% } else if (t.status === 'completed') { %>
+  <span class="badge badge-success">Completed</span>
+<% } else { %>
+  <span class="badge badge-light">Unknown</span>
+<% } %>
+            </a>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</body>
+</html>

@@ -54,8 +54,14 @@ const trades = (req, res) => {
 
   let trades = db
     .prepare(
-      "select trade_ext_id, recipient_id, initiator_id, pokemon_id, status from trades order by created_at desc",
+      `
+      select trade_ext_id, recipient_id, initiator_id, pokemon_id, status
+      from trades
+      where recipient_id = ? or initiator_id = ?
+      order by created_at desc
+      `,
     )
+    .bind(id, id)
     .all();
   trades = trades.map((t) => ({
     id: t.trade_ext_id,
@@ -90,7 +96,7 @@ const handleTrade = (req, res) => {
       )
       .bind(req.params.tradeId)
       .all();
-    if (trades.length === 0) {
+    if (tradeItems.length === 0) {
       return res.redirect("/logout");
     }
 
@@ -109,22 +115,24 @@ const handleTrade = (req, res) => {
       newStatus = "cancelled";
     }
 
-    const [trade] = db
-      .prepare("select * from trades where trade_ext_id = ?")
-      .bind(req.params.tradeId)
-      .all();
-    tradeItems.forEach((i) => {
-      if (i.user_id === trade.recipient_id) {
-        db.prepare("update user_pokemons set user_id = ? where id = ?")
-          .bind(trade.initiator_id, i.user_pokemon_id)
-          .run();
-      } else {
-        db.prepare("update user_pokemons set user_id = ? where id = ?")
-          .bind(trade.recipient_id, i.user_pokemon_id)
-          .run();
-      }
-    });
-    newStatus = "completed";
+    if (proceed) {
+      const [trade] = db
+        .prepare("select * from trades where trade_ext_id = ?")
+        .bind(req.params.tradeId)
+        .all();
+      tradeItems.forEach((i) => {
+        if (i.user_id === trade.recipient_id) {
+          db.prepare("update user_pokemons set user_id = ? where id = ?")
+            .bind(trade.initiator_id, i.user_pokemon_id)
+            .run();
+        } else {
+          db.prepare("update user_pokemons set user_id = ? where id = ?")
+            .bind(trade.recipient_id, i.user_pokemon_id)
+            .run();
+        }
+      });
+      newStatus = "completed";
+    }
   }
 
   db.prepare("update trades set status = ? where trade_ext_id = ?")
