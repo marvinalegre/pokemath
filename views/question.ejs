@@ -10,6 +10,55 @@
 
     <div class="question">
 
+    <% if (qCode === 'q') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <p style="margin: 4rem 0 1rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> + <%= qParameters.y %> = <%= qParameters.x + qParameters.y %></p>
+
+        <% if (qParameters.position === 0) { %>
+            <p style="text-align: center; font-size: 1.3rem">__ + <%= qParameters.x %> = <%= qParameters.x + qParameters.y %></p>
+        <% } else { %>
+            <p style="text-align: center; font-size: 1.3rem"><%= qParameters.y %> + __ = <%= qParameters.x + qParameters.y %></p>
+        <% } %>
+    <% } %>
+
+    <% if (qCode === 'p') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Below is a list of numbers. The first number is <%= qParameters.numbers[0] %>. The second number is <%= qParameters.numbers[1] %>.
+            Which is the
+            <% if (qParameters.position === 3) { %>
+                third?
+            <% } else if (qParameters.position === 4) { %>
+                fourth?
+            <% } else if (qParameters.position === 5) { %>
+                fifth?
+            <% } else if (qParameters.position === 6) { %>
+                sixth?
+            <% } else if (qParameters.position === 7) { %>
+                seventh?
+            <% } else if (qParameters.position === 8) { %>
+                eighth?
+            <% } else if (qParameters.position === 9) { %>
+                ninth?
+            <% } else { %>
+                tenth?
+            <% } %>
+        </p>
+
+        <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.numbers.join(', ') %></p>
+    <% } %>
+
+    <% if (qCode === 'o') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Which of the given numbers is the 
+            <% if (qParameters.type === 'min') { %>smallest<% } else { %>largest<% } %>?
+        </p>
+
+        <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.numbers[0] %>, <%= qParameters.numbers[1] %>, <%= qParameters.numbers[2] %></p>
+    <% } %>
+
     <% if (qCode === 'l') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.

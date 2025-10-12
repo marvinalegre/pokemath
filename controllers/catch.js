@@ -211,13 +211,59 @@ function getCode() {
     "l",
     "m",
     "n",
+    "o",
+    "p",
+    "q",
   ];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "n") {
+  if (code === "q") {
+    const x = Math.floor(Math.random() * 11);
+    const y = Math.floor(Math.random() * 11);
+    const position = Math.floor(Math.random() * 2);
+
+    return {
+      qAnswer: position === 0 ? y : x,
+      qParameters: {
+        x,
+        y,
+        position,
+      },
+    };
+  } else if (code === "p") {
+    const set = new Set();
+    while (set.size !== 10) {
+      set.add(Math.floor(Math.random() * 100));
+    }
+
+    const position = Math.ceil(Math.random() * 8) + 2;
+
+    return {
+      qAnswer: [...set][position - 1],
+      qParameters: {
+        numbers: [...set],
+        position,
+      },
+    };
+  } else if (code === "o") {
+    const set = new Set();
+    while (set.size !== 3) {
+      set.add(Math.floor(Math.random() * 100));
+    }
+
+    const min = Math.random() > 0.5;
+
+    return {
+      qAnswer: min ? Math.min(...set) : Math.max(...set),
+      qParameters: {
+        numbers: [...set],
+        type: min ? "min" : "max",
+      },
+    };
+  } else if (code === "n") {
     const x = Math.floor(Math.random() * 3) + 2;
     const y = Math.floor(Math.random() * 8) + 2;
 
