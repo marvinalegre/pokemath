@@ -196,13 +196,24 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["s"];
+  const codes = ["r", "s", "t"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "s") {
+  if (code === "t") {
+    const kgToGrams = Math.random() > 0.5;
+    const x = Math.ceil(Math.random() * 50);
+
+    return {
+      qAnswer: kgToGrams ? x * 1000 : x,
+      qParameters: {
+        x,
+        kgToGrams,
+      },
+    };
+  } else if (code === "s") {
     const p = Math.ceil(Math.random() * 1_990) + 10;
     const c = Math.floor(Math.random() * 100);
     const toWords = new ToWords({ localeCode: "en-PH" });
