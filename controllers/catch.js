@@ -196,31 +196,87 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = [
-    "a2",
-    "ar2",
-    "b",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-  ];
+  const codes = ["s"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "q") {
+  if (code === "s") {
+    const p = Math.ceil(Math.random() * 1_990) + 10;
+    const c = Math.floor(Math.random() * 100);
+    const toWords = new ToWords({ localeCode: "en-PH" });
+    let pWords = toWords.convert(p).toLowerCase();
+    let cWords = toWords.convert(c).toLowerCase();
+
+    const pLastTwoDigits = getLastTwoDigits(p);
+    const cLastTwoDigits = getLastTwoDigits(c);
+
+    if (pLastTwoDigits > 20 && pLastTwoDigits % 10 !== 0) {
+      pWords = pWords.replace(
+        toWords.convert(pLastTwoDigits).toLowerCase(),
+        toWords.convert(pLastTwoDigits).toLowerCase().replace(" ", "-"),
+      );
+    }
+
+    if (cLastTwoDigits > 20 && cLastTwoDigits % 10 !== 0) {
+      cWords = cWords.replace(
+        toWords.convert(cLastTwoDigits).toLowerCase(),
+        toWords.convert(cLastTwoDigits).toLowerCase().replace(" ", "-"),
+      );
+    }
+
+    let moneyInWords = `${pWords} pesos`;
+    if (c > 1) {
+      moneyInWords += ` and ${cWords} centavos`;
+    } else if (c === 1) {
+      moneyInWords += ` and ${cWords} centavo`;
+    }
+
+    return {
+      qAnswer: moneyInWords,
+      qParameters: {
+        money: `${p}.${c > 9 ? c : `0${c}`}`,
+      },
+    };
+  } else if (code === "r") {
+    const p = Math.ceil(Math.random() * 1_990) + 10;
+    const c = Math.floor(Math.random() * 100);
+    const toWords = new ToWords({ localeCode: "en-PH" });
+    let pWords = toWords.convert(p).toLowerCase();
+    let cWords = toWords.convert(c).toLowerCase();
+
+    const pLastTwoDigits = getLastTwoDigits(p);
+    const cLastTwoDigits = getLastTwoDigits(c);
+
+    if (pLastTwoDigits > 20 && pLastTwoDigits % 10 !== 0) {
+      pWords = pWords.replace(
+        toWords.convert(pLastTwoDigits).toLowerCase(),
+        toWords.convert(pLastTwoDigits).toLowerCase().replace(" ", "-"),
+      );
+    }
+
+    if (cLastTwoDigits > 20 && cLastTwoDigits % 10 !== 0) {
+      cWords = cWords.replace(
+        toWords.convert(cLastTwoDigits).toLowerCase(),
+        toWords.convert(cLastTwoDigits).toLowerCase().replace(" ", "-"),
+      );
+    }
+
+    let moneyInWords = `${pWords} pesos`;
+    if (c > 1) {
+      moneyInWords += ` and ${cWords} centavos`;
+    } else if (c === 1) {
+      moneyInWords += ` and ${cWords} centavo`;
+    }
+
+    return {
+      qAnswer: `${p}.${c > 9 ? c : `0${c}`}`,
+      qParameters: {
+        moneyInWords,
+      },
+    };
+  } else if (code === "q") {
     const x = Math.floor(Math.random() * 11);
     const y = Math.floor(Math.random() * 11);
     const position = Math.floor(Math.random() * 2);
@@ -488,5 +544,15 @@ function getParametersAndAnswer(code) {
     const x = Math.floor(Math.random() * 11);
     const y = Math.floor(Math.random() * 11);
     return { qAnswer: x * y, qParameters: { x, y } };
+  }
+}
+
+function getLastTwoDigits(num) {
+  let str = num.toString();
+
+  if (str.length >= 2) {
+    return Number(str.slice(-2));
+  } else {
+    return Number(str);
   }
 }

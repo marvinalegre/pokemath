@@ -10,6 +10,27 @@
 
     <div class="question">
 
+    <% if (qCode === 's') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Write the given amount in words.
+        </p>
+
+        <p style="margin: 4rem 0 1rem 0; text-align: center; font-size: 1.3rem">&#8369; <%= qParameters.money%></p>
+        <p style="text-align: center; font-size: 1.3rem">=</p>
+        <p style="margin: 1rem 0 0 0; text-align: center; font-size: 1.3rem">___________________________</p>
+    <% } %>
+
+
+    <% if (qCode === 'r') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <p style="margin: 4rem 0 1rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.moneyInWords %></p>
+        <p style="text-align: center; font-size: 1.3rem">=</p>
+        <p style="margin: 1rem 0 0 0; text-align: center; font-size: 1.3rem">&#8369; ______</p>
+    <% } %>
+
     <% if (qCode === 'q') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
@@ -184,7 +205,13 @@ const parts = formatted.split('').map(char => {
 
 
     <form method="post" action="/catch">
-        <input name="answer" tabindex="1" type="number" autocomplete="off" required>
+        <% if (qCode === 'r') { %>
+            <input name="answer" tabindex="1" type="number" autocomplete="off" required step="0.01">
+        <% } else if (qCode === 's') { %>
+            <input name="answer" tabindex="1" type="text" autocomplete="off" required>
+        <% } else { %>
+            <input name="answer" tabindex="1" type="number" autocomplete="off" required>
+        <% } %>
         <button 
             tabindex="2"
             type="submit"
