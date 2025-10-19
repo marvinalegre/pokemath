@@ -196,13 +196,133 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["r", "s", "t"];
+  const codes = ["r", "s", "t", "u", "v", "w", "x", "y"];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "t") {
+  if (code === "y") {
+    const names = [
+      "Anna",
+      "Ben",
+      "Carla",
+      "David",
+      "Ella",
+      "Frank",
+      "Grace",
+      "Henry",
+      "Isla",
+      "Jake",
+      "Kara",
+      "Leo",
+      "Mia",
+      "Noah",
+      "Olivia",
+    ];
+    const [name1, name2] = getTwoUniqueNames(names);
+    const moneyProblems = [
+      `${name2} paid for a notebook with two ten-peso coins. ${name1} bought a pen and paid with one twenty-peso bill. Who spent more?`,
+      `${name1} gave the vendor four five-peso coins for a sandwich. ${name2} paid with a ten-peso coin for a drink. Who spent more?`,
+      `${name2} bought snacks for 20 pesos. ${name1} bought a drink for 52 pesos. Who spent more money?`,
+      `${name1} gave the cashier 55 pesos for a book. ${name2} gave 20 pesos for a notebook. Who spent more?`,
+      `${name2} used one 50-peso bill to pay for lunch. ${name1} paid using three 20-peso bills and a ten-peso coin. Who spent more?`,
+      `${name2} paid three ten-peso coins for a toy. ${name1} paid two twenty-peso bills for a puzzle. Who spent more money?`,
+      `${name2} gave six five-peso coins to buy a ruler. ${name1} paid with one fifty-peso bill for a pair of scissors. Who spent more?`,
+      `${name1} bought a coloring book for 45 pesos. ${name2} bought crayons for 40 pesos. Who spent more?`,
+      `${name1} spent 75 pesos on lunch, while ${name2} spent 30 pesos on snacks. Who spent more money?`,
+
+      `${name1} bought a sandwich for 20 pesos. ${name2} bought a juice for 18 pesos. Who spent more money?`,
+      `${name2} gave two twenty-peso bills to buy a toy. ${name1} paid with one fifty-peso bill for a different toy. Who spent more?`,
+      `${name1} used five five-peso coins to buy a notebook. ${name2} paid with two ten-peso coins. Who spent more?`,
+      `${name1} paid 45 pesos for a puzzle. ${name2} paid 40 pesos for a board game. Who spent more money?`,
+      `${name1} gave two 100-peso bill to buy a backpack. ${name2} paid with two 50-peso bills for a school bag. Who spent more?`,
+      `${name1} spent 60 pesos on school supplies. ${name2} spent 55 pesos on art materials. Who spent more?`,
+      `${name2} bought three items that cost 15 pesos each. ${name1} bought two items that cost 25 pesos each. Who spent more money?`,
+      `${name1} gave one fifty-peso bill and one twenty-peso bill for a toy car. ${name2} gave three twenty-peso bills for a doll. Who spent more?`,
+      `${name2} spent 60 pesos at the canteen. ${name1} spent 75 pesos at the bookstore. Who spent more money?`,
+      `${name1} bought lunch and paid with two fifty-peso bills. ${name2} bought lunch and paid with four twenty-peso bills. Who spent more?`,
+    ];
+
+    return {
+      qAnswer: name1,
+      qParameters: {
+        question:
+          moneyProblems[Math.floor(Math.random() * moneyProblems.length)],
+        name1,
+        name2,
+      },
+    };
+
+    function getTwoUniqueNames(nameList) {
+      const shuffled = [...nameList].sort(() => 0.5 - Math.random());
+      return [shuffled[0], shuffled[1]];
+    }
+  } else if (code === "x") {
+    const x = Math.floor(Math.random() * 30) + 20;
+    const y = Math.floor(Math.random() * 30) + 20;
+
+    const moneyProblems = [
+      `Maria has ${x} pesos and her brother gave her ${y} pesos. How much money does Maria have now?`,
+      `John earned ${x} pesos from selling lemonade and ${y} pesos from doing chores. What is his total income?`,
+      `Emma received ${x} pesos for her graduation and ${y} pesos from her grandparents. How much money did she get in total?`,
+      `Liam found ${x} pesos in his piggy bank and added another ${y} pesos. How much money does he have now?`,
+      `A vendor earned ${x} pesos in the morning and ${y} pesos in the afternoon. How much did he earn in total that day?`,
+      `Sophie had ${x} pesos. Her parents gave her ${y} pesos more. How much money does she have altogether?`,
+      `Carlos collected ${x} pesos from his classmates and ${y} pesos from his teacher for a donation. How much money was collected in total?`,
+      `Nina saved ${x} pesos last month and ${y} pesos this month. How much has she saved so far?`,
+      `Ben picked up ${x} pesos from the ground and later found another ${y} pesos. What is the total amount he found?`,
+    ];
+
+    return {
+      qAnswer: x + y,
+      qParameters: {
+        question:
+          moneyProblems[Math.floor(Math.random() * moneyProblems.length)],
+        x,
+        y,
+      },
+    };
+  } else if (code === "w") {
+    const x = Math.floor(Math.random() * 600) + 400;
+    let y = Math.floor(Math.random() * 900) + 100;
+
+    while (y > x) {
+      y = Math.floor(Math.random() * 900) + 100;
+    }
+
+    return {
+      qAnswer: x - y,
+      qParameters: {
+        x,
+        y,
+      },
+    };
+  } else if (code === "v") {
+    const x = Math.floor(Math.random() * 900) + 100;
+    const y = Math.floor(Math.random() * 900) + 100;
+    const z = Math.floor(Math.random() * 900) + 100;
+
+    return {
+      qAnswer: x + y + z,
+      qParameters: {
+        x,
+        y,
+        z,
+      },
+    };
+  } else if (code === "u") {
+    const lToMl = Math.random() > 0.5;
+    const x = Math.ceil(Math.random() * 50);
+
+    return {
+      qAnswer: lToMl ? x * 1000 : x,
+      qParameters: {
+        x,
+        lToMl,
+      },
+    };
+  } else if (code === "t") {
     const kgToGrams = Math.random() > 0.5;
     const x = Math.ceil(Math.random() * 50);
 

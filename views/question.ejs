@@ -10,6 +10,34 @@
 
     <div class="question">
 
+    <% if (qCode === 'w') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> - <%= qParameters.y %> = ____</p>
+    <% } %>
+
+    <% if (qCode === 'v') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> + <%= qParameters.y %> + <%= qParameters.z %> = ____</p>
+    <% } %>
+
+    <% if (qCode === 'u') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <% if (qParameters.lToMl) { %>
+            <p style="margin: 4rem 0 1rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x%> L = ____ mL</p>
+        <% } else { %>
+            <p style="margin: 4rem 0 1rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %>,000 mL = ____ L</p>
+        <% } %>
+    <% } %>
+
     <% if (qCode === 't') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
@@ -173,7 +201,7 @@ const parts = formatted.split('').map(char => {
         </ul>
     <% } %>
 
-    <% if (['b', 'd', 'e', 'n'].includes(qCode)) { %>
+    <% if (['b', 'd', 'e', 'n', 'x', 'y'].includes(qCode)) { %>
         <p style="text-align: center; font-size: 1.1rem; margin-top: 5rem">
             <%= qParameters.question %>
         </p>
@@ -219,7 +247,7 @@ const parts = formatted.split('').map(char => {
     <form method="post" action="/catch">
         <% if (qCode === 'r') { %>
             <input name="answer" tabindex="1" type="number" autocomplete="off" required step="0.01">
-        <% } else if (qCode === 's') { %>
+        <% } else if (['s', 'y'].includes(qCode)) { %>
             <input name="answer" tabindex="1" type="text" autocomplete="off" required>
         <% } else { %>
             <input name="answer" tabindex="1" type="number" autocomplete="off" required>
