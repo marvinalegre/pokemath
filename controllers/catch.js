@@ -476,7 +476,7 @@ function getParametersAndAnswer(code) {
     ];
     const [name1, name2] = getTwoUniqueNames(names);
     const moneyProblems = [
-      `${name2} paid for a notebook with two ten-peso coins. ${name1} bought a pen and paid with one twenty-peso bill. Who spent more?`,
+      `${name2} paid for a notebook with two ten-peso coins. ${name1} bought a pen and paid with two twenty-peso bill. Who spent more?`,
       `${name1} gave the vendor four five-peso coins for a sandwich. ${name2} paid with a ten-peso coin for a drink. Who spent more?`,
       `${name2} bought snacks for 20 pesos. ${name1} bought a drink for 52 pesos. Who spent more money?`,
       `${name1} gave the cashier 55 pesos for a book. ${name2} gave 20 pesos for a notebook. Who spent more?`,
