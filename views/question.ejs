@@ -10,7 +10,27 @@
 
     <div class="question">
 
-    <% if (qCode === 'w') { %>
+    <% if (['ae'].includes(qCode)) { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Estimate how much the <% if (qParameters.isSum) { %>sum<% } else { %>difference<% } %> is.
+        </p>
+
+        <% if (qParameters.isSum) { %>
+            <p style="margin: 4rem 0 1rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x%> + <%= qParameters.y%> = ____</p>
+        <% } else { %>
+            <p style="margin: 4rem 0 1rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x%> - <%= qParameters.y%> = ____</p>
+        <% } %>
+    <% } %>
+
+    <% if (qCode === 'z') { %>
+        <p style="text-align: center; font-size: 1.1rem">
+            Fill in the blank.
+        </p>
+
+        <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.expression %> = ____</p>
+    <% } %>
+
+    <% if (['j', 'w', 'ab'].includes(qCode)) { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
         </p>
@@ -134,14 +154,6 @@
         </p>
     <% } %>
 
-    <% if (qCode === 'j') { %>
-        <p style="text-align: center; font-size: 1.1rem">
-            Fill in the blank.
-        </p>
-
-<p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> - <%= qParameters.y %> = ___</p>
-    <% } %>
-
     <% if (qCode === 'i') { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
@@ -201,18 +213,22 @@ const parts = formatted.split('').map(char => {
         </ul>
     <% } %>
 
-    <% if (['b', 'd', 'e', 'n', 'x', 'y'].includes(qCode)) { %>
+    <% if (['b', 'd', 'e', 'n', 'x', 'y', 'ac', 'ad', 'af'].includes(qCode)) { %>
         <p style="text-align: center; font-size: 1.1rem; margin-top: 5rem">
             <%= qParameters.question %>
         </p>
     <% } %>
 
-    <% if (qCode === 'a' || qCode === 'a2') { %>
+    <% if (['a', 'a2', 'aa'].includes(qCode)) { %>
         <p style="text-align: center; font-size: 1.1rem">
             Fill in the blank.
         </p>
 
-        <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> + <%= qParameters.y %> = ___</p>
+        <% if (Math.random() > 0.5) { %>
+            <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.x %> + <%= qParameters.y %> = ___</p>
+        <% } else { %>
+            <p style="margin: 4rem 0; text-align: center; font-size: 1.3rem"><%= qParameters.y %> + <%= qParameters.x %> = ___</p>
+        <% } %>
     <% } %>
 
     <% if (qCode === 'ar' || qCode === 'ar2') { %>
@@ -247,7 +263,7 @@ const parts = formatted.split('').map(char => {
     <form method="post" action="/catch">
         <% if (qCode === 'r') { %>
             <input name="answer" tabindex="1" type="number" autocomplete="off" required step="0.01">
-        <% } else if (['s', 'y'].includes(qCode)) { %>
+        <% } else if (['s', 'y', 'ac', 'ad'].includes(qCode)) { %>
             <input name="answer" tabindex="1" type="text" autocomplete="off" required>
         <% } else { %>
             <input name="answer" tabindex="1" type="number" autocomplete="off" required>

@@ -196,13 +196,267 @@ function rollDie() {
 }
 
 function getCode() {
-  const codes = ["r", "s", "t", "u", "v", "w", "x", "y"];
+  const codes = [
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+    "aa",
+    "ab",
+    "ac",
+    "ad",
+    "ae",
+    "af",
+  ];
   const index = Math.floor(Math.random() * codes.length);
   return codes[index];
 }
 
 function getParametersAndAnswer(code) {
-  if (code === "y") {
+  if (code === "af") {
+    const isAddition = Math.random() > 0.5;
+    let x, y;
+    if (isAddition) {
+      x = Math.floor(Math.random() * 30) + 20;
+      y = Math.floor(Math.random() * 30) + 20;
+    } else {
+      x = Math.ceil(Math.random() * 30) + 50;
+      y = Math.ceil(Math.random() * 30) + 20;
+
+      while (y > x) {
+        y = Math.ceil(Math.random() * 30) + 20;
+      }
+    }
+    const additionProblems = [
+      `There are ${x} apples in one basket and ${y} apples in another. How many apples are there in total?`,
+      `A library has ${x} books on one shelf and ${y} books on another. How many books are there altogether?`,
+      `Tom has ${x} toy cars and gets ${y} more for his birthday. How many toy cars does he have now?`,
+      `A class has ${x} boys and ${y} girls. How many students are there in the class?`,
+      `A bird laid ${x} eggs on Monday and ${y} eggs on Tuesday. How many eggs did it lay in total?`,
+      `There are ${x} red balloons and ${y} blue balloons. How many balloons are there in total?`,
+      `You walked ${x} steps in the morning and ${y} steps in the afternoon. How many steps did you walk today?`,
+      `Sarah read ${x} pages in the morning and ${y} pages in the evening. How many pages did she read in total?`,
+      `There are ${x} chairs in one room and ${y} in another. How many chairs are there altogether?`,
+      `A farmer has ${x} cows and ${y} goats. How many animals does he have in total?`,
+      `Lisa built ${x} blocks and added ${y} more. How many blocks are there now?`,
+      `There are ${x} students in one group and ${y} in another. How many students are there in both groups?`,
+      `A tree has ${x} apples and another has ${y}. How many apples are there in total?`,
+      `Mark has ${x} pencils and finds ${y} more in his backpack. How many pencils does he have now?`,
+      `In a box, there are ${x} red balls and ${y} green balls. How many balls are in the box?`,
+      `A train has ${x} passengers in one coach and ${y} in another. How many passengers are on the train?`,
+      `There are ${x} stars in the sky tonight and ${y} shooting stars. How many stars did you see in total?`,
+      `You collected ${x} stickers on Monday and ${y} on Tuesday. How many stickers do you have now?`,
+      `There are ${x} ducks on one pond and ${y} on another. How many ducks are there in total?`,
+      `Emma picked ${x} flowers in the morning and ${y} in the afternoon. How many flowers did she pick today?`,
+    ];
+    const subtractionProblems = [
+      `There were ${x} apples in the basket. ${y} apples were taken out. How many are left?`,
+      `A library had ${x} books. ${y} books were borrowed. How many books are still on the shelves?`,
+      `Tom had ${x} toy cars but gave ${y} to his friend. How many does he have left?`,
+      `A class had ${x} students. ${y} went on a field trip. How many students stayed behind?`,
+      `A bird laid ${x} eggs, but ${y} eggs broke. How many eggs are left?`,
+      `There were ${x} balloons at the party. ${y} balloons popped. How many balloons remain?`,
+      `You planned to walk ${x} steps today but stopped after ${y}. How many steps short did you fall?`,
+      `Sarah had ${x} pages to read and already read ${y}. How many pages does she have left?`,
+      `There were ${x} chairs before the meeting. ${y} were taken to another room. How many are left?`,
+      `A farmer had ${x} cows. ${y} were sold. How many cows does he still have?`,
+      `Lisa built ${x} blocks but ${y} blocks fell down. How many are still standing?`,
+      `There were ${x} students at recess. ${y} went back to class. How many are still outside?`,
+      `A tree had ${x} apples. ${y} fell to the ground. How many apples remain on the tree?`,
+      `Mark had ${x} pencils but lost ${y}. How many pencils does he still have?`,
+      `In a box, there were ${x} balls. ${y} balls were taken out. How many balls are left?`,
+      `A train started with ${x} passengers. ${y} got off at the next station. How many are still on board?`,
+      `You saw ${x} stars last night, but ${y} were hidden by clouds. How many could you still see?`,
+      `You had ${x} stickers, but gave ${y} to a friend. How many do you have now?`,
+      `There were ${x} ducks on the pond. ${y} flew away. How many ducks are still there?`,
+      `Emma picked ${x} flowers but dropped ${y} on the way. How many flowers does she still have?`,
+    ];
+
+    const output = { qParameters: {} };
+    if (isAddition) {
+      output.qAnswer = x + y;
+    } else {
+      output.qAnswer = x - y;
+    }
+    output.qParameters = {
+      question: isAddition
+        ? additionProblems[Math.floor(Math.random() * additionProblems.length)]
+        : subtractionProblems[
+            Math.floor(Math.random() * subtractionProblems.length)
+          ],
+    };
+    return output;
+  } else if (code === "ae") {
+    const isSum = Math.random() > 0.5;
+    let x, y;
+    if (isSum) {
+      if (Math.random() > 0.5) {
+        x = Math.ceil(Math.random() * 8999) + 1000;
+        y = Math.ceil(Math.random() * 8999) + 1000;
+      } else {
+        x = Math.ceil(Math.random() * 899) + 100;
+        y = Math.ceil(Math.random() * 899) + 100;
+      }
+    } else {
+      if (Math.random() > 0.5) {
+        x = Math.ceil(Math.random() * 8999) + 1000;
+        y = Math.ceil(Math.random() * 8999) + 1000;
+
+        while (y > x) {
+          y = Math.ceil(Math.random() * 8999) + 1000;
+        }
+      } else {
+        x = Math.ceil(Math.random() * 899) + 100;
+        y = Math.ceil(Math.random() * 899) + 100;
+
+        while (y > x) {
+          y = Math.ceil(Math.random() * 899) + 100;
+        }
+      }
+    }
+
+    const output = { qParameters: {} };
+    if (isSum) {
+      output.qAnswer =
+        roundToLargestPlaceValue(x) + roundToLargestPlaceValue(y);
+    } else {
+      output.qAnswer =
+        roundToLargestPlaceValue(x) - roundToLargestPlaceValue(y);
+    }
+    output.qParameters = { x, y, isSum };
+    return output;
+  } else if (code === "ad") {
+    const hasLessCapacity = Math.random() > 0.5;
+    const isSameUnit = Math.random() > 0.5;
+    const x = Math.ceil(Math.random() * 5) + 5;
+    const y = Math.ceil(Math.random() * 8) * 0.5 + x;
+    const liquids = [
+      "water",
+      "milk",
+      "juice",
+      "oil",
+      "vinegar",
+      "syrup",
+      "honey",
+      "soy sauce",
+      "coffee",
+      "tea",
+    ];
+    const [liq1, liq2] = getTwoUniqueNames(liquids);
+    const hash = {
+      [liq1]: [x],
+      [liq2]: [y],
+    };
+
+    const output = { qParameters: {} };
+    if (hasLessCapacity) {
+      output.qAnswer = liq1;
+    } else {
+      output.qAnswer = liq2;
+    }
+    if (isSameUnit) {
+      const useL = Math.random() > 0.5;
+      if (useL) {
+        output.qParameters.question = `Which has ${hasLessCapacity ? "less" : "more"} capacity: ${hash[liq1]} L of ${liq1} or ${hash[liq2]} L of ${liq2}?`;
+      } else {
+        output.qParameters.question = `Which has ${hasLessCapacity ? "less" : "more"} capacity: ${hash[liq1] * 1000} mL of ${liq1} or ${hash[liq2] * 1000} mL of ${liq2}?`;
+      }
+    } else {
+      output.qParameters.question = `Which has ${hasLessCapacity ? "less" : "more"} capacity: ${hash[liq1]} L of ${liq1} or ${hash[liq2] * 1000} mL of ${liq2}?`;
+    }
+
+    return output;
+  } else if (code === "ac") {
+    const isLighter = Math.random() > 0.5;
+    const isSameUnit = Math.random() > 0.5;
+    const x = Math.ceil(Math.random() * 5) + 5;
+    const y = Math.ceil(Math.random() * 8) * 0.5 + x;
+    const vegetables = ["okra", "squash", "carrots", "potatoes", "spinach"];
+    const [veg1, veg2] = getTwoUniqueNames(vegetables);
+    const hash = {
+      [veg1]: [x],
+      [veg2]: [y],
+    };
+
+    const output = { qParameters: {} };
+    if (isLighter) {
+      output.qAnswer = veg1;
+    } else {
+      output.qAnswer = veg2;
+    }
+    if (isSameUnit) {
+      const useKg = Math.random() > 0.5;
+      if (useKg) {
+        output.qParameters.question = `Which is ${isLighter ? "lighter" : "heavier"}: ${hash[veg1]} kg of ${veg1} or ${hash[veg2]} kg of ${veg2}?`;
+      } else {
+        output.qParameters.question = `Which is ${isLighter ? "lighter" : "heavier"}: ${hash[veg1] * 1000} g of ${veg1} or ${hash[veg2] * 1000} g of ${veg2}?`;
+      }
+    } else {
+      output.qParameters.question = `Which is ${isLighter ? "lighter" : "heavier"}: ${hash[veg1]} kg of ${veg1} or ${hash[veg2] * 1000} g of ${veg2}?`;
+    }
+
+    return output;
+  } else if (code === "ab") {
+    const x = Math.floor(Math.random() * 900) + 100;
+    let y = Math.floor(Math.random() * 100);
+
+    return {
+      qAnswer: x - y,
+      qParameters: { x, y },
+    };
+  } else if (code === "aa") {
+    const x = Math.floor(Math.random() * 900) + 100;
+    const y = Math.floor(Math.random() * 100);
+    return { qAnswer: x + y, qParameters: { x, y } };
+  } else if (code === "z") {
+    const { expression, result } = generateSafeExpression();
+
+    return {
+      qAnswer: result,
+      qParameters: {
+        expression,
+      },
+    };
+
+    function generateSafeExpression(terms = 5, maxTermValue = 20) {
+      let expression = "";
+      let currentValue = Math.floor(Math.random() * maxTermValue) + 1; // Start with a positive number
+      expression += currentValue;
+
+      for (let i = 1; i < terms; i++) {
+        let operator;
+        let nextNumber;
+
+        // If currentValue is 0, we must add (can't subtract from 0)
+        if (currentValue === 0) {
+          operator = "+";
+        } else {
+          operator = Math.random() < 0.5 ? "+" : "-";
+        }
+
+        if (operator === "+") {
+          nextNumber = Math.floor(Math.random() * maxTermValue) + 1;
+          currentValue += nextNumber;
+        } else {
+          // Subtract only up to currentValue to avoid going negative
+          nextNumber = Math.floor(Math.random() * currentValue) + 1;
+          currentValue -= nextNumber;
+        }
+
+        expression += ` ${operator} ${nextNumber}`;
+      }
+
+      return {
+        expression,
+        result: currentValue,
+      };
+    }
+  } else if (code === "y") {
     const names = [
       "Anna",
       "Ben",
@@ -253,11 +507,6 @@ function getParametersAndAnswer(code) {
         name2,
       },
     };
-
-    function getTwoUniqueNames(nameList) {
-      const shuffled = [...nameList].sort(() => 0.5 - Math.random());
-      return [shuffled[0], shuffled[1]];
-    }
   } else if (code === "x") {
     const x = Math.floor(Math.random() * 30) + 20;
     const y = Math.floor(Math.random() * 30) + 20;
@@ -686,4 +935,17 @@ function getLastTwoDigits(num) {
   } else {
     return Number(str);
   }
+}
+
+function getTwoUniqueNames(nameList) {
+  const shuffled = [...nameList].sort(() => 0.5 - Math.random());
+  return [shuffled[0], shuffled[1]];
+}
+
+function roundToLargestPlaceValue(num) {
+  if (num === 0) return 0;
+
+  const digits = Math.floor(Math.log10(Math.abs(num))); // Find the number of digits - 1
+  const placeValue = Math.pow(10, digits); // Get the largest place value
+  return Math.round(num / placeValue) * placeValue;
 }
