@@ -2,7 +2,7 @@ import Image from "next/image";
 import Message from "./message";
 
 export default async function Home() {
-  const res = await fetch("http://api:3000");
+  const res = await fetch("http://pokemath-api:3000");
   const { message } = await res.json();
 
   return (

@@ -1,0 +1,7 @@
+{
+  "name": "pokemath",
+  "scripts": {
+    "start:dev": "docker compose -f compose.yaml -f compose.dev.yaml up --build --watch",
+    "stop:dev": "docker compose -f compose.yaml -f compose.dev.yaml down"
+  }
+}
