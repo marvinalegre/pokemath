@@ -19,7 +19,7 @@ services:
     container_name: pokemath-web
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.priority=1"
-      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.web.priority=1"
+      - "traefik.http.services.web.loadbalancer.server.port=3000"
     networks:
       - web-traffic

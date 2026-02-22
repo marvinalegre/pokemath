@@ -18,7 +18,7 @@ services:
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost/api
     labels:
-      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.routers.web.rule=Host(`localhost`)"
     develop:
       watch:
         - path: ./web/src

@@ -4,8 +4,8 @@ services:
     restart: always
     labels:
       - "traefik.http.routers.api.rule=Host(`pokemath.testingg.bid`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.whiteboard.entrypoints=websecure"
-      - "traefik.http.routers.whiteboard.tls.certresolver=myresolver"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=myresolver"
 
   web:
     image: marvinalegre/pokemath-web:latest
@@ -13,9 +13,9 @@ services:
       - NEXT_PUBLIC_API_URL=https://pokemath.testingg.bid/api
     restart: always
     labels:
-      - "traefik.http.routers.frontend.rule=Host(`pokemath.testingg.bid`)"
-      - "traefik.http.routers.whiteboard.entrypoints=websecure"
-      - "traefik.http.routers.whiteboard.tls.certresolver=myresolver"
+      - "traefik.http.routers.web.rule=Host(`pokemath.testingg.bid`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls.certresolver=myresolver"
 
 networks:
   web-traffic:
