@@ -2,15 +2,13 @@ services:
   api:
     build:
       target: dev
-    environment:
-      - NODE_ENV=development
     labels:
       - "traefik.http.routers.api.rule=Host(`localhost`) && PathPrefix(`/api`)"
     develop:
       watch:
         - path: ./api/src
           action: sync
-          target: /usr/local/app/src
+          target: /app/src
         - path: ./package.json
           action: rebuild
 
@@ -18,18 +16,17 @@ services:
     build:
       target: dev
     environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://127.0.0.1:80/api
+      - NEXT_PUBLIC_API_URL=http://localhost/api
     labels:
       - "traefik.http.routers.frontend.rule=Host(`localhost`)"
     develop:
       watch:
         - path: ./web/src
           action: sync
-          target: /usr/local/app/src
+          target: /app/src
         - path: ./web/public
           action: sync
-          target: /usr/local/app/public
+          target: /app/public
         - path: ./package.json
           action: rebuild
 

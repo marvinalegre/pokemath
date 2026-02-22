@@ -1,9 +1,6 @@
 services:
   api:
-    build:
-      target: final
-    environment:
-      - NODE_ENV=production
+    image: marvinalegre/pokemath-api:latest
     restart: always
     labels:
       - "traefik.http.routers.api.rule=Host(`pokemath.testingg.bid`) && PathPrefix(`/api`)"
@@ -11,10 +8,8 @@ services:
       - "traefik.http.routers.whiteboard.tls.certresolver=myresolver"
 
   web:
-    build:
-      target: final
+    image: marvinalegre/pokemath-web:latest
     environment:
-      - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://pokemath.testingg.bid/api
     restart: always
     labels:
@@ -24,5 +19,4 @@ services:
 
 networks:
   web-traffic:
-    driver: bridge
-    name: web-traffic
+    external: true

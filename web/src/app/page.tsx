@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Message from "./message";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const res = await fetch("http://pokemath-api:3000");
   const { message } = await res.json();
