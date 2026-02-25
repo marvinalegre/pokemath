@@ -38,7 +38,7 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex md:items-center md:gap-1">
           <NavigationMenu>
-            <NavigationMenuList>
+            <NavigationMenuList className="gap-14">
               <NavigationMenuItem>
                 <NavigationMenuLink
                   href="/catch"
