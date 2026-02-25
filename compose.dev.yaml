@@ -24,6 +24,9 @@ services:
         - path: ./web/app
           action: sync
           target: /app/app
+        - path: ./web/components
+          action: sync
+          target: /app/components
         - path: ./web/public
           action: sync
           target: /app/public
