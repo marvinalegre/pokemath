@@ -1,4 +1,4 @@
-import { ComponentExample } from "@/components/component-example";
+import Navbar from "@/components/navbar";
 import Message from "./message";
 import Test from "@/components/test";
 
@@ -8,10 +8,10 @@ export default async function Page() {
 
   return (
     <>
+      <Navbar />
       <p>message from nest (via node rsc server): {message}</p>
       <Message />
       <Test />
-      <ComponentExample />
     </>
   );
 }
