@@ -24,8 +24,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  throw new Error("foobar");
-
   return (
     <html lang="en" className={inter.variable}>
       <body
