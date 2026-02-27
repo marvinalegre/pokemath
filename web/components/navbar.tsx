@@ -18,11 +18,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { IconMenu2, IconBolt, IconUser } from "@tabler/icons-react";
 
-const DEFAULT_USERNAME = "user9asug93";
-
-export default function Navbar() {
+export default function Navbar({ username }: { username: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const username = DEFAULT_USERNAME;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur-md">
@@ -64,12 +61,14 @@ export default function Navbar() {
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex md:items-center md:gap-2">
-          <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground">
-            <IconUser className="h-3.5 w-3.5" />
-            <span className="font-mono text-xs font-medium text-foreground">
-              {username}
-            </span>
-          </div>
+          {username && (
+            <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground">
+              <IconUser className="h-3.5 w-3.5" />
+              <span className="font-mono text-xs font-medium text-foreground">
+                {username}
+              </span>
+            </div>
+          )}
           <Button size="sm" asChild>
             <a href="/signup">Sign up</a>
           </Button>
@@ -115,17 +114,19 @@ export default function Navbar() {
               </nav>
 
               <div className="mt-6 flex flex-col gap-2">
-                <div className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2.5">
-                  <IconUser className="h-4 w-4 text-muted-foreground" />
-                  <div className="flex flex-col">
-                    <span className="text-xs text-muted-foreground">
-                      Temporary account (will be deleted)
-                    </span>
-                    <span className="font-mono text-sm font-medium text-foreground">
-                      {username}
-                    </span>
+                {username && (
+                  <div className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2.5">
+                    <IconUser className="h-4 w-4 text-muted-foreground" />
+                    <div className="flex flex-col">
+                      <span className="text-xs text-muted-foreground">
+                        Temporary account (will be deleted)
+                      </span>
+                      <span className="font-mono text-sm font-medium text-foreground">
+                        {username}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                )}
                 <Button className="w-full" asChild>
                   <a href="/signup" onClick={() => setMobileOpen(false)}>
                     Sign up

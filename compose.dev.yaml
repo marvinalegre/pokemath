@@ -30,6 +30,9 @@ services:
         - path: ./web/public
           action: sync
           target: /app/public
+        - path: ./web/proxy.ts
+          action: sync
+          target: /app/proxy.ts
         - path: ./package.json
           action: rebuild
 
