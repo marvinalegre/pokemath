@@ -9,7 +9,7 @@ services:
         - path: ./api/src
           action: sync
           target: /app/src
-        - path: ./package.json
+        - path: ./api/package.json
           action: rebuild
 
   web:
@@ -33,7 +33,7 @@ services:
         - path: ./web/proxy.ts
           action: sync
           target: /app/proxy.ts
-        - path: ./package.json
+        - path: ./web/package.json
           action: rebuild
 
   traefik:
