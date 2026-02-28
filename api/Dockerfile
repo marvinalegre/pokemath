@@ -1,4 +1,4 @@
-FROM node:24-trixie-slim AS base
+FROM node:24-trixie AS base
 RUN mkdir -p /var/lib/pokemath && chown -R node:node /var/lib/pokemath
 RUN mkdir -p /app && chown node:node /app
 WORKDIR /app
@@ -14,7 +14,10 @@ FROM build AS dev
 ENV NODE_ENV=development
 CMD ["npm", "run", "start:dev"]
 
-FROM base AS final
+FROM node:24-trixie-slim AS final
+RUN mkdir -p /var/lib/pokemath && chown -R node:node /var/lib/pokemath
+RUN mkdir -p /app && chown node:node /app
+WORKDIR /app
 ENV NODE_ENV=production
 COPY --chown=node:node package.json package-lock.json ./
 USER node
