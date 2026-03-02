@@ -33,6 +33,9 @@ services:
         - path: ./web/proxy.ts
           action: sync
           target: /app/proxy.ts
+        - path: ./web/sample.env
+          action: sync
+          target: /app/.env
         - path: ./web/package.json
           action: rebuild
 

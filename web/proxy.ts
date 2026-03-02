@@ -1,12 +1,16 @@
 import { NextResponse, NextRequest } from "next/server";
 
 // This function can be marked `async` if using `await` inside
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
 
-  let username = "kungfupanda";
+  let username;
   if (!token) {
-    // hit /auth/guest
+    const res = await fetch(
+      `${process.env.INTERNAL_API_BASE_URL as string}/auth/guest`,
+    );
+    const data = await res.json();
+    username = data.username;
   } else {
     // hit /auth/me
   }
