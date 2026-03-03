@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { customAlphabet } from 'nanoid/non-secure';
+import { customAlphabet } from 'nanoid';
 
 @Injectable()
 export class StringGeneratorService {
