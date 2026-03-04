@@ -1,12 +1,18 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/env.validation';
 import Database from 'better-sqlite3';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {
   private db: any;
 
+  constructor(private readonly configService: ConfigService<Env, true>) {}
+
   onModuleInit() {
-    this.db = new Database('/var/lib/pokemath/pokemath.db');
+    this.db = new Database(
+      this.configService.get('DATABASE_URL', { infer: true }),
+    );
 
     this.db.pragma('journal_mode = WAL');
 

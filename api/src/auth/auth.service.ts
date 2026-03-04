@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/env.validation';
 import { StringGeneratorService } from 'src/common/utils/string-generator.service';
 import { DatabaseService } from 'src/database/database.service';
 import jwt from 'jsonwebtoken';
@@ -7,7 +8,7 @@ import jwt from 'jsonwebtoken';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService<Env, true>,
     private readonly stringGeneratorService: StringGeneratorService,
     private readonly db: DatabaseService,
   ) {}
@@ -41,10 +42,7 @@ export class AuthService {
       throw new InternalServerErrorException('Failed to create user');
     }
 
-    const jwtSecret = this.configService.get<string>('JWT_SECRET');
-    if (typeof jwtSecret === 'undefined') {
-      throw new InternalServerErrorException();
-    }
+    const jwtSecret = this.configService.get('JWT_SECRET', { infer: true });
 
     const token = jwt.sign(
       { exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, sub: jwtSub },
