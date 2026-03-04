@@ -1,14 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { StringGeneratorService } from 'src/common/utils/string-generator.service';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private stringGeneratorService: StringGeneratorService) {}
+  constructor(private authService: AuthService) {}
 
   @Get('guest')
-  getGuest() {
-    return {
-      username: `User_${this.stringGeneratorService.generate(5)}`,
-    };
+  createGuest() {
+    return this.authService.createGuest();
   }
 }
