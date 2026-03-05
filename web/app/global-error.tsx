@@ -28,7 +28,7 @@ export default function Error() {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
+        <Navbar username="" />
         <main className="flex flex-col items-center justify-center p-6 m-24 text-center bg-white">
           <div className="max-w-md space-y-6">
             {/* Alert Icon */}
