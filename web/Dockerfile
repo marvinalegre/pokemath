@@ -9,14 +9,16 @@ RUN npm install
 COPY --chown=node:node . ./
 
 FROM deps AS dev
+ENV NEXT_PUBLIC_API_URL=http://localhost/api
 ENV NODE_ENV=development
+ENV INTERNAL_API_BASE_URL=http://pokemath-api:3000
 CMD ["npm", "run", "dev"]
 
 FROM deps AS build
+ENV NEXT_PUBLIC_API_URL=https://pokemath.testingg.bid/api
 RUN npm run build
 
 FROM base AS final
-ENV NODE_ENV=production
 COPY --chown=node:node package.json package-lock.json ./
 RUN npm ci --production && \
     npm cache clean --force

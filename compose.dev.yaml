@@ -15,8 +15,6 @@ services:
   web:
     build:
       target: dev
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost/api
     labels:
       - "traefik.http.routers.web.rule=Host(`localhost`)"
     develop:
@@ -33,9 +31,6 @@ services:
         - path: ./web/proxy.ts
           action: sync
           target: /app/proxy.ts
-        - path: ./web/sample.env
-          action: sync
-          target: /app/.env
         - path: ./web/package.json
           action: rebuild
 
