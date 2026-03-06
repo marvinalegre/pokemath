@@ -1,6 +1,8 @@
 services:
   api:
     image: marvinalegre/pokemath-api:latest
+    env_file:
+      - ./api/.env
     restart: always
     labels:
       - "traefik.http.routers.api.rule=Host(`pokemath.testingg.bid`) && PathPrefix(`/api`)"
@@ -9,8 +11,8 @@ services:
 
   web:
     image: marvinalegre/pokemath-web:latest
-    environment:
-      - NEXT_PUBLIC_API_URL=https://pokemath.testingg.bid/api
+    env_file:
+      - ./web/.env
     restart: always
     labels:
       - "traefik.http.routers.web.rule=Host(`pokemath.testingg.bid`)"
