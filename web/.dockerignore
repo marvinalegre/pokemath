@@ -1,1 +1,64 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+CHANGELOG.md
+LICENSE
+docs/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Dependency directories (reinstalled during build)
 node_modules/
+vendor/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Build artifacts
+dist/
+build/
+out/
+target/
+*.egg-info/
+
+# Test files
+tests/
+test/
+*.test.*
+*.spec.*
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker files (no need to copy these into the image)
+Dockerfile*
+docker-compose*
+.dockerignore
