@@ -7,6 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/env.validation';
 import { StringGeneratorService } from 'src/common/utils/string-generator.service';
 import { DatabaseService } from 'src/database/database.service';
+import { users } from 'src/database/schema';
+import { eq } from 'drizzle-orm';
 import jwt from 'jsonwebtoken';
 
 @Injectable()
@@ -14,7 +16,7 @@ export class AuthService {
   constructor(
     private readonly configService: ConfigService<Env, true>,
     private readonly stringGeneratorService: StringGeneratorService,
-    private readonly db: DatabaseService,
+    private readonly databaseService: DatabaseService,
   ) {}
 
   createGuest() {
@@ -24,10 +26,11 @@ export class AuthService {
     let result = null;
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       try {
-        result = this.db.run(
-          'INSERT INTO users (username, jwt_sub, role) VALUES (?, ?, ?)',
-          [username, jwtSub, 'guest'],
-        );
+        result = this.databaseService.db
+          .insert(users)
+          .values({ username, jwtSub })
+          .returning({ id: users.id })
+          .get();
         break;
       } catch (err) {
         if (!err.message.includes('UNIQUE constraint failed')) {
@@ -73,14 +76,16 @@ export class AuthService {
       throw new UnauthorizedException('Invalid or expired token');
     }
 
-    const users = this.db.query('SELECT * FROM users WHERE jwt_sub = ?', [
-      jwtSub,
-    ]);
+    const result = this.databaseService.db
+      .select()
+      .from(users)
+      .where(eq(users.jwtSub, jwtSub as string))
+      .all();
 
-    if (users.length === 0) {
+    if (result.length === 0) {
       throw new InternalServerErrorException('Something went wrong');
-    } else if (users.length === 1) {
-      return { username: users[0].username };
+    } else if (result.length === 1) {
+      return { username: result[0].username };
     } else {
       throw new InternalServerErrorException('Something went wrong');
     }
