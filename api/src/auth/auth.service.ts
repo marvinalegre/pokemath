@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/env.validation';
 import { StringGeneratorService } from 'src/common/utils/string-generator.service';
@@ -53,5 +57,32 @@ export class AuthService {
     );
 
     return { username, token };
+  }
+
+  getMe(authHeader: string) {
+    const token = authHeader.split(' ')[1];
+
+    let jwtSub;
+    try {
+      const decoded = jwt.verify(
+        token,
+        this.configService.get('JWT_SECRET', { infer: true }),
+      );
+      jwtSub = decoded.sub;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
+
+    const users = this.db.query('SELECT * FROM users WHERE jwt_sub = ?', [
+      jwtSub,
+    ]);
+
+    if (users.length === 0) {
+      throw new InternalServerErrorException('Something went wrong');
+    } else if (users.length === 1) {
+      return { username: users[0].username };
+    } else {
+      throw new InternalServerErrorException('Something went wrong');
+    }
   }
 }

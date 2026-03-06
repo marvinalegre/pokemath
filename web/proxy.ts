@@ -1,28 +1,61 @@
 import { NextResponse, NextRequest } from "next/server";
 
-// This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
+  const requestHeaders = new Headers(request.headers);
 
   let username;
+  let newToken;
   if (!token) {
     const res = await fetch(
       `${process.env.INTERNAL_API_BASE_URL as string}/auth/guest`,
     );
-    const data = await res.json();
-    username = data.username;
+
+    if (!res.ok) {
+      return new NextResponse(
+        "Sorry. Something went wrong. Try refreshing the page.",
+        {
+          status: 500,
+          headers: { "Content-Type": "text/plain" },
+        },
+      );
+    }
+
+    ({ token: newToken, username } = await res.json());
   } else {
-    // hit /auth/me
+    const res = await fetch(
+      `${process.env.INTERNAL_API_BASE_URL as string}/auth/me`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    if (!res.ok) {
+      return new NextResponse(
+        "Sorry. Something went wrong. Try refreshing the page.",
+        {
+          status: 500,
+          headers: { "Content-Type": "text/plain" },
+        },
+      );
+    }
+    ({ username } = await res.json());
   }
 
-  const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-username", username);
 
-  return NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: requestHeaders,
     },
   });
+
+  if (!token) {
+    response.cookies.set("token", newToken);
+  }
+
+  return response;
 }
 
 export const config = {

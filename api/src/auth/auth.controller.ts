@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -8,5 +8,10 @@ export class AuthController {
   @Get('guest')
   createGuest() {
     return this.authService.createGuest();
+  }
+
+  @Get('me')
+  getMe(@Headers('authorization') authHeader: string) {
+    return this.authService.getMe(authHeader);
   }
 }
