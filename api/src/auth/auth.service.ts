@@ -10,10 +10,12 @@ import { DatabaseService } from 'src/database/database.service';
 import { users } from 'src/database/schema';
 import { eq } from 'drizzle-orm';
 import jwt from 'jsonwebtoken';
+import { Logger } from 'nestjs-pino';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly logger: Logger,
     private readonly configService: ConfigService<Env, true>,
     private readonly stringGeneratorService: StringGeneratorService,
     private readonly databaseService: DatabaseService,
@@ -34,8 +36,7 @@ export class AuthService {
         break;
       } catch (err) {
         if (!err.message.includes('UNIQUE constraint failed')) {
-          // TODO: make a logger
-          // this.logger.error('Unexpected error during user creation', err);
+          this.logger.error({ err }, 'Unexpected error during user creation');
           throw new InternalServerErrorException('Failed to create user');
         }
 
@@ -45,7 +46,7 @@ export class AuthService {
     }
 
     if (!result) {
-      // this.logger.error('Failed to create unique user after max retries');
+      this.logger.error('Failed to create unique user after max retries');
       throw new InternalServerErrorException('Failed to create user');
     }
 

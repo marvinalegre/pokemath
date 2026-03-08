@@ -15,6 +15,7 @@ ENV NODE_ENV=development
 ENV PORT=3000
 ENV JWT_SECRET=foobarfoobarfoobarfoobarfoobar38964c0f666557d8a90038f4b39f4be5b7
 ENV DATABASE_URL="/var/lib/pokemath/pokemath.db"
+ENV LOG_LEVEL=debug
 CMD ["npm", "run", "start:dev"]
 
 FROM node:24-trixie-slim AS final

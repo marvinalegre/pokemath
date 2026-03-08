@@ -7,6 +7,11 @@ const envSchema = z.object({
     .default('development'),
   PORT: z.coerce.number().default(3000),
 
+  // logging
+  LOG_LEVEL: z
+    .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
+    .default('info'),
+
   // jwt
   JWT_SECRET: z.string().min(1),
 

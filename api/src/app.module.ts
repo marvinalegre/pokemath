@@ -24,6 +24,8 @@ import { Env } from './env.validation';
             configService.get('NODE_ENV', { infer: true }) !== 'production'
               ? { target: 'pino-pretty' }
               : undefined,
+          level: configService.get('LOG_LEVEL', { infer: true }) ?? 'info',
+          redact: ['req.headers.authorization', 'req.body.password'],
         },
       }),
       inject: [ConfigService],
