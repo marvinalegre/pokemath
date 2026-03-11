@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { validate } from './env.validation';
 import { LoggerModule } from 'nestjs-pino';
 import { Env } from './env.validation';
+import { PlayersModule } from './players/players.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Env } from './env.validation';
       }),
       inject: [ConfigService],
     }),
+    PlayersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
