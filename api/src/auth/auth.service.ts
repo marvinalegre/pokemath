@@ -3,25 +3,23 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/env.validation';
 import { StringGeneratorService } from 'src/common/utils/string-generator.service';
 import { DatabaseService } from 'src/database/database.service';
 import { users } from 'src/database/schema';
 import { eq } from 'drizzle-orm';
-import jwt from 'jsonwebtoken';
 import { Logger } from 'nestjs-pino';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly logger: Logger,
-    private readonly configService: ConfigService<Env, true>,
     private readonly stringGeneratorService: StringGeneratorService,
     private readonly databaseService: DatabaseService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  createGuest() {
+  async createGuest() {
     const MAX_RETRIES = 5;
     let jwtSub = this.stringGeneratorService.generate();
     let username = `User_${this.stringGeneratorService.generate(5)}`;
@@ -50,11 +48,8 @@ export class AuthService {
       throw new InternalServerErrorException('Failed to create user');
     }
 
-    const jwtSecret = this.configService.get('JWT_SECRET', { infer: true });
-
-    const token = jwt.sign(
+    const token = await this.jwtService.signAsync(
       { exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, sub: jwtSub },
-      jwtSecret,
       {
         algorithm: 'HS256',
       },
@@ -63,15 +58,12 @@ export class AuthService {
     return { username, token };
   }
 
-  getMe(authHeader: string) {
+  async getMe(authHeader: string) {
     const token = authHeader.split(' ')[1];
 
     let jwtSub;
     try {
-      const decoded = jwt.verify(
-        token,
-        this.configService.get('JWT_SECRET', { infer: true }),
-      );
+      const decoded = await this.jwtService.verifyAsync(token);
       jwtSub = decoded.sub;
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired token');
