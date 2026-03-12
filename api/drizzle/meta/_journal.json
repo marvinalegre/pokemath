@@ -8,6 +8,13 @@
       "when": 1772808268086,
       "tag": "0000_charming_stone_men",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1773325501769,
+      "tag": "0001_big_abomination",
+      "breakpoints": true
     }
   ]
 }
