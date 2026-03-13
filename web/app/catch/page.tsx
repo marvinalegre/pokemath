@@ -1,7 +1,18 @@
 import { CatchClient } from "@/components/catch-client";
+import { cookies } from "next/headers";
 
 async function getQuestion() {
-  const res = await fetch("http://pokemath-api:3000/catch");
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token");
+
+  const res = await fetch(
+    `${process.env.INTERNAL_API_BASE_URL as string}/catch`,
+    {
+      headers: {
+        Authorization: `Bearer ${token!.value}`,
+      },
+    },
+  );
   const data = await res.json();
   return data.question;
 }

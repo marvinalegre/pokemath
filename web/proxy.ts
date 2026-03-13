@@ -53,6 +53,7 @@ export async function proxy(request: NextRequest) {
 
   if (!token) {
     response.cookies.set("token", newToken);
+    request.cookies.set("token", newToken);
   }
 
   return response;
