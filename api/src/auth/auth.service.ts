@@ -58,17 +58,7 @@ export class AuthService {
     return { username, token };
   }
 
-  async getMe(authHeader: string) {
-    const token = authHeader.split(' ')[1];
-
-    let jwtSub;
-    try {
-      const decoded = await this.jwtService.verifyAsync(token);
-      jwtSub = decoded.sub;
-    } catch (error) {
-      throw new UnauthorizedException('Invalid or expired token');
-    }
-
+  async getMe(jwtSub: string) {
     const result = this.databaseService.db
       .select()
       .from(users)

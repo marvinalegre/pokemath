@@ -9,6 +9,8 @@ import { LoggerModule } from 'nestjs-pino';
 import { Env } from './env.validation';
 import { PlayersModule } from './players/players.module';
 import { CatchModule } from './catch/catch.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -40,6 +42,6 @@ import { CatchModule } from './catch/catch.module';
     CatchModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useClass: AuthGuard }],
 })
 export class AppModule {}
