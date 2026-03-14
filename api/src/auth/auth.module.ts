@@ -11,8 +11,11 @@ import { Env } from 'src/env.validation';
     DatabaseModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configServie: ConfigService<Env, true>) => ({
-        secret: configServie.get('JWT_SECRET', { infer: true }),
+      useFactory: async (configService: ConfigService<Env, true>) => ({
+        secret: configService.get('JWT_SECRET', { infer: true }),
+        signOptions: {
+          expiresIn: configService.get('JWT_EXPIRES_IN', { infer: true }),
+        },
       }),
       inject: [ConfigService],
     }),

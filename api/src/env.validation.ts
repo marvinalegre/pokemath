@@ -14,6 +14,7 @@ const envSchema = z.object({
 
   // jwt
   JWT_SECRET: z.string().min(1),
+  JWT_EXPIRES_IN: z.string().min(1),
 
   // database
   DATABASE_URL: z.string().min(1),

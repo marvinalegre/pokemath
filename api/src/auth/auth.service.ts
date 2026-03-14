@@ -49,7 +49,7 @@ export class AuthService {
     }
 
     const token = await this.jwtService.signAsync(
-      { exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, sub: jwtSub },
+      { sub: jwtSub },
       {
         algorithm: 'HS256',
       },
