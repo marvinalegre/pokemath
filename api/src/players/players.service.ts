@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { eq } from 'drizzle-orm';
 import { DatabaseService } from 'src/database/database.service';
 import { users } from 'src/database/schema';
 
@@ -8,5 +9,18 @@ export class PlayersService {
 
   findAll() {
     return this.databaseService.db.select().from(users);
+  }
+
+  findBySub(jwtSub: string) {
+    const user = this.databaseService.db
+      .select()
+      .from(users)
+      .where(eq(users.jwtSub, jwtSub))
+      .get();
+    if (!user) {
+      return null;
+    } else {
+      return { id: user.id };
+    }
   }
 }
