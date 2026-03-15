@@ -1,6 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { generateAddition } from './generators/addition.generator';
@@ -23,7 +24,7 @@ export class CatchService {
     const savedQuestion = this.findSavedQuestion(user.id);
 
     if (savedQuestion) {
-      return { question: savedQuestion };
+      return { question: savedQuestion.question };
     } else {
       const { question, answer } = generateAddition({ minSum: 1, maxSum: 10 });
       this.saveQuestion(user.id, question, answer);
@@ -31,7 +32,7 @@ export class CatchService {
     }
   }
 
-  findSavedQuestion(userId: number) {
+  private findSavedQuestion(userId: number) {
     const question = this.databaseService.db
       .select()
       .from(catchQuestions)
@@ -40,11 +41,11 @@ export class CatchService {
     if (!question) {
       return null;
     } else {
-      return question.question;
+      return question;
     }
   }
 
-  saveQuestion(userId: number, question: string, answer: string) {
+  private saveQuestion(userId: number, question: string, answer: string) {
     const result = this.databaseService.db
       .insert(catchQuestions)
       .values({ userId, question, answer })
@@ -54,5 +55,35 @@ export class CatchService {
     if (!result) {
       throw new InternalServerErrorException('Failed to save question');
     }
+  }
+
+  private deleteQuestion(userId: number) {
+    const result = this.databaseService.db
+      .delete(catchQuestions)
+      .where(eq(catchQuestions.userId, userId))
+      .returning({ id: catchQuestions.id })
+      .get();
+    if (!result) {
+      throw new InternalServerErrorException('Failed to delete question');
+    }
+  }
+
+  submitAnswer(jwtSub: string, answer: string) {
+    const user = this.playersService.findBySub(jwtSub);
+    if (!user) throw new UnauthorizedException();
+
+    const savedQuestion = this.findSavedQuestion(user.id);
+
+    if (!savedQuestion) throw new NotFoundException('No active question found');
+
+    const isCorrect = savedQuestion.answer === answer ? true : false;
+
+    if (isCorrect) {
+      this.deleteQuestion(user.id);
+      const { question, answer } = generateAddition({ minSum: 1, maxSum: 10 });
+      this.saveQuestion(user.id, question, answer);
+    }
+
+    return { correct: isCorrect };
   }
 }

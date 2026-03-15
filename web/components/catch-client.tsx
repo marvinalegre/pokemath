@@ -22,21 +22,24 @@ export function CatchClient({ question }: CatchClientProps) {
     setError(false);
 
     try {
-      const res = await fetch("http://localhost:3001/catch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ answer }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL as string}/catch`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ answer }),
+        },
+      );
       const data = await res.json();
 
       if (data.correct) {
-        router.push("/");
+        router.refresh();
       } else {
         setError(true);
-        setAnswer("");
-        inputRef.current?.focus();
       }
+      setAnswer("");
+      inputRef.current?.focus();
     } catch {
       setError(true);
     } finally {

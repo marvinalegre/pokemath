@@ -4,6 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
   SetMetadata,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
@@ -28,7 +29,19 @@ export class AuthGuard implements CanActivate {
     if (isPublic) return true;
 
     const request = context.switchToHttp().getRequest<Request>();
-    const token = this.extractTokenFromHeader(request);
+    let token;
+    const tokenFromHeader = this.extractTokenFromHeader(request);
+    const tokenFromCookie = this.extractTokenFromCookie(request);
+
+    if (tokenFromHeader && tokenFromCookie) {
+      throw new InternalServerErrorException('Something went wrong');
+    }
+
+    if (tokenFromHeader) {
+      token = tokenFromHeader;
+    } else {
+      token = tokenFromCookie;
+    }
 
     if (!token) {
       throw new UnauthorizedException('No token provided');
@@ -51,5 +64,9 @@ export class AuthGuard implements CanActivate {
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
+  }
+
+  private extractTokenFromCookie(request: Request): string | undefined {
+    return request.cookies?.token;
   }
 }
