@@ -1,12 +1,16 @@
 import {
+  data,
   isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteLoaderData,
+  type AppLoadContext,
 } from "react-router";
-
+import * as jose from "jose";
+import * as cookie from "cookie";
 import type { Route } from "./+types/root";
 import "./app.css";
 
@@ -23,7 +27,30 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const cookies = cookie.parseCookie(request.headers.get("Cookie") || "");
+  const secret = new TextEncoder().encode(context.cloudflare.env.JWT_SECRET);
+  if (cookies.token) {
+    const { payload } = await jose.jwtVerify(cookies.token, secret);
+    return { username: payload.sub };
+  } else {
+    const { username, jwt } = await createNewUser(context, secret);
+
+    return data(
+      {
+        username,
+      },
+      {
+        headers: {
+          "Set-Cookie": `token=${jwt}; Path=/; HttpOnly; Max-Age=10000000000000`,
+        },
+      },
+    );
+  }
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useRouteLoaderData<typeof loader>("root");
   return (
     <html lang="en">
       <head>
@@ -33,6 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <p>{data?.username}</p>
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -72,4 +100,32 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       )}
     </main>
   );
+}
+
+async function createNewUser(context: AppLoadContext, secret: Uint8Array) {
+  function generateRandomString(length: number) {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    return Array.from(
+      { length },
+      () => chars[Math.floor(Math.random() * chars.length)],
+    ).join("");
+  }
+
+  const username = `user_${generateRandomString(5)}`;
+  const alg = "HS256";
+
+  const jwt = await new jose.SignJWT()
+    .setProtectedHeader({ alg })
+    .setSubject(username)
+    .setIssuedAt()
+    .setExpirationTime("2h")
+    .sign(secret);
+
+  await context.cloudflare.env.DB.prepare(
+    "insert into users(username) values(?)",
+  )
+    .bind(username)
+    .run();
+
+  return { username, jwt };
 }

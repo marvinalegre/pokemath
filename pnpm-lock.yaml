@@ -17,9 +17,15 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
       isbot:
         specifier: ^5.1.31
         version: 5.1.36
+      jose:
+        specifier: ^6.2.2
+        version: 6.2.2
       lucide-react:
         specifier: ^1.0.1
         version: 1.0.1(react@19.2.4)
