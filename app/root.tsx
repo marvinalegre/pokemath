@@ -118,12 +118,11 @@ async function createNewUser(context: AppLoadContext, secret: Uint8Array) {
     .setProtectedHeader({ alg })
     .setSubject(username)
     .setIssuedAt()
-    .setExpirationTime("2h")
+    .setExpirationTime("7d")
     .sign(secret);
 
-  await context.cloudflare.env.DB.prepare(
-    "insert into users(username) values(?)",
-  )
+  await context.cloudflare.env
+    .DB!.prepare("insert into users(username) values(?)")
     .bind(username)
     .run();
 
