@@ -10,7 +10,7 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader({ context }: Route.LoaderArgs) {
   return {
-    message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
+    message: `env: ${import.meta.env.VITE_TEST_VAR}`,
     users: (
       await context.cloudflare.env.DB.prepare("select * from users").all()
     ).results,
