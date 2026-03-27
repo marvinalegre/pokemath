@@ -33,13 +33,21 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   const secret = new TextEncoder().encode(context.cloudflare.env.JWT_SECRET);
   if (cookies.token) {
     const { payload } = await jose.jwtVerify(cookies.token, secret);
-    return { username: payload.sub };
+    const {
+      results: [{ role }],
+    } = await context.cloudflare.env.DB.prepare(
+      "select * from users where username = ?",
+    )
+      .bind(payload.sub)
+      .all();
+    return { username: payload.sub, role };
   } else {
     const { username, jwt } = await createNewUser(context, secret);
 
     return data(
       {
         username,
+        role: "guest",
       },
       {
         headers: {
@@ -61,7 +69,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Navbar username={data?.username} />
+        <Navbar username={data?.username} role={data?.role} />
         {children}
         <ScrollRestoration />
         <Scripts />

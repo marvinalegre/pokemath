@@ -16,7 +16,13 @@ import {
 import { Button } from "~/components/ui/button";
 import { Menu, Zap, User } from "lucide-react";
 
-export default function Navbar({ username }: { username: string | undefined }) {
+export default function Navbar({
+  username,
+  role,
+}: {
+  username: string | undefined;
+  role: string | undefined;
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -67,9 +73,11 @@ export default function Navbar({ username }: { username: string | undefined }) {
               </span>
             </div>
           )}
-          <Button size="sm" asChild>
-            <a href="/signup">Sign up</a>
-          </Button>
+          {role === "guest" && (
+            <Button size="sm" asChild>
+              <a href="/signup">Sign up</a>
+            </Button>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -125,11 +133,13 @@ export default function Navbar({ username }: { username: string | undefined }) {
                     </div>
                   </div>
                 )}
-                <Button className="w-full" asChild>
-                  <a href="/signup" onClick={() => setMobileOpen(false)}>
-                    Sign up
-                  </a>
-                </Button>
+                {role === "guest" && (
+                  <Button className="w-full" asChild>
+                    <a href="/signup" onClick={() => setMobileOpen(false)}>
+                      Sign up
+                    </a>
+                  </Button>
+                )}
               </div>
             </SheetContent>
           </Sheet>
