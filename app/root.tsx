@@ -43,7 +43,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
       },
       {
         headers: {
-          "Set-Cookie": `token=${jwt}; Path=/; HttpOnly; Max-Age=10000000000000`,
+          "Set-Cookie": `token=${jwt}; Path=/; HttpOnly; Max-Age=604800${import.meta.env.PROD ? "; Secure" : ""}`,
         },
       },
     );
