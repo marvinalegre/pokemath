@@ -69,8 +69,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Navbar username={data?.username} role={data?.role} />
-        {children}
+        <div className="flex min-h-svh flex-col">
+          <Navbar username={data?.username} role={data?.role} />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -136,4 +139,24 @@ async function createNewUser(context: AppLoadContext, secret: Uint8Array) {
     .run();
 
   return { username, jwt };
+}
+
+function Footer() {
+  return (
+    <footer className="w-full border-t border-border/60 bg-background/80">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <span>
+          Developed by{" "}
+          <a
+            href="https://github.com/marvinalegre"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-slate-700 hover:text-amber-500 transition"
+          >
+            marvinalegre
+          </a>
+        </span>
+      </div>
+    </footer>
+  );
 }
