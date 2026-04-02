@@ -7,13 +7,11 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteLoaderData,
-  type AppLoadContext,
 } from "react-router";
-import * as jose from "jose";
-import * as cookie from "cookie";
 import type { Route } from "./+types/root";
 import "./app.css";
 import Navbar from "./components/navbar";
+import { ensureUser } from "./lib/auth.server";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -29,33 +27,11 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const cookies = cookie.parseCookie(request.headers.get("Cookie") || "");
-  const secret = new TextEncoder().encode(context.cloudflare.env.JWT_SECRET);
-  if (cookies.token) {
-    const { payload } = await jose.jwtVerify(cookies.token, secret);
-    const {
-      results: [{ role }],
-    } = await context.cloudflare.env.DB.prepare(
-      "select * from users where username = ?",
-    )
-      .bind(payload.sub)
-      .all();
-    return { username: payload.sub, role };
-  } else {
-    const { username, jwt } = await createNewUser(context, secret);
-
-    return data(
-      {
-        username,
-        role: "guest",
-      },
-      {
-        headers: {
-          "Set-Cookie": `token=${jwt}; Path=/; HttpOnly; Max-Age=604800${import.meta.env.PROD ? "; Secure" : ""}`,
-        },
-      },
-    );
-  }
+  const { username, role, headers } = await ensureUser(
+    request,
+    context.cloudflare.env,
+  );
+  return data({ username, role }, { headers });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -112,33 +88,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       )}
     </main>
   );
-}
-
-async function createNewUser(context: AppLoadContext, secret: Uint8Array) {
-  function generateRandomString(length: number) {
-    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-    return Array.from(
-      { length },
-      () => chars[Math.floor(Math.random() * chars.length)],
-    ).join("");
-  }
-
-  const username = `user_${generateRandomString(5)}`;
-  const alg = "HS256";
-
-  const jwt = await new jose.SignJWT()
-    .setProtectedHeader({ alg })
-    .setSubject(username)
-    .setIssuedAt()
-    .setExpirationTime("7d")
-    .sign(secret);
-
-  await context.cloudflare.env
-    .DB!.prepare("insert into users(username) values(?)")
-    .bind(username)
-    .run();
-
-  return { username, jwt };
 }
 
 function Footer() {
