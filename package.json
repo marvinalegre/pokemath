@@ -10,6 +10,7 @@
     "migrate": "wrangler d1 migrations apply pokemath",
     "postinstall": "npm run cf-typegen",
     "preview": "pnpm run build && vite preview",
+    "schema": "wrangler d1 execute pokemath --command \"SELECT name, sql FROM sqlite_master WHERE type='table' ORDER BY name\"",
     "seed": "wrangler d1 execute pokemath --file=./seed.sql",
     "typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
   },
