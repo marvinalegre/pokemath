@@ -1,6 +1,8 @@
 -- Migration number: 0003 	 2026-04-04T04:14:16.702Z
 -- One row per question "type". 
 -- A type is a generator + its parameters + its renderer.
+DROP TABLE IF EXISTS question_types;
+
 CREATE TABLE question_types (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   category TEXT NOT NULL, -- e.g. 'arithmetic'
@@ -16,6 +18,8 @@ CREATE TABLE question_types (
 -- The materialized question instance served to a user.
 -- One row per user at a time (enforced by UNIQUE on user_id).
 -- Cleared when the user answers correctly or skips.
+DROP TABLE IF EXISTS active_questions;
+
 CREATE TABLE active_questions (
   user_id INTEGER NOT NULL UNIQUE REFERENCES users (id),
   question_type_id INTEGER NOT NULL REFERENCES question_types (id),
@@ -25,6 +29,8 @@ CREATE TABLE active_questions (
 );
 
 -- Every answer attempt, win or lose, is logged here.
+DROP TABLE IF EXISTS answer_logs;
+
 CREATE TABLE answer_logs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL REFERENCES users (id),
