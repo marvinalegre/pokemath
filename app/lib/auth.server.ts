@@ -73,8 +73,8 @@ export async function createNewUser(env: Env) {
     .setExpirationTime("7d")
     .sign(getSecret(env));
 
-  await env.DB.prepare("insert into users(username) values(?)")
-    .bind(username)
+  await env.DB.prepare("insert into users(username, rating) values(?, ?)")
+    .bind(username, 500)
     .run();
 
   return { username, jwt };
