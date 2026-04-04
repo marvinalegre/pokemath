@@ -5,5 +5,6 @@ CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   username TEXT NOT NULL UNIQUE,
   created_at TEXT DEFAULT (strftime ('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  rating REAL NOT NULL,
   role TEXT DEFAULT 'guest' NOT NULL
 );

@@ -10,6 +10,7 @@ CREATE TABLE question_types (
   generator_params TEXT NOT NULL DEFAULT '{}', -- JSON: {"min_a":0,"max_a":10,...}
   renderer TEXT NOT NULL, -- frontend component key, e.g. 'math_expression'
   renderer_options TEXT NOT NULL DEFAULT '{}', -- JSON: {"layout":"horizontal"}
+  rating REAL NOT NULL,
   is_active INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1)),
   created_at TEXT NOT NULL DEFAULT (strftime ('%Y-%m-%dT%H:%M:%SZ', 'now')),
   UNIQUE (generator, generator_params) -- enforce canonical key ordering in application layer before insert
