@@ -1,7 +1,5 @@
-BEGIN TRANSACTION;
-
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     1,
@@ -11,8 +9,8 @@ VALUES
     'R'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     2,
@@ -22,8 +20,8 @@ VALUES
     'RE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     3,
@@ -33,8 +31,8 @@ VALUES
     'REE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     4,
@@ -44,8 +42,8 @@ VALUES
     'R'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     5,
@@ -55,8 +53,8 @@ VALUES
     'RE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     6,
@@ -66,8 +64,8 @@ VALUES
     'REE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     7,
@@ -77,8 +75,8 @@ VALUES
     'R'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     8,
@@ -88,8 +86,8 @@ VALUES
     'RE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     9,
@@ -99,8 +97,8 @@ VALUES
     'REE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     10,
@@ -110,8 +108,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     11,
@@ -121,8 +119,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     12,
@@ -132,8 +130,8 @@ VALUES
     'CEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     16,
@@ -143,8 +141,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     17,
@@ -154,8 +152,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     18,
@@ -165,8 +163,8 @@ VALUES
     'CEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     19,
@@ -176,8 +174,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     20,
@@ -187,8 +185,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     21,
@@ -198,8 +196,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     22,
@@ -209,8 +207,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     23,
@@ -220,8 +218,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     24,
@@ -231,8 +229,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     25,
@@ -242,8 +240,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     26,
@@ -253,8 +251,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     27,
@@ -264,8 +262,8 @@ VALUES
     'T'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     28,
@@ -275,8 +273,8 @@ VALUES
     'TE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     35,
@@ -286,8 +284,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     36,
@@ -297,8 +295,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     37,
@@ -308,8 +306,8 @@ VALUES
     'T'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     38,
@@ -319,8 +317,8 @@ VALUES
     'TE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     39,
@@ -330,8 +328,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     40,
@@ -341,8 +339,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     43,
@@ -352,8 +350,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     44,
@@ -363,8 +361,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     45,
@@ -374,8 +372,8 @@ VALUES
     'CEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     48,
@@ -385,8 +383,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     49,
@@ -396,8 +394,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     50,
@@ -407,8 +405,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     51,
@@ -418,8 +416,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     52,
@@ -429,8 +427,8 @@ VALUES
     'T'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     53,
@@ -440,8 +438,8 @@ VALUES
     'TE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     54,
@@ -451,8 +449,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     55,
@@ -462,8 +460,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     56,
@@ -473,8 +471,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     57,
@@ -484,8 +482,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     58,
@@ -495,8 +493,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     59,
@@ -506,8 +504,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     60,
@@ -517,8 +515,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     61,
@@ -528,8 +526,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     62,
@@ -539,8 +537,8 @@ VALUES
     'CEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     69,
@@ -550,8 +548,8 @@ VALUES
     'T'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     70,
@@ -561,8 +559,8 @@ VALUES
     'TE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     71,
@@ -572,8 +570,8 @@ VALUES
     'TEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     72,
@@ -583,8 +581,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     73,
@@ -594,8 +592,8 @@ VALUES
     'CEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     74,
@@ -605,8 +603,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     75,
@@ -616,8 +614,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     76,
@@ -627,8 +625,8 @@ VALUES
     'TEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     79,
@@ -638,8 +636,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     80,
@@ -649,8 +647,8 @@ VALUES
     'CEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     81,
@@ -660,8 +658,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     82,
@@ -671,8 +669,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     84,
@@ -682,8 +680,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     85,
@@ -693,8 +691,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     86,
@@ -704,8 +702,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     87,
@@ -715,8 +713,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     88,
@@ -726,8 +724,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     89,
@@ -737,8 +735,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     90,
@@ -748,8 +746,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     91,
@@ -759,8 +757,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     92,
@@ -770,8 +768,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     93,
@@ -781,8 +779,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     94,
@@ -792,8 +790,8 @@ VALUES
     'TEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     96,
@@ -803,8 +801,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     97,
@@ -814,8 +812,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     100,
@@ -825,8 +823,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     101,
@@ -836,8 +834,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     102,
@@ -847,8 +845,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     103,
@@ -858,8 +856,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     106,
@@ -869,8 +867,8 @@ VALUES
     'R'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     107,
@@ -880,8 +878,8 @@ VALUES
     'R'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     109,
@@ -891,8 +889,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     110,
@@ -902,8 +900,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     111,
@@ -913,8 +911,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     112,
@@ -924,8 +922,8 @@ VALUES
     'CE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     113,
@@ -935,8 +933,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     116,
@@ -946,8 +944,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     117,
@@ -957,8 +955,8 @@ VALUES
     'CEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     123,
@@ -968,8 +966,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     125,
@@ -979,8 +977,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     126,
@@ -990,8 +988,8 @@ VALUES
     'TE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     128,
@@ -1001,8 +999,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     129,
@@ -1012,8 +1010,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     130,
@@ -1023,8 +1021,8 @@ VALUES
     'H'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     131,
@@ -1034,8 +1032,8 @@ VALUES
     'R'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     132,
@@ -1045,8 +1043,8 @@ VALUES
     'C'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     133,
@@ -1056,8 +1054,8 @@ VALUES
     'R'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     134,
@@ -1067,8 +1065,8 @@ VALUES
     'RE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     135,
@@ -1078,8 +1076,8 @@ VALUES
     'RE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     136,
@@ -1089,8 +1087,8 @@ VALUES
     'RE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     137,
@@ -1100,8 +1098,8 @@ VALUES
     'R'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     143,
@@ -1111,8 +1109,8 @@ VALUES
     'H'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     144,
@@ -1122,8 +1120,8 @@ VALUES
     'L'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     145,
@@ -1133,8 +1131,8 @@ VALUES
     'L'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     146,
@@ -1144,8 +1142,8 @@ VALUES
     'L'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     147,
@@ -1155,8 +1153,8 @@ VALUES
     'H'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     148,
@@ -1166,8 +1164,8 @@ VALUES
     'HE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     149,
@@ -1177,8 +1175,8 @@ VALUES
     'HEE'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     150,
@@ -1188,8 +1186,8 @@ VALUES
     'L'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     151,
@@ -1199,8 +1197,8 @@ VALUES
     'L'
   );
 
-INSERT INTO
-  pokemons
+INSERT
+OR IGNORE INTO pokemons
 VALUES
   (
     979,
@@ -1209,5 +1207,3 @@ VALUES
     '#c5c7ca',
     'TEE'
   );
-
-COMMIT;

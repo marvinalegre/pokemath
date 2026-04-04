@@ -5,7 +5,7 @@
   "scripts": {
     "build": "react-router build",
     "cf-typegen": "wrangler types",
-    "deploy": "pnpm run build && wrangler deploy",
+    "deploy": "pnpm run migrate --remote && pnpm run seed --remote && pnpm run build && wrangler deploy",
     "dev": "react-router dev",
     "migrate": "wrangler d1 migrations apply pokemath",
     "postinstall": "npm run cf-typegen",
