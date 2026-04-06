@@ -2,17 +2,38 @@ import type { Route } from "./+types/catch-page";
 import { getQuestionType } from "~/question-types/registry";
 import { selectQuestionType } from "~/engine/selector";
 import NumericInput from "~/components/NumericInput";
+import { getAuthUser } from "~/lib/auth.server";
+import { redirect } from "react-router";
 
-export async function loader({ context }: Route.LoaderArgs) {
-  const selectedQuestionType = await selectQuestionType(
-    1,
-    500,
-    context.cloudflare.env.DB,
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const { env } = context.cloudflare;
+
+  const user = await getAuthUser(request, env);
+  if (!user) throw redirect("/");
+
+  const userData = await env.DB.prepare(
+    "SELECT id, rating FROM users WHERE username = ?",
+  )
+    .bind(user.username)
+    .first<{ id: number; rating: number }>();
+
+  if (!userData) {
+    throw new Error(`User profile for ${user.username} not found`);
+  }
+
+  const selectedType = await selectQuestionType(
+    userData.id,
+    userData.rating,
+    env.DB,
   );
-  const question = getQuestionType(selectedQuestionType.generator)?.generate(
-    selectedQuestionType.generator_params,
-  );
-  return question;
+
+  const handler = getQuestionType(selectedType.generator);
+
+  if (!handler) {
+    throw new Error(`Unknown generator type: ${selectedType.generator}`);
+  }
+
+  return handler.generate(selectedType.generator_params);
 }
 
 export default function Players({ loaderData }: Route.ComponentProps) {
