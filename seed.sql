@@ -1265,4 +1265,95 @@ VALUES
     '{"max_addend": 50, "num_addends": 3}',
     'NumericInput',
     1700
+  ),
+  (
+    'subtraction',
+    'subtraction',
+    '{"max_minuend": 10}',
+    'NumericInput',
+    1200
+  ),
+  (
+    'subtraction',
+    'subtraction',
+    '{"max_minuend": 20}',
+    'NumericInput',
+    1350
+  ),
+  (
+    'subtraction',
+    'subtraction',
+    '{"max_minuend": 50}',
+    'NumericInput',
+    1500
+  ),
+  (
+    'subtraction',
+    'subtraction',
+    '{"max_minuend": 100}',
+    'NumericInput',
+    1650
+  ),
+  (
+    'multiplication',
+    'multiplication',
+    '{"max_factor_a": 5,  "max_factor_b": 5}',
+    'NumericInput',
+    1200
+  ),
+  (
+    'multiplication',
+    'multiplication',
+    '{"max_factor_a": 10, "max_factor_b": 10}',
+    'NumericInput',
+    1400
+  ),
+  (
+    'multiplication',
+    'multiplication',
+    '{"max_factor_a": 12, "max_factor_b": 12}',
+    'NumericInput',
+    1550
+  ),
+  (
+    'multiplication',
+    'multiplication',
+    '{"max_factor_a": 20, "max_factor_b": 10}',
+    'NumericInput',
+    1650
+  ),
+  (
+    'multiplication',
+    'multiplication',
+    '{"max_factor_a": 20, "max_factor_b": 20}',
+    'NumericInput',
+    1800
+  ),
+  (
+    'division',
+    'division',
+    '{"max_quotient": 5,  "max_divisor": 5}',
+    'NumericInput',
+    1250
+  ),
+  (
+    'division',
+    'division',
+    '{"max_quotient": 10, "max_divisor": 10}',
+    'NumericInput',
+    1450
+  ),
+  (
+    'division',
+    'division',
+    '{"max_quotient": 12, "max_divisor": 12}',
+    'NumericInput',
+    1600
+  ),
+  (
+    'division',
+    'division',
+    '{"max_quotient": 20, "max_divisor": 10}',
+    'NumericInput',
+    1700
   );
