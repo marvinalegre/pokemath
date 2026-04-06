@@ -52,7 +52,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     DB,
   );
   if (correct) return redirect("/catch");
-  else return { message: "Try again" };
+  else return { message: "Wrong answer" };
 }
 
 export default function CatchPage({
