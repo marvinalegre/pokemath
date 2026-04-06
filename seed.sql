@@ -1207,3 +1207,62 @@ VALUES
     '#c5c7ca',
     'TEE'
   );
+
+INSERT INTO
+  question_types (
+    category,
+    generator,
+    generator_params,
+    renderer,
+    rating
+  )
+VALUES
+  (
+    'addition',
+    'addition',
+    '{"max_addend": 5}',
+    'NumericInput',
+    1000
+  ),
+  (
+    'addition',
+    'addition',
+    '{"max_addend": 10}',
+    'NumericInput',
+    1200
+  ),
+  (
+    'addition',
+    'addition',
+    '{"max_addend": 20}',
+    'NumericInput',
+    1350
+  ),
+  (
+    'addition',
+    'addition',
+    '{"max_addend": 50}',
+    'NumericInput',
+    1500
+  ),
+  (
+    'addition',
+    'addition',
+    '{"max_addend": 100}',
+    'NumericInput',
+    1650
+  ),
+  (
+    'addition',
+    'addition',
+    '{"max_addend": 20, "num_addends": 3}',
+    'NumericInput',
+    1500
+  ),
+  (
+    'addition',
+    'addition',
+    '{"max_addend": 50, "num_addends": 3}',
+    'NumericInput',
+    1700
+  );
