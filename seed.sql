@@ -1208,14 +1208,14 @@ VALUES
     'TEE'
   );
 
-INSERT INTO
-  question_types (
-    category,
-    generator,
-    generator_params,
-    renderer,
-    rating
-  )
+INSERT
+OR IGNORE INTO question_types (
+  category,
+  generator,
+  generator_params,
+  renderer,
+  rating
+)
 VALUES
   (
     'addition',
