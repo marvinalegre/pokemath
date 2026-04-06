@@ -1,26 +1,21 @@
-import { useState } from "react";
+import { Form } from "react-router";
 
-export default function NumericInput({ question, onAnswer }) {
-  const [value, setValue] = useState("");
-
-  function handleSubmit() {
-    if (value.trim() === "") return;
-    onAnswer(value.trim());
-    setValue("");
-  }
-
+export default function NumericInput({
+  question,
+  message,
+}: {
+  question: { question_text: string };
+  message: undefined | string;
+}) {
   return (
     <div>
+      {message && <p className="text-red-500">{message}</p>}
       <p>{question.question_text}</p>
 
-      <input
-        onKeyDown={(e) => {
-          if (e.key === "Enter") handleSubmit();
-        }}
-      />
-      <button type="button" onClick={handleSubmit}>
-        Submit
-      </button>
+      <Form method="post">
+        <input name="answer" />
+        <button type="submit">Submit</button>
+      </Form>
     </div>
   );
 }
