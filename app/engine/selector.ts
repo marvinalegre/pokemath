@@ -1,5 +1,3 @@
-import type { D1Database } from "@cloudflare/workers-types";
-
 const MAX_RATING_DIFF = 200;
 const MIN_ATTEMPTS_FOR_CALIBRATION = 20;
 

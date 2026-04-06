@@ -1,45 +1,48 @@
 import type { Route } from "./+types/catch-page";
-import { getQuestionType } from "~/question-types/registry";
-import { selectQuestionType } from "~/engine/selector";
+import { redirect } from "react-router";
 import NumericInput from "~/components/NumericInput";
 import { getAuthUser } from "~/lib/auth.server";
-import { redirect } from "react-router";
+import { loadActiveQuestion } from "~/engine/question";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const { env } = context.cloudflare;
+  const { DB } = context.cloudflare.env;
 
-  const user = await getAuthUser(request, env);
+  // 1. Auth check
+  const user = await getAuthUser(request, context.cloudflare.env);
   if (!user) throw redirect("/");
 
-  const userData = await env.DB.prepare(
+  // 2. Data fetching
+  const userData = await DB.prepare(
     "SELECT id, rating FROM users WHERE username = ?",
   )
     .bind(user.username)
     .first<{ id: number; rating: number }>();
 
   if (!userData) {
-    throw new Error(`User profile for ${user.username} not found`);
+    // A 404 is usually better for "Not Found" than a generic Error
+    throw new Response("User Profile Not Found", { status: 404 });
   }
 
-  const selectedType = await selectQuestionType(
+  // 3. Question Logic
+  const { question_text } = await loadActiveQuestion(
     userData.id,
     userData.rating,
-    env.DB,
+    DB,
   );
 
-  const handler = getQuestionType(selectedType.generator);
-
-  if (!handler) {
-    throw new Error(`Unknown generator type: ${selectedType.generator}`);
-  }
-
-  return handler.generate(selectedType.generator_params);
+  return { question_text };
 }
 
 export default function Players({ loaderData }: Route.ComponentProps) {
+  // Destructure for cleaner JSX
+  const question = loaderData;
+
   return (
-    <main className="container mx-auto py-8">
-      <NumericInput question={loaderData} onAnswer={() => {}} />
+    <main className="container mx-auto py-8 px-4">
+      <NumericInput
+        question={question}
+        onAnswer={(val) => console.log("Answered:", val)}
+      />
     </main>
   );
 }
