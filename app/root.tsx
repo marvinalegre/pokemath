@@ -36,6 +36,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData<typeof loader>("root");
+
   return (
     <html lang="en">
       <head>
@@ -47,6 +48,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        {/* Simple Top Banner */}
+        <div className="bg-yellow-500/10 py-1.5 text-center text-xs font-medium text-yellow-600 dark:text-yellow-400 border-b border-yellow-500/20">
+          <span className="mr-2">🚧</span>
+          PokéMath is under active development. Some features may be limited.
+        </div>
+
         <div className="flex min-h-svh flex-col">
           <Navbar username={data?.username} role={data?.role} />
           <main className="flex-1">{children}</main>
