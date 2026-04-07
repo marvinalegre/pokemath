@@ -5,16 +5,18 @@ import { Input } from "~/components/ui/input";
 export default function NumericInput({
   question,
   message,
+  secondsLeft,
 }: {
   question: { question_text: string };
   message: undefined | string;
+  secondsLeft: number;
 }) {
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6 text-center">
-        {message && (
+        {secondsLeft > 0 && (
           <p className="text-sm font-medium text-destructive animate-in fade-in zoom-in duration-200">
-            {message}
+            Wrong answer. Try again in {secondsLeft}s...
           </p>
         )}
         {/* Question Text */}
@@ -32,7 +34,12 @@ export default function NumericInput({
             />
           </div>
 
-          <Button type="submit" size="lg" className="w-full font-semibold">
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full font-semibold"
+            disabled={secondsLeft > 0}
+          >
             Submit
           </Button>
         </Form>

@@ -1,5 +1,6 @@
 import type { Route } from "./+types/catch-page";
-import { redirect } from "react-router";
+import { useState, useEffect } from "react";
+import { redirect, useRevalidator } from "react-router";
 import NumericInput from "~/components/NumericInput";
 import { getAuthUser } from "~/lib/auth.server";
 import { loadActiveQuestion, submitAnswer } from "~/engine/question";
@@ -25,8 +26,13 @@ async function getProfile(request: Request, env: Env) {
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const { DB } = context.cloudflare.env;
-
   const profile = await getProfile(request, context.cloudflare.env);
+
+  const active = await DB.prepare(
+    `SELECT retry_after FROM active_questions WHERE user_id = ?`,
+  )
+    .bind(profile.id)
+    .first<{ retry_after: string | null }>();
 
   const { question_text } = await loadActiveQuestion(
     profile.id,
@@ -34,7 +40,11 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     DB,
   );
 
-  return { question_text };
+  if (active?.retry_after && new Date(active.retry_after) > new Date()) {
+    const msLeft = new Date(active.retry_after).getTime() - Date.now();
+    return { question_text, cooldown: { msLeft } };
+  }
+  return { question_text, cooldown: null };
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
@@ -45,29 +55,61 @@ export async function action({ request, context }: Route.ActionArgs) {
 
   const profile = await getProfile(request, context.cloudflare.env);
 
-  const { correct } = await submitAnswer(
-    profile.id,
-    profile.rating,
-    answer,
-    DB,
-  );
-  if (correct) return redirect("/catch");
-  else return { message: "Wrong answer" };
+  const result = await submitAnswer(profile.id, profile.rating, answer, DB);
+  if (result.correct) return redirect("/catch");
+  else
+    return {
+      message: "Wrong answer",
+      correct: result.correct,
+      cooldown: result.cooldown,
+    };
 }
 
 export default function CatchPage({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
-  // Destructure for cleaner JSX
   const question = loaderData;
+  const { cooldown } = loaderData;
+  const revalidator = useRevalidator();
+  const [secondsLeft, setSecondsLeft] = useState(0);
+
+  const startCountdown = (msLeft: number) => {
+    setSecondsLeft(Math.ceil(msLeft / 1000));
+
+    const interval = setInterval(() => {
+      setSecondsLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          revalidator.revalidate();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  };
+
+  // After wrong answer
+  useEffect(() => {
+    if (actionData?.correct !== false || !actionData.cooldown) return;
+    return startCountdown(actionData.cooldown.msLeft);
+  }, [actionData]);
+
+  // After page refresh
+  useEffect(() => {
+    if (!cooldown) return;
+    return startCountdown(cooldown.msLeft);
+  }, []);
 
   return (
     <main className="container mx-auto py-8 px-4">
       <NumericInput
-        question={question}
         key={question.question_text}
+        question={question}
         message={actionData?.message}
+        secondsLeft={secondsLeft}
       />
     </main>
   );

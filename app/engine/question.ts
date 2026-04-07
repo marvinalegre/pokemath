@@ -15,9 +15,9 @@ export interface ActiveQuestion {
   assigned_at: string;
 }
 
-export interface SubmitResult {
-  correct: boolean;
-}
+export type SubmitResult =
+  | { correct: true }
+  | { correct: false; cooldown?: { msLeft: number } };
 
 // --- Load or generate the active question for a user ---
 
@@ -118,6 +118,24 @@ export async function submitAnswer(
       .prepare(`DELETE FROM active_questions WHERE user_id = ?`)
       .bind(userId)
       .run();
+  } else {
+    // Set retry_after to now + 20 seconds
+    const retryAfter = new Date(Date.now() + 20_000).toISOString();
+
+    await db
+      .prepare(`UPDATE active_questions SET retry_after = ? WHERE user_id = ?`)
+      .bind(retryAfter, userId)
+      .run();
+  }
+
+  const row = await db
+    .prepare(`SELECT retry_after FROM active_questions WHERE user_id = ?`)
+    .bind(userId)
+    .first<{ retry_after: string | null }>();
+
+  if (row?.retry_after && new Date(row.retry_after) > new Date()) {
+    const msLeft = new Date(row.retry_after).getTime() - Date.now();
+    return { correct: false, cooldown: { msLeft } };
   }
 
   return { correct };

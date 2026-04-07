@@ -26,7 +26,8 @@ CREATE TABLE active_questions (
   question_type_id INTEGER NOT NULL REFERENCES question_types (id),
   question_text TEXT NOT NULL, -- generated display text, e.g. '3 + 7 = ?'
   answer TEXT NOT NULL, -- expected answer, e.g. '10'
-  assigned_at TEXT NOT NULL DEFAULT (strftime ('%Y-%m-%dT%H:%M:%SZ', 'now'))
+  assigned_at TEXT NOT NULL DEFAULT (strftime ('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  retry_after TEXT
 );
 
 -- Every answer attempt, win or lose, is logged here.
