@@ -112,7 +112,7 @@ app/
 
 **`/`** — guest account is created automatically on first visit. No login required.
 
-**`/catch`** — active question loop. Loads the current `active_questions` row for the user and submits answers via a React Router action.
+**`/catch`** — active question loop. Loads the current `active_questions` row for the user and submits answers via a React Router action. If a cooldown is active, the loader returns the remaining wait time so the countdown is restored on page refresh.
 
 ### Engine
 
@@ -127,8 +127,8 @@ app/
 
 - Calls `generate()` on the selected module, passing `generator_params` from the DB row.
 - Writes the generated question to `active_questions` (upsert).
-- On correct answer: deletes the `active_questions` row.
-- On wrong answer: leaves the row intact so the user retries.
+- On every answer (correct or incorrect): deletes the `active_questions` row and generates a new question.
+- On wrong answer: sets `retry_after` on the new `active_questions` row to enforce a 20-second cooldown before the user can submit again.
 - Always writes to `answer_logs` regardless of outcome.
 
 **`elo.ts`** — updates ratings after every answer.
@@ -170,6 +170,20 @@ interface QuestionType {
 | `MultipleChoice.tsx` | pick from options        |
 | `TrueFalse.tsx`      | binary choice            |
 
+### Answer Cooldown
+
+Wrong answers trigger a 20-second cooldown before the user can submit again. The cooldown is enforced server-side via `retry_after` on the `active_questions` row, so it survives page refreshes.
+
+The `SubmitResult` type is a discriminated union:
+
+```ts
+export type SubmitResult =
+  | { correct: true }
+  | { correct: false; cooldown?: { msLeft: number } };
+```
+
+The loader also checks `retry_after` on mount and returns `cooldown: { msLeft }` if one is active, allowing the frontend to restore the countdown timer on refresh.
+
 ---
 
 ## Database Schema
@@ -201,6 +215,7 @@ CREATE TABLE active_questions (
   question_type_id INTEGER NOT NULL REFERENCES question_types(id),
   question_text    TEXT    NOT NULL,
   answer           TEXT    NOT NULL,
+  retry_after      TEXT,
   assigned_at      TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
 
@@ -216,7 +231,7 @@ CREATE TABLE answer_logs (
 );
 ```
 
-`active_questions` holds one row per user at a time — deleted on correct answer, kept on wrong answer. `answer_logs` is append-only and is the source of truth for ELO history and analytics.
+`active_questions` holds one row per user at a time — replaced with a new question after every answer. `retry_after` is set on wrong answers and cleared once the cooldown expires. `answer_logs` is append-only and is the source of truth for ELO history and analytics.
 
 ---
 
@@ -224,11 +239,13 @@ CREATE TABLE answer_logs (
 
 ```
 1. User visits /catch — guest account created if not exists
-2. question.ts validate() compares against active_questions.answer
-3. answer_logs row written (always, win or lose)
-4. elo.ts updates users.rating + question_types.rating in one transaction
-5. Correct  → delete active_questions row → selector picks next → generate new row
-   Incorrect → active_questions row unchanged → user retries
+2. Loader checks retry_after — if still in cooldown, returns msLeft to client
+3. question.ts validate() compares against active_questions.answer
+4. answer_logs row written (always, win or lose)
+5. elo.ts updates users.rating + question_types.rating in one transaction
+6. active_questions row deleted → selector picks next → new row generated
+7. Correct  → retry_after left null
+   Incorrect → retry_after set to now + 20s → client shows countdown
 ```
 
 ---
@@ -251,6 +268,6 @@ CREATE TABLE answer_logs (
 
 The question registry is rebuilt in every V8 isolate from static source code. This is safe because registration is deterministic — all isolates produce the same `Map` from the same modules.
 
-Anything that must survive across requests lives in D1, not memory: ELO ratings, active question state, and answer history.
+Anything that must survive across requests lives in D1, not memory: ELO ratings, active question state, answer history, and cooldown timestamps.
 
 `PRAGMA foreign_keys = ON` must be set on every D1 connection for FK cascade behaviour to fire. No cascades are currently defined — FKs are declared for documentation and future use.
