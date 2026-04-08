@@ -170,20 +170,6 @@ interface QuestionType {
 | `MultipleChoice.tsx` | pick from options        |
 | `TrueFalse.tsx`      | binary choice            |
 
-### Answer Cooldown
-
-Wrong answers trigger a 20-second cooldown before the user can submit again. The cooldown is enforced server-side via `retry_after` on the `active_questions` row, so it survives page refreshes.
-
-The `SubmitResult` type is a discriminated union:
-
-```ts
-export type SubmitResult =
-  | { correct: true }
-  | { correct: false; cooldown?: { msLeft: number } };
-```
-
-The loader also checks `retry_after` on mount and returns `cooldown: { msLeft }` if one is active, allowing the frontend to restore the countdown timer on refresh.
-
 ---
 
 ## Database Schema
