@@ -17,7 +17,7 @@ export async function updateElo(
   questionTypeId: number,
   correct: boolean,
   db: D1Database,
-): Promise<void> {
+): Promise<{ updatedUserRating: number }> {
   const user = await db
     .prepare(`SELECT rating FROM users WHERE id = ?`)
     .bind(userId)
@@ -55,4 +55,6 @@ export async function updateElo(
       .prepare(`UPDATE question_types SET rating = ? WHERE id = ?`)
       .bind(updatedQuestionRating, questionTypeId),
   ]);
+
+  return { updatedUserRating: updatedPlayerRating };
 }

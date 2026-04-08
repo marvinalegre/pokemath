@@ -110,16 +110,21 @@ export async function submitAnswer(
     .run();
 
   // Always update ELO
-  await updateElo(userId, active.question_type_id, correct, db);
+  const { updatedUserRating } = await updateElo(
+    userId,
+    active.question_type_id,
+    correct,
+    db,
+  );
 
-  if (correct) {
-    // Delete active question so the next load generates a fresh one
-    await db
-      .prepare(`DELETE FROM active_questions WHERE user_id = ?`)
-      .bind(userId)
-      .run();
-  } else {
-    // Set retry_after to now + 20 seconds
+  await db
+    .prepare(`DELETE FROM active_questions WHERE user_id = ?`)
+    .bind(userId)
+    .run();
+
+  await generateNextQuestion(userId, updatedUserRating, db);
+
+  if (!correct) {
     const retryAfter = new Date(Date.now() + 20_000).toISOString();
 
     await db
