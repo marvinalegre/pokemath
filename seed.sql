@@ -1357,3 +1357,48 @@ VALUES
     'NumericInput',
     1700
   );
+
+INSERT
+OR IGNORE INTO question_types (
+  category,
+  generator,
+  generator_params,
+  renderer,
+  rating
+)
+VALUES
+  (
+    'exponentiation',
+    'exponentiation',
+    '{"max_base": 5,  "max_exponent": 2, "min_exponent": 2}',
+    'NumericInput',
+    1400
+  ),
+  (
+    'exponentiation',
+    'exponentiation',
+    '{"max_base": 10, "max_exponent": 2, "min_exponent": 2}',
+    'NumericInput',
+    1550
+  ),
+  (
+    'exponentiation',
+    'exponentiation',
+    '{"max_base": 12, "max_exponent": 2, "min_exponent": 2}',
+    'NumericInput',
+    1650
+  ),
+  (
+    'exponentiation',
+    'exponentiation',
+    '{"max_base": 5,  "max_exponent": 3, "min_exponent": 3}',
+    'NumericInput',
+    1700
+  ),
+  (
+    'exponentiation',
+    'exponentiation',
+    '{"max_base": 10, "max_exponent": 3, "min_exponent": 2}',
+    'NumericInput',
+    1800
+  );
