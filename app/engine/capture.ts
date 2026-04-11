@@ -124,9 +124,9 @@ export async function attemptCapture(
   // 5. Save the capture
   await db
     .prepare(
-      "INSERT INTO captured_pokemons (user_id, pokemon_id, caught_at_rating, roll_value) VALUES (?, ?, ?, ?)",
+      "INSERT INTO captured_pokemons (user_id, pokemon_id, caught_at_rating) VALUES (?, ?, ?)",
     )
-    .bind(userId, pokemon.id, userElo, roll)
+    .bind(userId, pokemon.id, userElo)
     .run();
 
   return {

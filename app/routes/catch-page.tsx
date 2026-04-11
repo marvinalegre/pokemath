@@ -4,6 +4,7 @@ import { redirect, useRevalidator } from "react-router";
 import NumericInput from "~/components/NumericInput";
 import { getAuthUser } from "~/lib/auth.server";
 import { loadActiveQuestion, submitAnswer } from "~/engine/question";
+import { attemptCapture } from "~/engine/capture";
 
 async function getProfile(request: Request, env: Env) {
   // 1. Auth check
@@ -56,13 +57,21 @@ export async function action({ request, context }: Route.ActionArgs) {
   const profile = await getProfile(request, context.cloudflare.env);
 
   const result = await submitAnswer(profile.id, profile.rating, answer, DB);
-  if (result.correct) return redirect("/catch");
-  else
+  if (result.correct) {
+    const catchData = await attemptCapture(DB, profile.id, profile.rating);
+
+    return {
+      correct: true,
+      // If catchData is null, it means it "Got Away"
+      catchData: catchData || { fled: true },
+    };
+  } else {
     return {
       message: "Wrong answer",
-      correct: result.correct,
+      correct: false,
       cooldown: result.cooldown,
     };
+  }
 }
 
 export default function CatchPage({
