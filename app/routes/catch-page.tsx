@@ -1,3 +1,15 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "~/components/ui/dialog";
+import { Button } from "~/components/ui/button";
+import { Badge } from "~/components/ui/badge";
+import { Sparkles, Ghost } from "lucide-react"; // Optional icons
+
 import type { Route } from "./+types/catch-page";
 import { useState, useEffect } from "react";
 import { redirect, useRevalidator } from "react-router";
@@ -82,6 +94,16 @@ export default function CatchPage({
   const { cooldown } = loaderData;
   const revalidator = useRevalidator();
   const [secondsLeft, setSecondsLeft] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  // Open modal when catchData arrives
+  useEffect(() => {
+    if (actionData?.catchData) {
+      setOpen(true);
+    }
+  }, [actionData]);
+
+  const catchData = actionData?.catchData;
 
   const startCountdown = (msLeft: number) => {
     setSecondsLeft(Math.ceil(msLeft / 1000));
@@ -120,6 +142,89 @@ export default function CatchPage({
         message={actionData?.message}
         secondsLeft={secondsLeft}
       />
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[425px] overflow-hidden">
+          {catchData?.fled ? (
+            <div className="flex flex-col items-center py-6 text-center">
+              <div className="bg-slate-100 p-6 rounded-full mb-4">
+                <Ghost className="w-12 h-12 text-slate-400" />
+              </div>
+              <DialogHeader>
+                <DialogTitle className="text-2xl text-slate-700">
+                  It got away...
+                </DialogTitle>
+                <DialogDescription>
+                  The Pokémon was too fast this time. Keep solving to find
+                  another!
+                </DialogDescription>
+              </DialogHeader>
+            </div>
+          ) : (
+            <div className="relative">
+              {/* Dynamic background glow based on Pokemon color */}
+              <div
+                className="absolute -top-24 -left-24 w-64 h-64 rounded-full blur-3xl opacity-20"
+                style={{ backgroundColor: catchData?.color }}
+              />
+
+              <div className="flex flex-col items-center py-4 text-center">
+                {catchData?.isNew && (
+                  <Badge
+                    variant="secondary"
+                    className="mb-4 bg-yellow-100 text-yellow-700 hover:bg-yellow-100 animate-bounce"
+                  >
+                    <Sparkles className="w-3 h-3 mr-1" /> New Entry
+                  </Badge>
+                )}
+
+                <div className="relative mb-6 group">
+                  <div
+                    className="w-32 h-32 rounded-full flex items-center justify-center shadow-inner"
+                    style={{ backgroundColor: `${catchData?.color}33` }} // 20% opacity hex
+                  >
+                    {/* Placeholder for Pokemon Sprite */}
+                    <span className="text-6xl group-hover:scale-110 transition-transform cursor-default">
+                      🐾
+                    </span>
+                  </div>
+                </div>
+
+                <DialogHeader className="items-center">
+                  <DialogTitle className="text-3xl font-black uppercase tracking-tighter italic">
+                    Gotcha!
+                  </DialogTitle>
+                  <DialogDescription className="text-lg font-bold text-slate-900 mt-1">
+                    {catchData?.name}
+                  </DialogDescription>
+                  <p className="text-sm text-slate-500 max-w-[280px] mt-2 italic">
+                    "{catchData?.description}"
+                  </p>
+                </DialogHeader>
+
+                <div className="mt-4 flex gap-2">
+                  <Badge variant="outline" className="capitalize">
+                    {catchData?.availability} Rank
+                  </Badge>
+                  <Badge variant="outline" className="text-slate-400">
+                    Roll: {catchData?.roll?.toLocaleString()}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              type="button"
+              className="w-full h-12 text-lg font-bold"
+              onClick={() => setOpen(false)}
+            >
+              Continue Training
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
