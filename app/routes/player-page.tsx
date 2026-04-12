@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { redirect, useFetcher } from "react-router";
 import { getAuthUser } from "~/lib/auth.server";
-import { SortablePokemon } from "~/components/SortablePokemon";
+import { SortablePokemon } from "~/components/sortable-pokemon";
 import type { Route } from "./+types/player-page";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
