@@ -8,7 +8,7 @@ import {
 } from "~/components/ui/dialog";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
-import { Sparkles, Ghost } from "lucide-react"; // Optional icons
+import { Sparkles, Ghost } from "lucide-react";
 
 import type { Route } from "./+types/catch-page";
 import { useState, useEffect } from "react";
@@ -144,7 +144,7 @@ export default function CatchPage({
       />
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px] overflow-hidden">
+        <DialogContent className="sm:max-w-[425px] bg-white overflow-hidden">
           {catchData?.fled ? (
             <div className="flex flex-col items-center py-6 text-center">
               <div className="bg-slate-100 p-6 rounded-full mb-4">
@@ -174,19 +174,17 @@ export default function CatchPage({
                     variant="secondary"
                     className="mb-4 bg-yellow-100 text-yellow-700 hover:bg-yellow-100 animate-bounce"
                   >
-                    <Sparkles className="w-3 h-3 mr-1" /> New Entry
+                    <Sparkles className="w-3 h-3 mr-1" /> New
                   </Badge>
                 )}
 
                 <div className="relative mb-6 group">
-                  <div
-                    className="w-32 h-32 rounded-full flex items-center justify-center shadow-inner"
-                    style={{ backgroundColor: `${catchData?.color}33` }} // 20% opacity hex
-                  >
+                  <div className="w-40 h-40 p-2 rounded-full flex items-center justify-center">
                     {/* Placeholder for Pokemon Sprite */}
-                    <span className="text-6xl group-hover:scale-110 transition-transform cursor-default">
-                      🐾
-                    </span>
+                    <img
+                      src={`images/sprites/${catchData?.id}.avif`}
+                      className="text-6xl group-hover:scale-110 transition-transform cursor-default"
+                    />
                   </div>
                 </div>
 
@@ -201,15 +199,6 @@ export default function CatchPage({
                     "{catchData?.description}"
                   </p>
                 </DialogHeader>
-
-                <div className="mt-4 flex gap-2">
-                  <Badge variant="outline" className="capitalize">
-                    {catchData?.availability} Rank
-                  </Badge>
-                  <Badge variant="outline" className="text-slate-400">
-                    Roll: {catchData?.roll?.toLocaleString()}
-                  </Badge>
-                </div>
               </div>
             </div>
           )}
@@ -220,7 +209,7 @@ export default function CatchPage({
               className="w-full h-12 text-lg font-bold"
               onClick={() => setOpen(false)}
             >
-              Continue Training
+              Continue Catching
             </Button>
           </DialogFooter>
         </DialogContent>
