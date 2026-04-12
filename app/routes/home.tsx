@@ -36,9 +36,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             possible.
           </p>
         </div>
-
-        {/* Your content goes here */}
-        <div className="w-full mt-8">{/* <NumericInput ... /> */}</div>
       </div>
     </main>
   );

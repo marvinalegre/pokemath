@@ -1,5 +1,5 @@
 import type { QuestionType } from "./registry";
-import NumericInput from "~/components/NumericInput";
+import NumericInput from "~/components/numeric-input";
 
 interface AdditionParams {
   max_addend?: number; // largest value each addend can be

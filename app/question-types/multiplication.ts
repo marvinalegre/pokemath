@@ -1,5 +1,5 @@
 import type { QuestionType } from "~/question-types/registry";
-import NumericInput from "~/components/NumericInput";
+import NumericInput from "~/components/numeric-input";
 
 interface MultiplicationParams {
   max_factor_a?: number;

@@ -7,7 +7,7 @@ export interface Question {
 
 export interface QuestionProps {
   question: Question;
-  onAnswer: (answer: string) => void;
+  secondsLeft: number;
 }
 
 export interface QuestionType {

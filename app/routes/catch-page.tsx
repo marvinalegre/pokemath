@@ -13,7 +13,7 @@ import { Sparkles, Ghost } from "lucide-react";
 import type { Route } from "./+types/catch-page";
 import { useState, useEffect } from "react";
 import { redirect, useRevalidator } from "react-router";
-import NumericInput from "~/components/NumericInput";
+import NumericInput from "~/components/numeric-input";
 import { getAuthUser } from "~/lib/auth.server";
 import { loadActiveQuestion, submitAnswer } from "~/engine/question";
 import { attemptCapture } from "~/engine/capture";

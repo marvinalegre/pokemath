@@ -1,5 +1,5 @@
 import type { QuestionType } from "~/question-types/registry";
-import NumericInput from "~/components/NumericInput";
+import NumericInput from "~/components/numeric-input";
 
 interface SubtractionParams {
   max_minuend?: number; // largest value the starting number can be

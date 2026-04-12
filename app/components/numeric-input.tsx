@@ -4,11 +4,9 @@ import { Input } from "~/components/ui/input";
 
 export default function NumericInput({
   question,
-  message,
   secondsLeft,
 }: {
   question: { question_text: string };
-  message: undefined | string;
   secondsLeft: number;
 }) {
   return (
