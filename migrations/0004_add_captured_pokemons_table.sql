@@ -6,5 +6,6 @@ CREATE TABLE captured_pokemons (
   user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
   pokemon_id INTEGER NOT NULL REFERENCES pokemons (id),
   caught_at_rating REAL NOT NULL, -- The player's ELO when they caught it
+  box_position INTEGER DEFAULT 0,
   captured_at TEXT NOT NULL DEFAULT (strftime ('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );

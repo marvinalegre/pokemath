@@ -15,6 +15,7 @@ import {
 } from "~/components/ui/sheet";
 import { Button } from "~/components/ui/button";
 import { Menu, Zap, User } from "lucide-react";
+import { Link } from "react-router";
 
 export default function Navbar({
   username,
@@ -66,12 +67,14 @@ export default function Navbar({
         {/* Desktop CTAs */}
         <div className="hidden md:flex md:items-center md:gap-2">
           {username && (
-            <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground">
-              <User className="h-3.5 w-3.5" />
-              <span className="font-mono text-xs font-medium text-foreground">
-                {username}
-              </span>
-            </div>
+            <Link to="/player">
+              <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground">
+                <User className="h-3.5 w-3.5" />
+                <span className="font-mono text-xs font-medium text-foreground">
+                  {username}
+                </span>
+              </div>
+            </Link>
           )}
           {role === "guest" && (
             <Button size="sm" asChild>
