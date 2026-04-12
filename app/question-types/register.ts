@@ -1,4 +1,3 @@
-// app/question-types/register.ts
 import { registerQuestionType } from "./registry";
 import * as types from "./index";
 

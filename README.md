@@ -21,19 +21,7 @@ pnpm wrangler login
 pnpm wrangler d1 create pokemath
 ```
 
-Copy the database ID from the output and add it to `wrangler.jsonc`:
-
-```jsonc
-{
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "pokemath",
-      "database_id": "your-database-id-here",
-    },
-  ],
-}
-```
+Copy the database ID from the output and add it to `wrangler.jsonc`.
 
 ### Development
 
@@ -67,41 +55,10 @@ cp sample.env .env.production
 pnpm wrangler secret put SECRET_NAME
 ```
 
-We recommend using OpenSSL in generating JWT_SECRET:
-
-```bash
-openssl rand -base64 32
-```
-
 Now deploy with:
 
 ```bash
 pnpm run deploy
-```
-
----
-
-## Project Structure
-
-```
-app/
-├── routes.ts                     # route config
-├── routes/
-│   ├── catch-page.tsx
-│   ├── players-page.tsx
-    └── ...
-├── engine/
-│   ├── selector.ts               # ELO-based question selection
-│   ├── question.ts               # generate, validate, persist
-│   └── elo.ts                    # rating updates
-└── question-types/
-    ├── registry.ts               # in-memory Map of generators
-    ├── register.ts               # explicit registration at startup
-    ├── index.ts                  # barrel re-export
-    ├── addition.ts
-    ├── subtraction.ts
-    ├── multiplication.ts
-    └── ...                       # 100+ generator modules
 ```
 
 ---
@@ -172,81 +129,9 @@ interface QuestionType {
 
 ---
 
-## Database Schema
-
-```sql
-CREATE TABLE users (
-  id         INTEGER PRIMARY KEY AUTOINCREMENT,
-  username   TEXT    NOT NULL UNIQUE,
-  rating     REAL    NOT NULL DEFAULT 1500,
-  role       TEXT    NOT NULL DEFAULT 'guest',
-  created_at TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
-);
-
-CREATE TABLE question_types (
-  id               INTEGER PRIMARY KEY AUTOINCREMENT,
-  category         TEXT    NOT NULL,
-  generator        TEXT    NOT NULL,
-  generator_params TEXT    NOT NULL DEFAULT '{}',
-  renderer         TEXT    NOT NULL,
-  renderer_options TEXT    NOT NULL DEFAULT '{}',
-  rating           REAL    NOT NULL DEFAULT 1500,
-  is_active        INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1)),
-  created_at       TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
-  UNIQUE (generator, generator_params)
-);
-
-CREATE TABLE active_questions (
-  user_id          INTEGER NOT NULL UNIQUE REFERENCES users(id),
-  question_type_id INTEGER NOT NULL REFERENCES question_types(id),
-  question_text    TEXT    NOT NULL,
-  answer           TEXT    NOT NULL,
-  retry_after      TEXT,
-  assigned_at      TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
-);
-
-CREATE TABLE answer_logs (
-  id               INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id          INTEGER NOT NULL REFERENCES users(id),
-  question_type_id INTEGER NOT NULL REFERENCES question_types(id),
-  question_text    TEXT    NOT NULL,
-  user_answer      TEXT    NOT NULL,
-  correct_answer   TEXT    NOT NULL,
-  is_correct       INTEGER NOT NULL CHECK (is_correct IN (0, 1)),
-  answered_at      TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
-);
-```
-
-`active_questions` holds one row per user at a time — replaced with a new question after every answer. `retry_after` is set on wrong answers and cleared once the cooldown expires. `answer_logs` is append-only and is the source of truth for ELO history and analytics.
-
----
-
-## Answer Flow
-
-```
-1. User visits /catch — guest account created if not exists
-2. Loader checks retry_after — if still in cooldown, returns msLeft to client
-3. question.ts validate() compares against active_questions.answer
-4. answer_logs row written (always, win or lose)
-5. elo.ts updates users.rating + question_types.rating in one transaction
-6. active_questions row deleted → selector picks next → new row generated
-7. Correct  → retry_after left null
-   Incorrect → retry_after set to now + 20s → client shows countdown
-```
-
----
-
 ## Adding Question Types
 
 **New variant of an existing generator** (e.g. addition with `max_sum: 20`) — insert a row into `question_types`. No code change needed provided the generator already accepts that param.
-
-**New generator** (e.g. `division`):
-
-1. Create `app/question-types/division.ts` implementing `QuestionType`.
-2. Re-export it in `index.ts`.
-3. Add a `registerQuestionType()` call in `register.ts`.
-4. Insert one or more rows in `question_types` pointing to `generator: 'division'`.
-5. Re-run `pnpm run seed`.
 
 ---
 
