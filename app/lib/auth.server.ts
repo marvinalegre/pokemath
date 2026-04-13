@@ -74,7 +74,7 @@ export async function createNewUser(env: Env) {
     .sign(getSecret(env));
 
   await env.DB.prepare("insert into users(username, rating) values(?, ?)")
-    .bind(username, 500)
+    .bind(username, 1000)
     .run();
 
   return { username, jwt };
