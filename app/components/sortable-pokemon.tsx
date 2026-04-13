@@ -59,7 +59,6 @@ export function SortablePokemon({
           className={`
             group relative flex items-center justify-center aspect-square rounded-full
             transition-all duration-300 cursor-pointer active:cursor-grabbing
-            hover:bg-slate-100/50
             ${isDragged ? "opacity-10 scale-90" : "opacity-100"}
           `}
         >
