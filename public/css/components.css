@@ -1,0 +1,33 @@
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 130px;
+    font-family: system-ui, sans-serif;
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: #111;
+}
+
+nav svg {
+    cursor: pointer;
+    color: #333;
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+nav svg:hover {
+    color: #000;
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    nav {
+        padding: 12px 4px;
+    }
+}
