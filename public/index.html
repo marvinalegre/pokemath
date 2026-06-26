@@ -4,8 +4,26 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>PokeMath</title>
+
         <link rel="stylesheet" href="/css/base.css" />
         <link rel="stylesheet" href="/css/components.css" />
+        <link rel="stylesheet" href="/css/home.css" />
+
+        <link rel="stylesheet" href="/vendor/katex/katex.css" />
+        <script defer src="/vendor/katex/katex.js"></script>
+        <script defer src="/vendor/katex/auto-render.js"></script>
+
+        <style>
+            body {
+                visibility: hidden;
+            }
+        </style>
+        <script defer>
+            document.addEventListener('DOMContentLoaded', () => {
+                renderMathInElement(document.body);
+                document.body.style.visibility = 'visible';
+            });
+        </script>
     </head>
     <body>
         <nav>
@@ -26,5 +44,15 @@
                 <circle cx="12" cy="7" r="4" />
             </svg>
         </nav>
+
+        <main>
+            <form>
+                <div id="question">\(1 + 1 = \; ?\)</div>
+
+                <input id="answer" name="answer" type="number" placeholder="Enter your answer" required autocomplete="off" autofocus />
+
+                <button type="submit">Submit</button>
+            </form>
+        </main>
     </body>
 </html>
