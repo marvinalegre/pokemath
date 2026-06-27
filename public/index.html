@@ -8,10 +8,7 @@
         <link rel="stylesheet" href="/css/base.css" />
         <link rel="stylesheet" href="/css/components.css" />
         <link rel="stylesheet" href="/css/index.css" />
-
         <link rel="stylesheet" href="/vendor/katex/katex.css" />
-        <script defer src="/vendor/katex/katex.js"></script>
-        <script defer src="/vendor/katex/auto-render.js"></script>
 
         <style>
             body {
@@ -19,8 +16,12 @@
             }
         </style>
         <script defer>
-            document.addEventListener('DOMContentLoaded', () => {
-                renderMathInElement(document.body);
+            // Loader
+            document.addEventListener('DOMContentLoaded', async () => {
+                const res = await fetch('/api/active-question');
+                const html = await res.text();
+
+                document.getElementById('question').innerHTML = html;
                 document.body.style.visibility = 'visible';
             });
         </script>
@@ -47,7 +48,7 @@
 
         <main>
             <form>
-                <div id="question">\(1 + 1 = \; ?\)</div>
+                <div id="question"></div>
 
                 <input id="answer" name="answer" type="number" placeholder="Enter your answer" required autocomplete="off" autofocus />
 
