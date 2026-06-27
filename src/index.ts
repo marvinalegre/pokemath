@@ -5,9 +5,12 @@ export default {
         const url = new URL(request.url);
         switch (url.pathname.slice(4)) {
             case '/active-question':
-                return new Response(`${katex.renderToString('10 + 10 = \\text{?}')}`, {
-                    headers: { 'Content-Type': 'text/html' },
-                });
+                return new Response(
+                    `${katex.renderToString(`${Math.floor(Math.random() * 10)} + ${Math.floor(Math.random() * 10)} = \\text{?}`)}`,
+                    {
+                        headers: { 'Content-Type': 'text/html' },
+                    },
+                );
             case '/random':
                 return new Response(crypto.randomUUID());
             default:

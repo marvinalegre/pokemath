@@ -40,3 +40,10 @@ form button {
     cursor: pointer;
     transition: background-color 0.2s;
 }
+
+form button:disabled {
+    background-color: #444;
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.5;
+}

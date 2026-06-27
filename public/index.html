@@ -24,7 +24,20 @@
                 document.getElementById('question').innerHTML = html;
                 document.body.style.visibility = 'visible';
             });
+
+            document.addEventListener('fx:config', () => {
+                document.getElementById('answer').disabled = true;
+                document.querySelector('form button').disabled = true;
+            });
+
+            document.addEventListener('fx:swapped', () => {
+                document.getElementById('answer').disabled = false;
+                document.getElementById('answer').value = '';
+                document.querySelector('form button').disabled = false;
+            });
         </script>
+
+        <script defer src="/vendor/the-fixi-project/fixi-0.9.4.js"></script>
     </head>
     <body>
         <nav>
@@ -47,7 +60,7 @@
         </nav>
 
         <main>
-            <form>
+            <form fx-action="/api/active-question" fx-method="post" fx-target="#question" fx-swap="innerHTML">
                 <div id="question"></div>
 
                 <input id="answer" name="answer" type="number" placeholder="Enter your answer" required autocomplete="off" autofocus />
