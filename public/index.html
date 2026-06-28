@@ -25,15 +25,18 @@
                 document.body.style.visibility = 'visible';
             });
 
-            document.addEventListener('fx:config', () => {
-                document.getElementById('answer').disabled = true;
-                document.querySelector('form button').disabled = true;
+            document.addEventListener('fx:before', (evt) => {
+                const form = evt.target.closest('form') ?? evt.target;
+
+                form.querySelectorAll('input, button, select, textarea').forEach((el) => (el.disabled = true));
             });
 
-            document.addEventListener('fx:swapped', () => {
-                document.getElementById('answer').disabled = false;
+            document.addEventListener('fx:after', (evt) => {
+                const form = evt.target.closest('form') ?? evt.target;
+
+                form.querySelectorAll('input, button, select, textarea').forEach((el) => (el.disabled = false));
+
                 document.getElementById('answer').value = '';
-                document.querySelector('form button').disabled = false;
             });
         </script>
 
