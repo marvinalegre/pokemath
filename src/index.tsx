@@ -1,28 +1,32 @@
 import { Hono } from 'hono';
 import type { FC } from 'hono/jsx';
+import { html } from 'hono/html';
 import katex from 'katex';
 
 const app = new Hono();
 
 const Layout: FC = (props) => {
     return (
-        <html lang="en">
-            <head>
-                <meta charset="UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>PokeMath</title>
+        <>
+            {html`<!doctype html>`}
+            <html lang="en">
+                <head>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <title>PokeMath</title>
 
-                <link rel="stylesheet" href="/css/base.css" />
-                <link rel="stylesheet" href="/css/components.css" />
-                <link rel="stylesheet" href="/css/home.css" />
-                <link rel="stylesheet" href="/vendor/katex/katex.css" />
+                    <link rel="stylesheet" href="/css/base.css" />
+                    <link rel="stylesheet" href="/css/components.css" />
+                    <link rel="stylesheet" href="/css/home.css" />
+                    <link rel="stylesheet" href="/vendor/katex/katex.css" />
 
-                <script defer src="/js/home.js"></script>
-                <script defer src="/vendor/the-fixi-project/fixi-0.9.4.js"></script>
-            </head>
+                    <script defer src="/js/home.js"></script>
+                    <script defer src="/vendor/the-fixi-project/fixi-0.9.4.js"></script>
+                </head>
 
-            <body>{props.children}</body>
-        </html>
+                <body>{props.children}</body>
+            </html>
+        </>
     );
 };
 
