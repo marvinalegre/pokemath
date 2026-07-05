@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const html = await res.text();
 
     document.getElementById('question').innerHTML = html;
-    document.body.style.visibility = 'visible';
+    document.querySelector('main').style.visibility = 'visible';
 });
 
 document.addEventListener('fx:before', (evt) => {
