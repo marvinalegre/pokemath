@@ -1,10 +1,9 @@
 // Loader
 document.addEventListener('DOMContentLoaded', async () => {
-    const res = await fetch('/api/active-question');
-    const html = await res.text();
+    await document.fonts.ready;
 
-    document.getElementById('question').innerHTML = html;
-    document.querySelector('main').style.visibility = 'visible';
+    document.getElementById('loading').style.display = 'none';
+    document.querySelector('form').style.display = 'flex';
 });
 
 document.addEventListener('fx:before', (evt) => {

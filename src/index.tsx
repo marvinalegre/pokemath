@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import type { FC } from 'hono/jsx';
-import { html } from 'hono/html';
+import { html, raw } from 'hono/html';
 import katex from 'katex';
 
 const app = new Hono();
@@ -19,6 +19,13 @@ const Layout: FC = (props) => {
                     <link rel="stylesheet" href="/css/components.css" />
                     <link rel="stylesheet" href="/css/home.css" />
                     <link rel="stylesheet" href="/vendor/katex/katex.css" />
+                    <link
+                        rel="preload"
+                        href="/vendor/katex/fonts/KaTeX_Main-Regular.woff2"
+                        as="font"
+                        type="font/woff2"
+                        crossorigin="anonymous"
+                    />
 
                     <script defer src="/js/home.js"></script>
                     <script defer src="/vendor/the-fixi-project/fixi-0.9.4.js"></script>
@@ -53,8 +60,12 @@ const Home: FC = () => {
             </nav>
 
             <main>
+                <div id="loading" class="spinner"></div>
+
                 <form fx-action="/api/active-question" fx-method="post" fx-target="#question" fx-swap="innerHTML">
-                    <div id="question"></div>
+                    <div id="question">
+                        {raw(katex.renderToString(`${Math.floor(Math.random() * 10)} + ${Math.floor(Math.random() * 10)} = \\text{?}`))}
+                    </div>
 
                     <input id="answer" name="answer" type="number" placeholder="Enter your answer" required autocomplete="off" autofocus />
 
