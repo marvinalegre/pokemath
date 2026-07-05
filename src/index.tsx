@@ -64,7 +64,7 @@ const Home: FC = () => {
 
             <footer>
                 <a href="https://github.com/marvinalegre/pokemath" target="_blank" rel="noopener noreferrer">
-                    Source Code
+                    source code
                 </a>
             </footer>
         </Layout>
