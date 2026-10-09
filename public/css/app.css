@@ -19,6 +19,37 @@ nav {
   }
 }
 
+.password-field {
+  position: relative;
+
+  input {
+    padding-right: 2.75rem;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 0.5rem;
+    top: 40%;
+    transform: translateY(-50%);
+    width: auto;
+    margin: 0;
+    padding: 0.25rem;
+    line-height: 0;
+    border: none;
+    background: transparent;
+  }
+}
+.toggle-password .icon-eye-off,
+.toggle-password.is-showing .icon-eye {
+  display: none;
+}
+.toggle-password.is-showing .icon-eye-off {
+  display: inline;
+}
+.toggle-password svg {
+  display: block;
+}
+
 @media (min-width: 768px) {
   .container {
     padding-inline: 5rem;
