@@ -2,7 +2,7 @@ export const SignupForm = () => {
   return (
     <main class="container">
       <h1>Create an account</h1>
-      <form method="post" action="/signup" class="signup-form">
+      <form method="post" action="/signup" class="auth-form">
         <label for="username">Username</label>
         <input
           id="username"
@@ -10,7 +10,6 @@ export const SignupForm = () => {
           name="username"
           required
           minlength={3}
-          autocomplete="username"
         />
         <label for="password">Password</label>
         <input
@@ -19,10 +18,12 @@ export const SignupForm = () => {
           name="password"
           required
           minlength={8}
-          autocomplete="new-password"
         />
         <button type="submit">Sign up</button>
       </form>
+      <p>
+        Have an account? <a href="/login">Log in</a>
+      </p>
     </main>
   );
 };
