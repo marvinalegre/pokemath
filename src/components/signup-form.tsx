@@ -1,8 +1,8 @@
 export const SignupForm = () => {
   return (
-    <main class="container">
+    <div class="auth-form">
       <h1>Create an account</h1>
-      <form method="post" action="/signup" class="auth-form">
+      <form method="post" action="/signup">
         <label for="username">Username</label>
         <input
           id="username"
@@ -24,6 +24,6 @@ export const SignupForm = () => {
       <p>
         Have an account? <a href="/login">Log in</a>
       </p>
-    </main>
+    </div>
   );
 };

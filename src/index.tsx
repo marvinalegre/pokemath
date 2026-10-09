@@ -18,7 +18,10 @@ app.get("/", (c) => {
 app.get("/signup", (c) => {
   return c.html(
     <Layout>
-      <SignupForm />
+      <Nav />
+      <main class="container">
+        <SignupForm />
+      </main>
     </Layout>,
   );
 });
@@ -26,7 +29,10 @@ app.get("/signup", (c) => {
 app.get("/login", (c) => {
   return c.html(
     <Layout>
-      <LoginForm />
+      <Nav />
+      <main class="container">
+        <LoginForm />
+      </main>
     </Layout>,
   );
 });
