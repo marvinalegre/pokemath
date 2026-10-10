@@ -1,6 +1,10 @@
 import { html } from "hono/html";
-import { PropsWithChildren } from "hono/jsx";
+import { type Child } from "hono/jsx";
 
-export const HtmlDocument = ({ children }: PropsWithChildren) => {
+interface Props {
+  children: Child;
+}
+
+export const HtmlDocument = ({ children }: Props) => {
   return html`<!doctype html>${children}`;
 };
