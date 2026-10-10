@@ -6,8 +6,8 @@ nav {
   font-size: 1.4rem;
 }
 
-.auth-form {
-  max-width: 400px;
+.auth-page {
+  max-width: 600px;
   margin: 0 auto;
 
   form {

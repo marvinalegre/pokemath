@@ -7,7 +7,7 @@ import { login } from "@/routes/login";
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
 app.route("/", home);
-app.route("/", signup);
-app.route("/", login);
+app.route("/signup", signup);
+app.route("/login", login);
 
 export default app;
