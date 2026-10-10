@@ -33,6 +33,15 @@ signup.post("/", async (c) => {
 
   if (!result.success) {
     const errors = z.flattenError(result.error);
-    console.log(errors);
+
+    return c.html(
+      <SignupForm
+        values={{
+          username: typeof body.username === "string" ? body.username : "",
+        }}
+        fieldErrors={errors.fieldErrors}
+      />,
+      422,
+    );
   }
 });

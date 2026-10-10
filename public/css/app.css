@@ -15,21 +15,27 @@ nav {
   }
 
   button {
+    margin-top: var(--pico-spacing);
     font-size: 1.2rem;
   }
+}
+
+#password-error {
+  color: var(--pico-del-color);
 }
 
 .password-field {
   position: relative;
 
   input {
+    margin-bottom: 0;
     padding-right: 2.75rem;
   }
 
   .toggle-password {
     position: absolute;
     right: 0.5rem;
-    top: 40%;
+    top: 50%;
     transform: translateY(-50%);
     width: auto;
     margin: 0;
