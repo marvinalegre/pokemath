@@ -1,40 +1,13 @@
 import { Hono } from "hono";
 
-import { Nav } from "@/components/nav";
-import { Layout } from "@/components/layout";
-import { SignupForm } from "@/components/signup-form";
-import { LoginForm } from "@/components/login-form";
+import { home } from "@/routes/home";
+import { signup } from "@/routes/signup";
+import { login } from "@/routes/login";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
-app.get("/", (c) => {
-  return c.html(
-    <Layout>
-      <Nav />
-    </Layout>,
-  );
-});
-
-app.get("/signup", (c) => {
-  return c.html(
-    <Layout>
-      <Nav />
-      <main class="container">
-        <SignupForm />
-      </main>
-    </Layout>,
-  );
-});
-
-app.get("/login", (c) => {
-  return c.html(
-    <Layout>
-      <Nav />
-      <main class="container">
-        <LoginForm />
-      </main>
-    </Layout>,
-  );
-});
+app.route("/", home);
+app.route("/", signup);
+app.route("/", login);
 
 export default app;
