@@ -1,4 +1,7 @@
 import { Hono } from "hono";
+import { z } from "zod";
+
+import { signupSchema } from "@/lib/validation";
 
 import { Nav } from "@/components/nav";
 import { Layout } from "@/components/layout";
@@ -22,4 +25,14 @@ signup.get("/", (c) => {
       </main>
     </Layout>,
   );
+});
+
+signup.post("/", async (c) => {
+  const body = await c.req.parseBody();
+  const result = signupSchema.safeParse(body);
+
+  if (!result.success) {
+    const errors = z.flattenError(result.error);
+    console.log(errors);
+  }
 });

@@ -2,17 +2,11 @@ export const SignupForm = () => {
   return (
     <form id="signup-form" method="post" action="/signup">
       <label for="username">Username</label>
-      <input id="username" type="text" name="username" required minlength={3} />
+      <input id="username" type="text" name="username" />
 
       <label for="password">Password</label>
       <div class="password-field">
-        <input
-          id="password"
-          type="password"
-          name="password"
-          required
-          minlength={8}
-        />
+        <input id="password" type="password" name="password" />
         <button
           type="button"
           class="toggle-password outline"
