@@ -1,0 +1,113 @@
+/* app/components/Navbar.module.css */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 3.5rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    max-width: 960px;
+  }
+}
+
+.brand {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--foreground);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background: var(--muted);
+}
+
+.toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: none;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem var(--gutter) 1rem;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+
+.menuOpen {
+  display: flex;
+}
+
+.menu a {
+  display: block;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius);
+  color: var(--foreground);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.menu a:hover {
+  background: var(--muted);
+}
+
+.menu a[aria-current="page"] {
+  background: var(--muted);
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  .toggle {
+    display: none;
+  }
+
+  .menu {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  .menu a {
+    padding: 0.375rem 0.75rem;
+  }
+}
