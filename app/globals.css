@@ -292,6 +292,10 @@ textarea {
   }
 }
 
+input[type="checkbox"] {
+  accent-color: var(--primary);
+}
+
 textarea {
   min-height: 4rem;
   padding: 0.5rem 0.75rem;
