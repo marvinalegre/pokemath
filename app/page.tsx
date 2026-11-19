@@ -1,69 +1,82 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main>
+      <h1>shadcn-style Defaults</h1>
+      <p>
+        A neutral, light theme built from global CSS variables. Links use the
+        foreground color, and buttons use the primary style.
+      </p>
+
+      <section className={styles.card}>
+        <h2>Typography</h2>
+        <p>
+          Body text uses a 1.5 line height. Inline code looks like{" "}
+          <code>const x = 1</code>.
+        </p>
+        <ul>
+          <li>First item</li>
+          <li>
+            Second item with a <a href="#">link</a>
+          </li>
+        </ul>
+        <blockquote>Simplicity is the ultimate sophistication.</blockquote>
+      </section>
+
+      <section className={styles.card}>
+        <h2>Code</h2>
+        <pre>
+          <code>{`export default function Home() {
+  return <h1>Hello</h1>;
+}`}</code>
+        </pre>
+      </section>
+
+      <section className={styles.card}>
+        <h2>Table</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ada</td>
+              <td>Engineer</td>
+              <td>Active</td>
+            </tr>
+            <tr>
+              <td>Linus</td>
+              <td>Maintainer</td>
+              <td>Away</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section className={styles.card}>
+        <h2>Form</h2>
+        <form>
+          <div className={styles.field}>
+            <label htmlFor="name">Name</label>
+            <input id="name" type="text" placeholder="Your name" />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="message">Message</label>
+            <textarea id="message" rows={4} placeholder="Say something" />
+          </div>
+          <div className={styles.actions}>
+            <button type="button">Send</button>
+            <a className="button" href="#">
+              Get started
+            </a>
+          </div>
+        </form>
+      </section>
+    </main>
   );
 }
