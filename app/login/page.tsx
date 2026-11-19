@@ -1,77 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useActionState, useState } from "react";
 import styles from "../signup/signup.module.css";
-
-type Values = {
-  username: string;
-  password: string;
-};
-
-type Errors = Partial<Record<keyof Values, string>>;
-
-const initial: Values = {
-  username: "",
-  password: "",
-};
-
-function validate(values: Values): Errors {
-  const errors: Errors = {};
-
-  if (!values.username.trim()) {
-    errors.username = "Enter your username.";
-  }
-
-  if (!values.password) {
-    errors.password = "Enter your password.";
-  }
-
-  return errors;
-}
+import { login } from "./actions";
+import { initialLoginState } from "./types";
 
 export default function LoginPage() {
-  const [values, setValues] = useState<Values>(initial);
-  const [errors, setErrors] = useState<Errors>({});
+  const [state, formAction, isPending] = useActionState(
+    login,
+    initialLoginState,
+  );
   const [showPassword, setShowPassword] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
-  const [formError, setFormError] = useState("");
 
-  function update<K extends keyof Values>(key: K, value: Values[K]) {
-    setValues((prev) => ({ ...prev, [key]: value }));
-    setErrors((prev) => ({ ...prev, [key]: undefined }));
-    setFormError("");
-  }
-
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const found = validate(values);
-    setErrors(found);
-    if (Object.keys(found).length > 0) return;
-
-    setSubmitting(true);
-    // Replace with a real request, e.g. fetch("/api/login", { method: "POST", ... })
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setSubmitting(false);
-
-    // Placeholder check; remove once the real request is wired up.
-    if (values.password !== "password123") {
-      setFormError("Incorrect username or password.");
-      return;
-    }
-
-    setDone(true);
-  }
-
-  if (done) {
+  if (state.status === "success") {
     return (
       <div className={styles.wrapper}>
         <section className={styles.card}>
           <div className={styles.header}>
             <h1>Welcome back</h1>
-            <p>Signed in as {values.username.trim()}.</p>
+            <p>Signed in as {state.username}.</p>
           </div>
           <Link href="/" className="button">
             Go to home
@@ -81,6 +29,7 @@ export default function LoginPage() {
     );
   }
 
+  const { fieldErrors, formError } = state;
   const credentialsInvalid = !!formError;
 
   return (
@@ -91,7 +40,7 @@ export default function LoginPage() {
           <p>Enter your username and password.</p>
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
+        <form action={formAction} className={styles.form} noValidate>
           {formError && (
             <p role="alert" className={styles.formError}>
               {formError}
@@ -107,19 +56,21 @@ export default function LoginPage() {
               autoComplete="username"
               autoCapitalize="none"
               spellCheck={false}
-              value={values.username}
-              onChange={(e) => update("username", e.target.value)}
+              defaultValue={state.username}
               className={
-                errors.username || credentialsInvalid
+                fieldErrors.username || credentialsInvalid
                   ? styles.invalid
                   : undefined
               }
-              aria-invalid={!!errors.username || credentialsInvalid}
-              aria-describedby={errors.username ? "username-error" : undefined}
+              aria-invalid={!!fieldErrors.username || credentialsInvalid}
+              aria-describedby={
+                fieldErrors.username ? "username-error" : undefined
+              }
+              disabled={isPending}
             />
-            {errors.username && (
+            {fieldErrors.username && (
               <p id="username-error" className={styles.error}>
-                {errors.username}
+                {fieldErrors.username}
               </p>
             )}
           </div>
@@ -131,19 +82,20 @@ export default function LoginPage() {
               name="password"
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
-              value={values.password}
-              onChange={(e) => update("password", e.target.value)}
               className={
-                errors.password || credentialsInvalid
+                fieldErrors.password || credentialsInvalid
                   ? styles.invalid
                   : undefined
               }
-              aria-invalid={!!errors.password || credentialsInvalid}
-              aria-describedby={errors.password ? "password-error" : undefined}
+              aria-invalid={!!fieldErrors.password || credentialsInvalid}
+              aria-describedby={
+                fieldErrors.password ? "password-error" : undefined
+              }
+              disabled={isPending}
             />
-            {errors.password && (
+            {fieldErrors.password && (
               <p id="password-error" className={styles.error}>
-                {errors.password}
+                {fieldErrors.password}
               </p>
             )}
           </div>
@@ -153,12 +105,13 @@ export default function LoginPage() {
               type="checkbox"
               checked={showPassword}
               onChange={(e) => setShowPassword(e.target.checked)}
+              disabled={isPending}
             />
             <span>Show password</span>
           </label>
 
-          <button type="submit" className={styles.submit} disabled={submitting}>
-            {submitting ? "Logging in..." : "Log in"}
+          <button type="submit" className={styles.submit} disabled={isPending}>
+            {isPending ? "Logging in..." : "Log in"}
           </button>
         </form>
 
