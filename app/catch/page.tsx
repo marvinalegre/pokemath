@@ -95,9 +95,10 @@ export default async function CatchPage() {
   const activeLock =
     lockedUntil && lockedUntil > Date.now() ? lockedUntil : null;
 
-  const pokemon = pendingCatch
-    ? pokemonTiers.find((p) => p.id === pendingCatch.pokemonId)
-    : undefined;
+  const pokemon =
+    pendingCatch && pendingCatch.pokemonId !== null
+      ? pokemonTiers.find((p) => p.id === pendingCatch.pokemonId)
+      : undefined;
 
   const problemHtml = katex.renderToString(
     `${problem.data.a} + ${problem.data.b} = \\; ?`,
@@ -134,11 +135,13 @@ export default async function CatchPage() {
 
         <AnswerForm initialLockedUntil={activeLock} />
 
-        {pendingCatch && pokemon && (
+        {pendingCatch && (
           <CatchDialog
-            name={pokemon.name}
-            sprite={spriteSrc(pokemon.id)}
-            escaped={pendingCatch.escaped}
+            pokemon={
+              pokemon
+                ? { name: pokemon.name, sprite: spriteSrc(pokemon.id) }
+                : null
+            }
           />
         )}
       </section>

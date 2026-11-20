@@ -4,9 +4,11 @@ import { redirect } from "next/navigation";
 import { ObjectId } from "mongodb";
 import { getCurrentUser } from "@/lib/session";
 import { getActiveProblems, getCaughtPokemon, getUsers } from "@/lib/mongodb";
-import { randomPokemon } from "@/lib/pokemon";
+import { rollTier } from "@/lib/drop-rates";
+import { pickPokemonOfTier } from "@/lib/pokemon";
+import { gradeOf } from "@/lib/problem-grade-levels";
 import type { CatchState } from "./types";
-import { LOCK_MS, ESCAPE_CHANCE } from "@/lib/constants";
+import { LOCK_MS } from "@/lib/constants";
 
 export async function checkAnswer(
   _prevState: CatchState,
@@ -36,14 +38,15 @@ export async function checkAnswer(
   const guess = Number(raw);
 
   if (guess === Number(active.answer)) {
-    const pokemon = randomPokemon();
-    const escaped = Math.random() < ESCAPE_CHANCE;
+    const grade = gradeOf(active.problemId);
+    const tier = rollTier(grade);
 
-    // Keep the problem document until the dialog is resolved, so a refresh
-    // shows the same catch instead of a new problem.
+    // Tier 0 is an escape, so there's no Pokémon to store.
+    const pokemonId = tier === 0 ? null : pickPokemonOfTier(tier).id;
+
     await activeProblems.updateOne(
       { userId },
-      { $set: { pendingCatch: { pokemonId: pokemon.id, escaped } } },
+      { $set: { pendingCatch: { pokemonId } } },
     );
     redirect("/catch");
   }
@@ -70,17 +73,15 @@ export async function resolveCatch(formData: FormData) {
 
   if (!active?.pendingCatch) redirect("/catch");
 
-  const { pokemonId, escaped } = active.pendingCatch;
+  const { pokemonId } = active.pendingCatch;
   const intent = String(formData.get("intent") ?? "");
 
-  // Claim the resolution first. Only the request that deletes the document
-  // gets to save the Pokémon, so a double submit can't catch it twice.
   const claim = await activeProblems.deleteOne({
     userId,
     pendingCatch: { $exists: true },
   });
 
-  if (claim.deletedCount === 1 && !escaped && intent === "keep") {
+  if (claim.deletedCount === 1 && pokemonId !== null && intent === "keep") {
     const caught = await getCaughtPokemon();
     const position = await caught.countDocuments({ userId });
     await caught.insertOne({

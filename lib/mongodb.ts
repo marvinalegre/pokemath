@@ -5,8 +5,7 @@ import type { ObjectId } from "mongodb";
 import type { Problem } from "mathforge";
 
 export type PendingCatch = {
-  pokemonId: number;
-  escaped: boolean;
+  pokemonId: number | null;
 };
 
 type CaughtPokemonDoc = {

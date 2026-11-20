@@ -5,12 +5,11 @@ import { resolveCatch } from "./actions";
 import styles from "./catch.module.css";
 
 type Props = {
-  name: string;
-  sprite: string;
-  escaped: boolean;
+  // null means the Pokémon escaped.
+  pokemon: { name: string; sprite: string } | null;
 };
 
-export default function CatchDialog({ name, sprite, escaped }: Props) {
+export default function CatchDialog({ pokemon }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -22,22 +21,13 @@ export default function CatchDialog({ name, sprite, escaped }: Props) {
       ref={ref}
       className={styles.dialog}
       aria-labelledby="catch-dialog-title"
-      // Block Escape so the player has to make a choice.
       onCancel={(e) => e.preventDefault()}
     >
       <div className={styles.dialogBody}>
-        <img
-          src={sprite}
-          alt={escaped ? "" : name}
-          width={128}
-          height={128}
-          className={escaped ? styles.spriteEscaped : styles.sprite}
-        />
-
-        {escaped ? (
+        {pokemon === null ? (
           <>
             <h2 id="catch-dialog-title">It ran away!</h2>
-            <p>{name} escaped before you could catch it.</p>
+            <p>The wild Pokémon escaped before you could catch it.</p>
             <form action={resolveCatch}>
               <button type="submit" className={styles.submit}>
                 Continue catching
@@ -46,7 +36,14 @@ export default function CatchDialog({ name, sprite, escaped }: Props) {
           </>
         ) : (
           <>
-            <h2 id="catch-dialog-title">You caught {name}!</h2>
+            <img
+              src={pokemon.sprite}
+              alt=""
+              width={128}
+              height={128}
+              className={styles.sprite}
+            />
+            <h2 id="catch-dialog-title">You caught {pokemon.name}!</h2>
             <p>Keep it in your collection, or let it go.</p>
             <form action={resolveCatch} className={styles.dialogActions}>
               <button

@@ -1,4 +1,5 @@
-// lib/pokemon.ts
+import type { Tier } from "./drop-rates";
+
 interface PokemonWithTier {
   id: number;
   name: string;
@@ -161,8 +162,12 @@ export const pokemonTiers: PokemonWithTier[] = [
 
 export type Pokemon = (typeof pokemonTiers)[number];
 
-export function randomPokemon(): Pokemon {
-  return pokemonTiers[Math.floor(Math.random() * pokemonTiers.length)];
+export function pickPokemonOfTier(tier: Exclude<Tier, 0>): Pokemon {
+  const pool = pokemonTiers.filter((p) => p.tier === tier);
+  if (pool.length === 0) {
+    throw new Error(`No Pokémon defined for tier ${tier}`);
+  }
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 export function spriteSrc(id: number): string {
