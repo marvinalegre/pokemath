@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import type { SignupState } from "./types";
 import { getUsers } from "@/lib/mongodb";
 import { redirect } from "next/navigation";
+import { DEFAULT_RATING } from "@/lib/constants";
 
 export async function signup(
   _prevState: SignupState,
@@ -47,6 +48,7 @@ export async function signup(
     await users.insertOne({
       username: normalized,
       passwordHash,
+      rating: DEFAULT_RATING,
       createdAt: new Date(),
     });
   } catch (err) {

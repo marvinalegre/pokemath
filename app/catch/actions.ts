@@ -9,6 +9,7 @@ import { pickPokemonOfTier } from "@/lib/pokemon";
 import { gradeOf } from "@/lib/problem-grade-levels";
 import type { CatchState } from "./types";
 import { LOCK_MS } from "@/lib/constants";
+import { recordAttempt } from "@/lib/ratings";
 
 export async function checkAnswer(
   _prevState: CatchState,
@@ -37,11 +38,12 @@ export async function checkAnswer(
 
   const guess = Number(raw);
 
-  if (guess === Number(active.answer)) {
+  const correct = guess === Number(active.answer);
+  await recordAttempt(userId, active.problemId, correct);
+
+  if (correct) {
     const grade = gradeOf(active.problemId);
     const tier = rollTier(grade);
-
-    // Tier 0 is an escape, so there's no Pokémon to store.
     const pokemonId = tier === 0 ? null : pickPokemonOfTier(tier).id;
 
     await activeProblems.updateOne(

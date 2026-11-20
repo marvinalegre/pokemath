@@ -9,6 +9,7 @@ import AnswerForm from "./AnswerForm";
 import CatchDialog from "./CatchDialog";
 import { dismissCatchIntro } from "./actions";
 import { newProblem, problemLatex } from "@/lib/problems";
+import { selectProblemId, getUserRating } from "@/lib/ratings";
 import styles from "./catch.module.css";
 
 export const instant = false;
@@ -25,6 +26,7 @@ type ActiveState = {
 
 async function getOrCreateActiveProblem(
   userId: ObjectId,
+  userRating: number,
 ): Promise<ActiveState> {
   const activeProblems = await getActiveProblems();
 
@@ -41,7 +43,7 @@ async function getOrCreateActiveProblem(
     };
   }
 
-  const problem = newProblem();
+  const problem = newProblem(await selectProblemId(userRating));
 
   try {
     await activeProblems.insertOne({
@@ -87,9 +89,11 @@ export default async function CatchPage() {
 
   const userId = new ObjectId(user.id);
   const showIntro = !(await hasDismissedIntro(userId));
-
-  const { problem, lockedUntil, pendingCatch } =
-    await getOrCreateActiveProblem(userId);
+  const userRating = await getUserRating(userId);
+  const { problem, lockedUntil, pendingCatch } = await getOrCreateActiveProblem(
+    userId,
+    userRating,
+  );
 
   const activeLock =
     lockedUntil && lockedUntil > Date.now() ? lockedUntil : null;
