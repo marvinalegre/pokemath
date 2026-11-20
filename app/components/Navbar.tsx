@@ -8,6 +8,7 @@ import Pokeball from "./Pokeball";
 const links = [
   { href: "/catch", label: "Catch" },
   { href: "/collection", label: "Collection" },
+  { href: "/players", label: "Players" },
 ];
 
 export default function Navbar() {
