@@ -2,9 +2,10 @@ import { redirect } from "next/navigation";
 import { ObjectId } from "mongodb";
 import katex from "katex";
 import { getCurrentUser } from "@/lib/session";
-import { getActiveProblems } from "@/lib/mongodb";
+import { getActiveProblems, getUsers } from "@/lib/mongodb";
 import { forge, type Problem } from "mathforge";
 import AnswerForm from "./AnswerForm";
+import { dismissCatchIntro } from "./actions";
 import styles from "./catch.module.css";
 
 export const instant = false;
@@ -60,15 +61,24 @@ async function getOrCreateActiveProblem(userId: ObjectId): Promise<{
   }
 }
 
+async function hasDismissedIntro(userId: ObjectId): Promise<boolean> {
+  const users = await getUsers();
+  const user = await users.findOne(
+    { _id: userId },
+    { projection: { dismissedCatchIntro: 1 } },
+  );
+  return user?.dismissedCatchIntro === true;
+}
+
 export default async function CatchPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
-  const { problem, lockedUntil } = await getOrCreateActiveProblem(
-    new ObjectId(user.id),
-  );
+  const userId = new ObjectId(user.id);
+  const showIntro = !(await hasDismissedIntro(userId));
 
-  // Only pass a lock that's still in the future, so expired locks don't flash.
+  const { problem, lockedUntil } = await getOrCreateActiveProblem(userId);
+
   const activeLock =
     lockedUntil && lockedUntil > Date.now() ? lockedUntil : null;
 
@@ -83,8 +93,22 @@ export default async function CatchPage() {
   return (
     <main>
       <section className={styles.card}>
-        <h1>Catch a Pokémon</h1>
-        <p>Solve the problem to catch it.</p>
+        {showIntro ? (
+          <div className={styles.intro}>
+            <div>
+              <h1>Catch a Pokémon</h1>
+              <p>Solve the problem to catch it.</p>
+            </div>
+            <form action={dismissCatchIntro}>
+              <button type="submit" className={styles.dismiss}>
+                Don&apos;t show again
+              </button>
+            </form>
+          </div>
+        ) : (
+          // Keep a heading for screen readers even when the intro is hidden.
+          <h1 className={styles.srOnly}>Catch a Pokémon</h1>
+        )}
 
         {/* KaTeX output comes from our own forge(), not user input. */}
         <div

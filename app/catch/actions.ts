@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { ObjectId } from "mongodb";
 import { getCurrentUser } from "@/lib/session";
-import { getActiveProblems } from "@/lib/mongodb";
+import { getActiveProblems, getUsers } from "@/lib/mongodb";
 import type { CatchState } from "./types";
 import { LOCK_MS } from "@/lib/constants";
 
@@ -51,4 +51,17 @@ export async function checkAnswer(
     error: `Not quite. Try again in ${LOCK_MS / 1_000} seconds.`,
     lockedUntil: newLockedUntil,
   };
+}
+
+export async function dismissCatchIntro() {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
+  const users = await getUsers();
+  await users.updateOne(
+    { _id: new ObjectId(user.id) },
+    { $set: { dismissedCatchIntro: true } },
+  );
+
+  redirect("/catch");
 }

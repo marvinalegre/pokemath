@@ -12,6 +12,13 @@ type ActiveProblemDoc = {
   lockedUntil?: Date;
 };
 
+export type UserDoc = {
+  username: string;
+  passwordHash: string;
+  createdAt: Date;
+  dismissedCatchIntro?: boolean;
+};
+
 const globalForMongo = globalThis as unknown as {
   mongoClientPromise?: Promise<MongoClient>;
 };
@@ -38,11 +45,7 @@ export default clientPromise;
 
 export async function getUsers() {
   const client = await clientPromise;
-  return client.db().collection<{
-    username: string;
-    passwordHash: string;
-    createdAt: Date;
-  }>("users");
+  return client.db().collection<UserDoc>("users");
 }
 
 export async function getActiveProblems() {
