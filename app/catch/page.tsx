@@ -3,11 +3,12 @@ import { ObjectId } from "mongodb";
 import katex from "katex";
 import { getCurrentUser } from "@/lib/session";
 import { getActiveProblems, getUsers, type PendingCatch } from "@/lib/mongodb";
-import { forge, type Problem } from "mathforge";
+import { type Problem } from "mathforge";
 import { pokemonTiers, spriteSrc } from "@/lib/pokemon";
 import AnswerForm from "./AnswerForm";
 import CatchDialog from "./CatchDialog";
 import { dismissCatchIntro } from "./actions";
+import { newProblem, problemLatex } from "@/lib/problems";
 import styles from "./catch.module.css";
 
 export const instant = false;
@@ -15,8 +16,6 @@ export const instant = false;
 export const metadata = {
   title: "Catch",
 };
-
-const PROBLEM_ID = "addition-single-digit-no-carry" as const;
 
 type ActiveState = {
   problem: Problem;
@@ -42,17 +41,17 @@ async function getOrCreateActiveProblem(
     };
   }
 
-  const { data, answer } = forge(PROBLEM_ID);
+  const problem = newProblem();
 
   try {
     await activeProblems.insertOne({
       userId,
-      problemId: PROBLEM_ID,
-      data,
-      answer,
+      problemId: problem.id,
+      data: problem.data,
+      answer: problem.answer,
     });
     return {
-      problem: { id: PROBLEM_ID, data, answer },
+      problem,
       lockedUntil: null,
       pendingCatch: null,
     };
@@ -100,13 +99,10 @@ export default async function CatchPage() {
       ? pokemonTiers.find((p) => p.id === pendingCatch.pokemonId)
       : undefined;
 
-  const problemHtml = katex.renderToString(
-    `${problem.data.a} + ${problem.data.b} = \\; ?`,
-    {
-      throwOnError: false,
-      displayMode: true,
-    },
-  );
+  const problemHtml = katex.renderToString(problemLatex(problem), {
+    throwOnError: false,
+    displayMode: true,
+  });
 
   return (
     <main>
