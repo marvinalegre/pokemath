@@ -45,24 +45,21 @@ export default function CatchDialog({ pokemon }: Props) {
             />
             <h2 id="catch-dialog-title">You caught {pokemon.name}!</h2>
             <p>Keep it in your collection, or let it go.</p>
-            <form action={resolveCatch} className={styles.dialogActions}>
-              <button
-                type="submit"
-                name="intent"
-                value="keep"
-                className={styles.submit}
-              >
-                Keep
-              </button>
-              <button
-                type="submit"
-                name="intent"
-                value="release"
-                className={styles.secondary}
-              >
-                Release
-              </button>
-            </form>
+            <div className={styles.dialogActions}>
+              <form action={resolveCatch}>
+                <input type="hidden" name="intent" value="keep" />
+                <button type="submit" className={styles.submit}>
+                  Keep
+                </button>
+              </form>
+
+              <form action={resolveCatch}>
+                <input type="hidden" name="intent" value="release" />
+                <button type="submit" className={styles.secondary}>
+                  Release
+                </button>
+              </form>
+            </div>
           </>
         )}
       </div>
