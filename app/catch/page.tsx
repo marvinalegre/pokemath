@@ -2,9 +2,11 @@ import { redirect } from "next/navigation";
 import { ObjectId } from "mongodb";
 import katex from "katex";
 import { getCurrentUser } from "@/lib/session";
-import { getActiveProblems, getUsers } from "@/lib/mongodb";
+import { getActiveProblems, getUsers, type PendingCatch } from "@/lib/mongodb";
 import { forge, type Problem } from "mathforge";
+import { pokemonTiers, spriteSrc } from "@/lib/pokemon";
 import AnswerForm from "./AnswerForm";
+import CatchDialog from "./CatchDialog";
 import { dismissCatchIntro } from "./actions";
 import styles from "./catch.module.css";
 
@@ -16,10 +18,15 @@ export const metadata = {
 
 const PROBLEM_ID = "addition-single-digit-no-carry" as const;
 
-async function getOrCreateActiveProblem(userId: ObjectId): Promise<{
+type ActiveState = {
   problem: Problem;
   lockedUntil: number | null;
-}> {
+  pendingCatch: PendingCatch | null;
+};
+
+async function getOrCreateActiveProblem(
+  userId: ObjectId,
+): Promise<ActiveState> {
   const activeProblems = await getActiveProblems();
 
   const existing = await activeProblems.findOne({ userId });
@@ -31,6 +38,7 @@ async function getOrCreateActiveProblem(userId: ObjectId): Promise<{
         answer: existing.answer,
       },
       lockedUntil: existing.lockedUntil?.getTime() ?? null,
+      pendingCatch: existing.pendingCatch ?? null,
     };
   }
 
@@ -43,11 +51,14 @@ async function getOrCreateActiveProblem(userId: ObjectId): Promise<{
       data,
       answer,
     });
-    return { problem: { id: PROBLEM_ID, data, answer }, lockedUntil: null };
+    return {
+      problem: { id: PROBLEM_ID, data, answer },
+      lockedUntil: null,
+      pendingCatch: null,
+    };
   } catch (err) {
     if ((err as { code?: number }).code !== 11000) throw err;
 
-    // Another request created the problem first, so use that one.
     const winner = await activeProblems.findOne({ userId });
     if (!winner) throw err;
     return {
@@ -57,6 +68,7 @@ async function getOrCreateActiveProblem(userId: ObjectId): Promise<{
         answer: winner.answer,
       },
       lockedUntil: winner.lockedUntil?.getTime() ?? null,
+      pendingCatch: winner.pendingCatch ?? null,
     };
   }
 }
@@ -77,10 +89,15 @@ export default async function CatchPage() {
   const userId = new ObjectId(user.id);
   const showIntro = !(await hasDismissedIntro(userId));
 
-  const { problem, lockedUntil } = await getOrCreateActiveProblem(userId);
+  const { problem, lockedUntil, pendingCatch } =
+    await getOrCreateActiveProblem(userId);
 
   const activeLock =
     lockedUntil && lockedUntil > Date.now() ? lockedUntil : null;
+
+  const pokemon = pendingCatch
+    ? pokemonTiers.find((p) => p.id === pendingCatch.pokemonId)
+    : undefined;
 
   const problemHtml = katex.renderToString(
     `${problem.data.a} + ${problem.data.b} = \\; ?`,
@@ -106,7 +123,6 @@ export default async function CatchPage() {
             </form>
           </div>
         ) : (
-          // Keep a heading for screen readers even when the intro is hidden.
           <h1 className={styles.srOnly}>Catch a Pokémon</h1>
         )}
 
@@ -117,6 +133,14 @@ export default async function CatchPage() {
         />
 
         <AnswerForm initialLockedUntil={activeLock} />
+
+        {pendingCatch && pokemon && (
+          <CatchDialog
+            name={pokemon.name}
+            sprite={spriteSrc(pokemon.id)}
+            escaped={pendingCatch.escaped}
+          />
+        )}
       </section>
     </main>
   );

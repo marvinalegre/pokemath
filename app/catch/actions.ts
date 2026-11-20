@@ -3,9 +3,10 @@
 import { redirect } from "next/navigation";
 import { ObjectId } from "mongodb";
 import { getCurrentUser } from "@/lib/session";
-import { getActiveProblems, getUsers } from "@/lib/mongodb";
+import { getActiveProblems, getCaughtPokemon, getUsers } from "@/lib/mongodb";
+import { randomPokemon } from "@/lib/pokemon";
 import type { CatchState } from "./types";
-import { LOCK_MS } from "@/lib/constants";
+import { LOCK_MS, ESCAPE_CHANCE } from "@/lib/constants";
 
 export async function checkAnswer(
   _prevState: CatchState,
@@ -18,10 +19,9 @@ export async function checkAnswer(
   const activeProblems = await getActiveProblems();
   const active = await activeProblems.findOne({ userId });
 
-  // No active problem means it was already solved (e.g. a second tab).
-  if (!active) redirect("/catch");
+  // Already solved in another tab, or waiting on the catch dialog.
+  if (!active || active.pendingCatch) redirect("/catch");
 
-  // Enforce the lock on the server. The client countdown is display only.
   const now = Date.now();
   const lockedUntil = active.lockedUntil?.getTime() ?? 0;
   if (lockedUntil > now) {
@@ -36,8 +36,15 @@ export async function checkAnswer(
   const guess = Number(raw);
 
   if (guess === Number(active.answer)) {
-    await activeProblems.deleteOne({ userId });
-    // redirect() throws internally, so keep it outside any try/catch.
+    const pokemon = randomPokemon();
+    const escaped = Math.random() < ESCAPE_CHANCE;
+
+    // Keep the problem document until the dialog is resolved, so a refresh
+    // shows the same catch instead of a new problem.
+    await activeProblems.updateOne(
+      { userId },
+      { $set: { pendingCatch: { pokemonId: pokemon.id, escaped } } },
+    );
     redirect("/catch");
   }
 
@@ -51,6 +58,34 @@ export async function checkAnswer(
     error: `Not quite. Try again in ${LOCK_MS / 1_000} seconds.`,
     lockedUntil: newLockedUntil,
   };
+}
+
+export async function resolveCatch(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
+  const userId = new ObjectId(user.id);
+  const activeProblems = await getActiveProblems();
+  const active = await activeProblems.findOne({ userId });
+
+  if (!active?.pendingCatch) redirect("/catch");
+
+  const { pokemonId, escaped } = active.pendingCatch;
+  const intent = String(formData.get("intent") ?? "");
+
+  // Claim the resolution first. Only the request that deletes the document
+  // gets to save the Pokémon, so a double submit can't catch it twice.
+  const claim = await activeProblems.deleteOne({
+    userId,
+    pendingCatch: { $exists: true },
+  });
+
+  if (claim.deletedCount === 1 && !escaped && intent === "keep") {
+    const caught = await getCaughtPokemon();
+    await caught.insertOne({ userId, pokemonId, caughtAt: new Date() });
+  }
+
+  redirect("/catch");
 }
 
 export async function dismissCatchIntro() {

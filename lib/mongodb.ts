@@ -4,12 +4,24 @@ import { env } from "./env";
 import type { ObjectId } from "mongodb";
 import type { Problem } from "mathforge";
 
+export type PendingCatch = {
+  pokemonId: number;
+  escaped: boolean;
+};
+
+type CaughtPokemonDoc = {
+  userId: ObjectId;
+  pokemonId: number;
+  caughtAt: Date;
+};
+
 type ActiveProblemDoc = {
   userId: ObjectId;
   problemId: Problem["id"];
   data: Problem["data"];
   answer: Problem["answer"];
   lockedUntil?: Date;
+  pendingCatch?: PendingCatch;
 };
 
 export type UserDoc = {
@@ -51,4 +63,9 @@ export async function getUsers() {
 export async function getActiveProblems() {
   const client = await clientPromise;
   return client.db().collection<ActiveProblemDoc>("activeProblems");
+}
+
+export async function getCaughtPokemon() {
+  const client = await clientPromise;
+  return client.db().collection<CaughtPokemonDoc>("caughtPokemon");
 }
