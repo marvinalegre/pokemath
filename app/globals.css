@@ -259,7 +259,8 @@ button,
 
 button:hover,
 .button:hover {
-  background: #262626;
+  background: #dcdcdc;
+  color: var(--foreground);
   text-decoration: none;
 }
 

@@ -5,7 +5,10 @@ import { useState } from "react";
 import styles from "./Navbar.module.css";
 import Pokeball from "./Pokeball";
 
-const links = [{ href: "/catch", label: "Catch" }];
+const links = [
+  { href: "/catch", label: "Catch" },
+  { href: "/collection", label: "Collection" },
+];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);

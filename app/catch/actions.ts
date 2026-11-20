@@ -82,7 +82,13 @@ export async function resolveCatch(formData: FormData) {
 
   if (claim.deletedCount === 1 && !escaped && intent === "keep") {
     const caught = await getCaughtPokemon();
-    await caught.insertOne({ userId, pokemonId, caughtAt: new Date() });
+    const position = await caught.countDocuments({ userId });
+    await caught.insertOne({
+      userId,
+      pokemonId,
+      caughtAt: new Date(),
+      position,
+    });
   }
 
   redirect("/catch");

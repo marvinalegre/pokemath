@@ -13,6 +13,7 @@ type CaughtPokemonDoc = {
   userId: ObjectId;
   pokemonId: number;
   caughtAt: Date;
+  position: number;
 };
 
 type ActiveProblemDoc = {
@@ -43,6 +44,11 @@ async function connectAndPrepare(): Promise<MongoClient> {
     .db()
     .collection("users")
     .createIndex({ username: 1 }, { unique: true });
+
+  await client
+    .db()
+    .collection("caughtPokemon")
+    .createIndex({ userId: 1, position: 1 });
 
   return client;
 }
