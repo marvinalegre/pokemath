@@ -9,6 +9,7 @@ type ActiveProblemDoc = {
   problemId: Problem["id"];
   data: Problem["data"];
   answer: Problem["answer"];
+  lockedUntil?: Date;
 };
 
 const globalForMongo = globalThis as unknown as {

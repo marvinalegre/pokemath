@@ -1,7 +1,5 @@
 export type CatchState = {
   error: string | null;
-};
-
-export const initialCatchState: CatchState = {
-  error: null,
+  // Epoch milliseconds. Numbers serialize cleanly between server and client.
+  lockedUntil: number | null;
 };

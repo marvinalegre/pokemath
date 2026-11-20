@@ -15,15 +15,21 @@ export const metadata = {
 
 const PROBLEM_ID = "addition-single-digit-no-carry" as const;
 
-async function getOrCreateActiveProblem(userId: ObjectId): Promise<Problem> {
+async function getOrCreateActiveProblem(userId: ObjectId): Promise<{
+  problem: Problem;
+  lockedUntil: number | null;
+}> {
   const activeProblems = await getActiveProblems();
 
   const existing = await activeProblems.findOne({ userId });
   if (existing) {
     return {
-      id: existing.problemId,
-      data: existing.data,
-      answer: existing.answer,
+      problem: {
+        id: existing.problemId,
+        data: existing.data,
+        answer: existing.answer,
+      },
+      lockedUntil: existing.lockedUntil?.getTime() ?? null,
     };
   }
 
@@ -36,16 +42,20 @@ async function getOrCreateActiveProblem(userId: ObjectId): Promise<Problem> {
       data,
       answer,
     });
-    return { id: PROBLEM_ID, data, answer };
+    return { problem: { id: PROBLEM_ID, data, answer }, lockedUntil: null };
   } catch (err) {
     if ((err as { code?: number }).code !== 11000) throw err;
 
+    // Another request created the problem first, so use that one.
     const winner = await activeProblems.findOne({ userId });
     if (!winner) throw err;
     return {
-      id: winner.problemId,
-      data: winner.data,
-      answer: winner.answer,
+      problem: {
+        id: winner.problemId,
+        data: winner.data,
+        answer: winner.answer,
+      },
+      lockedUntil: winner.lockedUntil?.getTime() ?? null,
     };
   }
 }
@@ -54,10 +64,16 @@ export default async function CatchPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
-  const active = await getOrCreateActiveProblem(new ObjectId(user.id));
+  const { problem, lockedUntil } = await getOrCreateActiveProblem(
+    new ObjectId(user.id),
+  );
+
+  // Only pass a lock that's still in the future, so expired locks don't flash.
+  const activeLock =
+    lockedUntil && lockedUntil > Date.now() ? lockedUntil : null;
 
   const problemHtml = katex.renderToString(
-    `${active.data.a} + ${active.data.b} = \\; ?`,
+    `${problem.data.a} + ${problem.data.b} = \\; ?`,
     {
       throwOnError: false,
       displayMode: true,
@@ -76,7 +92,7 @@ export default async function CatchPage() {
           dangerouslySetInnerHTML={{ __html: problemHtml }}
         />
 
-        <AnswerForm />
+        <AnswerForm initialLockedUntil={activeLock} />
       </section>
     </main>
   );
