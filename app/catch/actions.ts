@@ -83,7 +83,13 @@ export async function resolveCatch(formData: FormData) {
 
   if (claim.deletedCount === 1 && pokemonId !== null && intent === "keep") {
     const caught = await getCaughtPokemon();
-    const position = await caught.countDocuments({ userId });
+
+    const first = await caught.findOne(
+      { userId },
+      { sort: { position: 1 }, projection: { position: 1 } },
+    );
+    const position = (first?.position ?? 0) - 1;
+
     await caught.insertOne({
       userId,
       pokemonId,
