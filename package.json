@@ -12,6 +12,8 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "iron-session": "^9.1.0",
+    "katex": "^0.19.1",
+    "mathforge": "link:/home/marvin/projects/mathforge/",
     "mongodb": "^7.9.0",
     "next": "16.4.6",
     "react": "19.3.0",

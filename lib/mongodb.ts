@@ -1,6 +1,15 @@
 import "server-only";
 import { MongoClient } from "mongodb";
 import { env } from "./env";
+import type { ObjectId } from "mongodb";
+import type { Problem } from "mathforge";
+
+type ActiveProblemDoc = {
+  userId: ObjectId;
+  problemId: Problem["id"];
+  data: Problem["data"];
+  answer: Problem["answer"];
+};
 
 const globalForMongo = globalThis as unknown as {
   mongoClientPromise?: Promise<MongoClient>;
@@ -33,4 +42,9 @@ export async function getUsers() {
     passwordHash: string;
     createdAt: Date;
   }>("users");
+}
+
+export async function getActiveProblems() {
+  const client = await clientPromise;
+  return client.db().collection<ActiveProblemDoc>("activeProblems");
 }

@@ -1,0 +1,80 @@
+.card {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: 2rem;
+  }
+}
+
+.card h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.problem {
+  padding: 1.5rem 0;
+  overflow-x: auto;
+}
+
+/* KaTeX sets its own sizes, so target the rendered element directly. */
+.problem :global(.katex) {
+  font-size: 2.25rem;
+}
+
+@media (min-width: 640px) {
+  .problem :global(.katex) {
+    font-size: 3.5rem;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .form {
+    max-width: 630px;
+    margin: 0.5rem auto;
+  }
+}
+
+.field {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.field input {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.error {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #dc2626;
+}
+
+.invalid {
+  border-color: #dc2626;
+}
+
+.submit {
+  width: 100%;
+}
