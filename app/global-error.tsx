@@ -1,0 +1,23 @@
+"use client";
+
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <main style={{ padding: "2rem", textAlign: "center" }}>
+          <h1>Something went wrong</h1>
+          <p>Please try again.</p>
+          <button type="button" onClick={reset}>
+            Try again
+          </button>
+        </main>
+      </body>
+    </html>
+  );
+}
