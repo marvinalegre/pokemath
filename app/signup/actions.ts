@@ -1,9 +1,12 @@
 "use server";
 
+import bcrypt from "bcryptjs";
 import type { SignupState } from "./types";
+import { getUsers } from "@/lib/mongodb";
+import { redirect } from "next/navigation";
 
 export async function signup(
-  prevState: SignupState,
+  _prevState: SignupState,
   formData: FormData,
 ): Promise<SignupState> {
   const username = String(formData.get("username") ?? "").trim();
@@ -25,10 +28,39 @@ export async function signup(
     return { status: "error", errors, username };
   }
 
-  // TODO: check the username isn't taken, hash the password
-  // (e.g. bcrypt or argon2), and insert the user into your database.
-  // Never store the plain password.
-  await new Promise((resolve) => setTimeout(resolve, 800));
+  const normalized = username.toLowerCase();
+  const users = await getUsers();
 
-  return { status: "success", errors: {}, username };
+  // Fast check for a friendly message. The unique index below is the real guarantee.
+  const existing = await users.findOne({ username: normalized });
+  if (existing) {
+    return {
+      status: "error",
+      errors: { username: "That username is taken." },
+      username,
+    };
+  }
+
+  const passwordHash = await bcrypt.hash(password, 12);
+
+  try {
+    await users.insertOne({
+      username: normalized,
+      passwordHash,
+      createdAt: new Date(),
+    });
+  } catch (err) {
+    // 11000 is MongoDB's duplicate key error. Two signups can pass the
+    // findOne check at the same time, so the index catches the race.
+    if ((err as { code?: number }).code === 11000) {
+      return {
+        status: "error",
+        errors: { username: "That username is taken." },
+        username,
+      };
+    }
+    throw err;
+  }
+
+  redirect("/login");
 }

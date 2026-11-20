@@ -1,81 +1,52 @@
+import Link from "next/link";
+import { getCurrentUser } from "@/lib/session";
+import { logout } from "@/app/logout/actions";
 import styles from "./page.module.css";
+import Pokeball from "./components/Pokeball";
 
-export default function Home() {
+export const instant = false;
+
+export default async function HomePage() {
+  const user = await getCurrentUser();
+
+  if (user) {
+    return (
+      <main>
+        <section className={styles.hero}>
+          <p className={styles.signedIn}>Signed in as {user.username}</p>
+          <h1>Welcome back, {user.username}.</h1>
+          <p>Pick up where you left off.</p>
+
+          <div className={styles.actions}>
+            <form action={logout}>
+              <button type="submit" className={styles.secondary}>
+                Log out
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main>
-      <h1>shadcn-style Defaults</h1>
-      <p>
-        A neutral, light theme built from global CSS variables. Links use the
-        foreground color, and buttons use the primary style.
-      </p>
+      <section className={styles.hero}>
+        <h1>
+          Welcome to Pokum
+          <Pokeball />
+          n.
+        </h1>
+        <p>Log in to continue, or create an account to get started.</p>
 
-      <section className={styles.card}>
-        <h2>Typography</h2>
-        <p>
-          Body text uses a 1.5 line height. Inline code looks like{" "}
-          <code>const x = 1</code>.
-        </p>
-        <ul>
-          <li>First item</li>
-          <li>
-            Second item with a <a href="#">link</a>
-          </li>
-        </ul>
-        <blockquote>Simplicity is the ultimate sophistication.</blockquote>
-      </section>
-
-      <section className={styles.card}>
-        <h2>Code</h2>
-        <pre>
-          <code>{`export default function Home() {
-  return <h1>Hello</h1>;
-}`}</code>
-        </pre>
-      </section>
-
-      <section className={styles.card}>
-        <h2>Table</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Ada</td>
-              <td>Engineer</td>
-              <td>Active</td>
-            </tr>
-            <tr>
-              <td>Linus</td>
-              <td>Maintainer</td>
-              <td>Away</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section className={styles.card}>
-        <h2>Form</h2>
-        <form>
-          <div className={styles.field}>
-            <label htmlFor="name">Name</label>
-            <input id="name" type="text" placeholder="Your name" />
-          </div>
-          <div className={styles.field}>
-            <label htmlFor="message">Message</label>
-            <textarea id="message" rows={4} placeholder="Say something" />
-          </div>
-          <div className={styles.actions}>
-            <button type="button">Send</button>
-            <a className="button" href="#">
-              Get started
-            </a>
-          </div>
-        </form>
+        <div className={styles.actions}>
+          <Link href="/login" className="button">
+            Log in
+          </Link>
+          <Link href="/signup" className={styles.secondary}>
+            Create account
+          </Link>
+        </div>
       </section>
     </main>
   );

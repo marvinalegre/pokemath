@@ -1,9 +1,16 @@
 "use server";
 
+import bcrypt from "bcryptjs";
 import type { LoginState } from "./types";
+import { getUsers } from "@/lib/mongodb";
+import { getSession } from "@/lib/session";
+
+// Invalid credentials get the same message whether the username or the
+// password is wrong, so the response doesn't reveal which accounts exist.
+const INVALID_MESSAGE = "Incorrect username or password.";
 
 export async function login(
-  prevState: LoginState,
+  _prevState: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
   const username = String(formData.get("username") ?? "").trim();
@@ -23,20 +30,30 @@ export async function login(
     return { status: "error", fieldErrors, username };
   }
 
-  // TODO: look up the user, then compare the password against the stored
-  // hash with bcrypt.compare or argon2.verify. Never compare plain text.
-  await new Promise((resolve) => setTimeout(resolve, 800));
+  const users = await getUsers();
+  const user = await users.findOne({ username: username.toLowerCase() });
 
-  // Placeholder check; remove once the real lookup is in place.
-  if (password !== "password123") {
+  // Always run bcrypt, even when the user doesn't exist, so response
+  // timing doesn't reveal whether a username is registered.
+  const hashToCompare =
+    user?.passwordHash ??
+    "$2b$12$CwTycUXWue0Thq9StjUM0uJ8.G2Yc6zq2a4fVb4d1CkqUoG3c1aVe";
+
+  const passwordMatches = await bcrypt.compare(password, hashToCompare);
+
+  if (!user || !passwordMatches) {
     return {
       status: "error",
       fieldErrors: {},
-      formError: "Incorrect username or password.",
+      formError: INVALID_MESSAGE,
       username,
     };
   }
 
-  // TODO: create a session (cookie or token) here before returning.
+  const session = await getSession();
+  session.userId = user._id.toString();
+  session.username = user.username;
+  await session.save();
+
   return { status: "success", fieldErrors: {}, username };
 }

@@ -1,0 +1,36 @@
+import "server-only";
+import { MongoClient } from "mongodb";
+import { env } from "./env";
+
+const globalForMongo = globalThis as unknown as {
+  mongoClientPromise?: Promise<MongoClient>;
+};
+
+async function connectAndPrepare(): Promise<MongoClient> {
+  const client = await new MongoClient(env.MONGODB_URI).connect();
+
+  // Idempotent: a no-op if the index already exists with the same options.
+  await client
+    .db()
+    .collection("users")
+    .createIndex({ username: 1 }, { unique: true });
+
+  return client;
+}
+
+const clientPromise = globalForMongo.mongoClientPromise ?? connectAndPrepare();
+
+if (process.env.NODE_ENV !== "production") {
+  globalForMongo.mongoClientPromise = clientPromise;
+}
+
+export default clientPromise;
+
+export async function getUsers() {
+  const client = await clientPromise;
+  return client.db().collection<{
+    username: string;
+    passwordHash: string;
+    createdAt: Date;
+  }>("users");
+}

@@ -13,22 +13,6 @@ export default function SignupPage() {
   );
   const [showPassword, setShowPassword] = useState(false);
 
-  if (state.status === "success") {
-    return (
-      <div className={styles.wrapper}>
-        <section className={styles.card}>
-          <div className={styles.header}>
-            <h1>Account created</h1>
-            <p>Welcome, {state.username}.</p>
-          </div>
-          <Link href="/" className="button">
-            Back to home
-          </Link>
-        </section>
-      </div>
-    );
-  }
-
   const { errors } = state;
 
   return (

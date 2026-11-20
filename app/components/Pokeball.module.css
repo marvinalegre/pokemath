@@ -1,0 +1,6 @@
+.pokeball {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  vertical-align: -0.1em;
+}
