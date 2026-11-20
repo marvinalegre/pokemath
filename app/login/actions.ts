@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import type { LoginState } from "./types";
 import { getUsers } from "@/lib/mongodb";
 import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
 
 // Invalid credentials get the same message whether the username or the
 // password is wrong, so the response doesn't reveal which accounts exist.
@@ -55,5 +56,5 @@ export async function login(
   session.username = user.username;
   await session.save();
 
-  return { status: "success", fieldErrors: {}, username };
+  redirect("/");
 }

@@ -13,22 +13,6 @@ export default function LoginPage() {
   );
   const [showPassword, setShowPassword] = useState(false);
 
-  if (state.status === "success") {
-    return (
-      <div className={styles.wrapper}>
-        <section className={styles.card}>
-          <div className={styles.header}>
-            <h1>Welcome back</h1>
-            <p>Signed in as {state.username}.</p>
-          </div>
-          <Link href="/" className="button">
-            Go to home
-          </Link>
-        </section>
-      </div>
-    );
-  }
-
   const { fieldErrors, formError } = state;
   const credentialsInvalid = !!formError;
 

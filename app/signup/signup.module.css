@@ -1,15 +1,15 @@
-@media (min-width: 640px) {
-  body {
-    background: var(--muted);
-  }
-}
-
 .wrapper {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100dvh;
   padding: 1.5rem var(--gutter);
+}
+
+@media (min-width: 640px) {
+  .wrapper {
+    background: var(--muted);
+  }
 }
 
 .card {
